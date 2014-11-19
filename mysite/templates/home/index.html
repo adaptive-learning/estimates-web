@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<head>
+	<script src="/js/foundation.min.js"></script>
+	<script src="/static/js/home.js"></script>
+</head>
+<html>
+
+
+
+{% extends "foundation/base.html" %}
+
+
+{% block base_body %}
+
+{%include "navBar/bar.html" %}
+
+<div class="row">
+    <div class="large-12 columns">
+        <h1 id="header" align="center">Odhad prevodu jednotiek</h1>
+    </div>
+</div>
+<div class="collumn" align="center" id="b">
+	
+</div>
+<div class="row" align="center" id="choice">
+	<a class="button" onclick="home('curr')">Mena</a>
+	<a class="button" onclick="home('math')"> Matematika</a>
+   	<a class="button" onclick="home('fyz')">Fyzika</a>
+</div>
+{% endblock base_body %}
+
+</html>
+ 
