@@ -40,10 +40,12 @@ function home(a){
 			createHrefButton('a','Priklady','math/assig',choice,true);
 			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';
 			break;
-		case 'Fyz':
+		case 'fyz':
 			document.getElementById("header").innerHTML = "Odhady Fyzikalnych jednotiek";
 			break;
-		case 'Curr':
+		case 'curr':
+			createHrefButton('a','Eurá (€)','curr/e',choice,false);
+			createHrefButton('a','České koruny (CZK)','curr/c',choice,true);
 			document.getElementById("header").innerHTML = "Odhady meny";
 			break;
 		case 'home':

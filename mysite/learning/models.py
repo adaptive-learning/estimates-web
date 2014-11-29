@@ -1,5 +1,13 @@
 from django.db import models
 
-class MathExercise(models.Model):
-    result = models.IntegerField();
-    answer = models.IntegerField();
+class MathExerciseModel(models.Model):
+    result = models.IntegerField()
+    answer = models.IntegerField()
+    max = 10
+    counter = 0;
+    
+class CurrencyModel(models.Model):
+    result = models.FloatField()
+    answer = models.FloatField()
+    fr = models.CharField(max_length=4)
+    to = models.CharField(max_length=4)

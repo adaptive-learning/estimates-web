@@ -7,26 +7,22 @@
 </head>
 <html>
 
-{% if assig %}
+{% if output %}
 
 
 {% block base_body %}
 {%include "navBar/bar.html" %}
 
-{{ assig }}
+{{ output.result }}
 <div>
-<form id="assigForm" action="/math/answeredMath" onsubmit="return answer(ans,JSON.parse('{{ assig|escapejs }}').results[0].fields.result)" method="post">{% csrf_token %}
+<div>
+
+<form id="assigForm" onsubmit='return answerC(ans,"{{output.result}}")' method="post">{% csrf_token %}
 	<div class="row">
 			<div class="row collapse">
-				<label class="small-9 collumns" >
-					<script>
-						var eh = JSON.parse("{{ assig|escapejs }}");
-						document.write( eh.num[0]);
-						for (i = 0; i<eh.o.length;i++){
-							document.write(" " + eh.o[i] + " " + eh.num[i+1]);
-						}
-						document.write(" = ?");
-					</script>
+				<label class="small-9 collumns">
+					<script src="/static/js/Currency.js"></script>
+					{{output.question}}<script>decider("{{output.fr}}");</script> ({{output.fr}}) = ? <script>decider("{{output.to}}");</script> ({{output.to}}) 
 				</label>
 			
 				<div class="small-5 columns">
@@ -42,9 +38,9 @@
 	</div>
 </form>
 </div>
-<script src="/static/js/MathAssig.js"></script>
 <script src="/static/js/answerForm.js"></script>
 <script src="/js/foundation.min.js"></script>
+</div>
 {% endblock base_body %}
 
 {% else %}
