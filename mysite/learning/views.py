@@ -22,11 +22,12 @@ def MAssig(request):
     j = random.randint(2, 4)
     oper = [random.choice("+-*") for _ in range(j-1)]
     numbers = [random.randrange(100,200) for _ in range(j)]
-    e=str(numbers[0])
-    equation = e
+    equation = str(numbers[0])
     counter = 1
     for char in oper:
         equation += char
+        if (char == '*'):
+            numbers[counter] %= 15
         equation += str(numbers[counter])
         counter += 1
     assig.result = eval(equation)
