@@ -17,7 +17,6 @@ def answeredMath(request):
         return redirect('/math/assig')
 
 def MAssig(request):
-
     assig = MathExerciseModel()
     j = random.randint(2, 4)
     oper = [random.choice("+-*") for _ in range(j-1)]
@@ -42,27 +41,23 @@ def MAssig(request):
     data = json.dumps(d)
     return render(request,'learning/math/assig.html', {'assig': data})
 
+# def Msqrt(request):
+#     numbers = [random.randrange(100,200) for _ in range(j)]
 
 def Currency(request,curr):
 #    dolar,zloty,forint,frank, libra, rubel
     array = ["USD","PLN","HUF","CHF","GBP","RUB"]
     rand = random.choice(array)
-    result = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22"+ curr + rand +"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
-    data = json.loads(result.read())
-    rate = data['query']['results']['rate']['Rate']
-    
-#     ft = random.choice("ft")
     if curr == "CZK" : 
         val = random.randrange(300,3000)
     else :
         val = random.randrange(10,120)
-    
-#     if(ft == 'f'):
-    
+    res = urllib2.urlopen("http://rate-exchange.appspot.com/currency?from="+curr+"&amp;to="+rand+"&amp;q=" + str(val))
+    data = json.loads(res.read())
     
     out = CurrencyModel()
+    out.result = round(float(data['v']),2)
     out.question = val
-    out.result = float(rate) * val
     out.fr = curr
     out.to = rand
     
