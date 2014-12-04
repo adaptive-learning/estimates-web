@@ -45,24 +45,29 @@ def MAssig(request):
 #     numbers = [random.randrange(100,200) for _ in range(j)]
 
 def Currency(request,curr):
-#    dolar,zloty,forint,frank, libra, rubel
+    # dolar,zloty,forint,frank, libra, rubel
     array = ["USD","PLN","HUF","CHF","GBP","RUB"]
-    rand = random.choice(array)
-    if curr == "CZK" : 
+    if curr == "CZK" :
+        array.append("EUR")
         val = random.randrange(300,3000)
     else :
+        array.append("CZK")
         val = random.randrange(10,120)
-    res = urllib2.urlopen("http://rate-exchange.appspot.com/currency?from="+curr+"&amp;to="+rand+"&amp;q=" + str(val))
-    data = json.loads(res.read())
+    rand = random.choice(array)
+    result = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22"+ curr + rand +"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
+    data = json.loads(result.read())
+    rate = data['query']['results']['rate']['Rate']
+    # ft = random.choice("ft")
     
+    # if(ft == 'f'):
     out = CurrencyModel()
-    out.result = round(float(data['v']),2)
     out.question = val
+    out.result = round(float(rate) * val,2)
     out.fr = curr
+    out.rate = rate
     out.to = rand
-    
-    
     return render(request,'learning/curr/assig.html',{'output':out})
+
 
 def answeredCurr(request):
     if request.method == "POST" :
