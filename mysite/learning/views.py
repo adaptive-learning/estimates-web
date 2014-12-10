@@ -30,7 +30,7 @@ def MAssig(request):
         equation += str(numbers[counter])
         counter += 1
     assig.result = eval(equation)
-
+    assig.equation = equation
     
     data = json.loads(serializers.serialize('json', [assig,]))
     d = {}
