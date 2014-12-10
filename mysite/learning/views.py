@@ -41,8 +41,23 @@ def MAssig(request):
     data = json.dumps(d)
     return render(request,'learning/math/assig.html', {'assig': data})
 
-# def Msqrt(request):
-#     numbers = [random.randrange(100,200) for _ in range(j)]
+def MSqrt(request):
+    oper = [random.choice("12")]
+    
+    out = MathSqrtModel()
+    if ( oper == '1'):
+        number = random.randrange(1,256)
+        out.result = sqrt(number)
+    else :
+        number = random.randrange(10,16)
+        p = random.randrange(2,4)
+        out.result = pow(number, p)
+        out.pow = p
+        
+    out.oper = oper
+    out.question = number
+    return render(request, 'learning/math/sqrt.html', {'assig':out})
+    
 
 def Currency(request,curr):
     # dolar,zloty,forint,frank, libra, rubel

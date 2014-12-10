@@ -36,7 +36,7 @@ function home(a){
 	}
 	switch(a){
 		case 'math':
-			createButton('a','Odmocniny/mocniny',null,choice,false);
+			createButton('a','Odmocniny/mocniny','math/sqrt',choice,false);
 			createHrefButton('a','Priklady','math/assig',choice,true);
 			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';
 			break;

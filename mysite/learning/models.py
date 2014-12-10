@@ -4,7 +4,12 @@ class MathExerciseModel(models.Model):
     result = models.IntegerField()
     answer = models.IntegerField()
     max = 10
-    counter = 0;
+    counter = 0
+    
+class MathSqrtModel(models.Model):
+    result = models.FloatField()
+    answer = models.FloatField()
+    
     
 class CurrencyModel(models.Model):
     result = models.FloatField()

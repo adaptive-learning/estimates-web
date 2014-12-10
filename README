@@ -1,0 +1,8 @@
+ to run server: python mysite/manage.py runserver
+ 
+ dependecies: 
+    django
+    simplejson
+    django_compressor
+    libpq-dev
+    python-dev
