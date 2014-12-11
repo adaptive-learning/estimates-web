@@ -1,4 +1,6 @@
- to run server: python mysite/manage.py runserver
+ to run server cd into mysite and run: 
+    python manage.py runserver
+
  
  dependecies: 
     django
