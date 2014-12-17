@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, render, redirect
 from django.http import HttpResponse
 from django.template import RequestContext, loader
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from learning.models import *
 import random, json
 import simplejson
@@ -10,11 +11,18 @@ from django.core import serializers
 def index(request):
     return render_to_response('home/index.html')
 
+@csrf_protect
 def answeredMath(request):
     if request.method == "POST" :
-        answer = request.POST["ans"]
-        response = MAssig(request)
-        return redirect('/math/assig')
+        ans = request.POST.get('input')
+        userId = request.POST.get('userId')
+        model = MathExerciseModel.objects.get(id=request.POST.get('modelId'))
+        model.result = eval(model.equation)
+        model.answer = ans
+        model.save();
+        diff = model.result - int(model.answer)
+        
+        return HttpResponse(str(diff) + "//" + str(model.result))
 
 def MAssig(request):
     assig = MathExerciseModel()
@@ -24,22 +32,28 @@ def MAssig(request):
     equation = str(numbers[0])
     counter = 1
     for char in oper:
-        equation += char
-        if (char == '*'):
+        equation += ' ' +  char + ' '
+        if (char == '*' ):
             numbers[counter] %= 15
         equation += str(numbers[counter])
         counter += 1
-    assig.result = eval(equation)
-    assig.equation = equation
     
-    data = json.loads(serializers.serialize('json', [assig,]))
-    d = {}
-    d['results'] = data
-    d['num'] = numbers;
-    d['o'] = oper;
-                        
-    data = json.dumps(d)
-    return render(request,'learning/math/assig.html', {'assig': data})
+    assig.equation = equation
+    assig.save();
+                    
+    return render(request,'learning/math/assig.html', {'assig': assig})
+
+def ansSqrt(request):
+    if request.method == "POST" :
+        ans = request.POST.get('input')
+        userId = request.POST.get('userId')
+        model = MathExerciseModel.objects.get(id=request.POST.get('modelId'))
+        model.result = eval(model.equation)
+        model.answer = ans
+        model.save();
+        diff = model.result - int(model.answer)
+        
+        return HttpResponse(str(diff) + "//" + str(model.result))
 
 def MSqrt(request):
     oper = [random.choice("12")]

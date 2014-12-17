@@ -1,9 +1,5 @@
-function process(answer, result){
+function answer(diff,result){
 	
-	if(!answer.value) {
-    	alert("zadajte odpoved");
-    	return false;
-	}
 	var img = document.createElement('img');
 	resize(img);
 	var div = document.getElementById("assigment");
@@ -15,12 +11,12 @@ function process(answer, result){
 		document.forms["assigForm"].submit();
 	};
 	
-	if(answer.value != result){
-		img.src = "/static/img/false.png";		
-	} else {
+	if(diff > -0.0001 && diff < 0.0001){
 		img.src = "/static/img/true.png";
 		setTimeout(onclick,3000);
-		return false;
+		return false;		
+	} else {
+		img.src = "/static/img/false.png";
 	}
 	var next = document.createElement("input");
 	next.value = "Ďalej";		
@@ -33,7 +29,10 @@ function process(answer, result){
 	    	next.attachEvent('onclick',onclick); //IE only
 	
 	d.appendChild(next);
-	return true;
+	var a = document.getElementById("answer");
+	delet(a);
+	a.appendChild(document.createTextNode("správna odpoveď bola: " + result + " líšili ste sa o: " + diff));
+	return false;
 }
 
 function delet(div){
@@ -49,4 +48,4 @@ function resize(img){
 
 Number.prototype.round = function(places) {
   return +(Math.round(this + "e+" + places)  + "e-" + places);
-}
+};
