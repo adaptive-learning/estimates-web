@@ -20,7 +20,7 @@ function getCookie(name) {
 }
 
 
-function create_post(mId,url) {
+function create_post(mId,urlPath) {
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -29,14 +29,13 @@ function create_post(mId,url) {
 		}
 	});
     $.ajax({
-    	url : url, // the endpoint
+    	url : urlPath, // the endpoint
         type : "POST", // http method
         //TODO userId
         data : { input : $('#input').val(), userId: 0, modelId: mId }, // data sent with the post request
 
         // handle a successful response
         success : function(response) {
-        	alert(response);
             var splitter = response.split("//");
             answer(splitter[0],splitter[1]);
         },

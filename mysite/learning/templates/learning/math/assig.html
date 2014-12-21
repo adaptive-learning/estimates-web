@@ -16,7 +16,7 @@
 {{ assig.id }}
 <br>
 <div>
-<form id="assigForm" action="/math/assig" >{% csrf_token %}
+<form id="assigForm" action="/math/assig">{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
 				<br><br><br><br>
@@ -41,7 +41,7 @@
 		</div>
 	</div>
 <script src="/static/js/jquery-1.11.1.min.js"></script>
-<script src="/static/js/Math.js"></script>
+<script src="/static/js/answerForm.js"></script>
 <script>
 var csrftoken = getCookie('csrftoken');
 $('#assigForm').on('submit', function(event){
@@ -52,7 +52,6 @@ $('#assigForm').on('submit', function(event){
 
 </form>
 </div>
-<script src="/static/js/answerForm.js"></script>
 <script src="/js/foundation.min.js"></script>
 <style>
 	#imgDiv{  

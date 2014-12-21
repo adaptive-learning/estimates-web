@@ -7,13 +7,13 @@
 </head>
 <html>
 
-{% if assig %}
+{% if output %}
 
 
 {% block base_body %}
 {%include "navBar/bar.html" %}
 
-{{ assig.result }}
+{{ output.result }}
 <div>
 <div>
 
@@ -21,7 +21,7 @@
 	<div class="row">
 		<div class="row collapse" id="imgEu" align="center">
 		<script>
-		var from = "{{assig.fr}}";
+		var from = "{{output.fr}}";
 		if(from == 'CZK'){
 			var div = document.getElementById('imgEu');
 			div.id = "imgCz";
@@ -29,8 +29,8 @@
 		</script>
 			<br><br><br><br>
 			<label class="small-9 collumns" id="label">
-				<script src="/static/js/Currency.js"></script>
-				{{assig.question}}<script>decider("{{assig.fr}}");</script> ({{assig.fr}}) = ? <script>decider("{{assig.to}}");</script> ({{assig.to}}) 
+				<script src="/static/js/Physics.js"></script>
+				{{output.question}}<script>decider("{{output.fr}}");</script> ({{output.fr}}) = ? <script>decider("{{output.to}}");</script> ({{output.to}}) 
 			</label>
 		
 			<div class="large-3 collumns" id="userPart">
@@ -47,24 +47,21 @@
 			<input type="submit" class="button" value="Odpovedat" />
 		</div>
 	</div>
-	<script src="/static/js/jquery-1.11.1.min.js"></script>
-	<script src="/static/js/answerForm.js"></script>
 	<script>
-
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 	    	event.preventDefault();
-	    	create_post("{{assig.id}}","/curr/ansCurr");
+	    	create_post("{{assig.id}}","/math/answeredMath/");
 		});
-		var doc = document.getElementById("assigForm");
-		if("{{assig.fr}}" == 'CZK')
-			doc.setAtrribute("action","/curr/c");
+		var d = document.getElementById("assigForm");
+		if("{{assig.fr}}" == "CZK")
+			d.setAtrribute("action","curr/c");
 		else 
-			doc.setAttribute("action","/curr/e");
+			d.setAttribute("action","curr/e");
 	</script>
 </form>
 </div>
-
+<script src="/static/js/answerForm.js"></script>
 <script src="/js/foundation.min.js"></script>
 <style>
 	#imgEu{  
