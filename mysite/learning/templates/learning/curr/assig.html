@@ -17,7 +17,7 @@
 <div>
 <div>
 
-<form id="assigForm">{% csrf_token %}
+<form id="assigForm" action="/curr/c">{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgEu" align="center">
 		<script>
@@ -50,17 +50,17 @@
 	<script src="/static/js/jquery-1.11.1.min.js"></script>
 	<script src="/static/js/answerForm.js"></script>
 	<script>
+	
 
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
+			var doc = document.getElementById("assigForm");
+			if("{{assig.fr}}" == 'EUR')
+				doc.setAttribute("action","/curr/e");
 	    	event.preventDefault();
 	    	create_post("{{assig.id}}","/curr/ansCurr");
 		});
-		var doc = document.getElementById("assigForm");
-		if("{{assig.fr}}" == 'CZK')
-			doc.setAtrribute("action","/curr/c");
-		else 
-			doc.setAttribute("action","/curr/e");
+
 	</script>
 </form>
 </div>
