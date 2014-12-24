@@ -20,6 +20,7 @@ def answeredMath(request):
         model = MathExerciseModel.objects.get(id=request.POST.get('modelId'))
         model.result = eval(model.equation)
         model.answer = ans
+        model.time = request.POST.get('time')
         model.save();
         diff = model.result - int(model.answer)
         
@@ -54,6 +55,7 @@ def ansSqrt(request):
         else :
             model.result = pow(model.question, model.pow)
         diff = model.result - float(model.answer)
+        model.time = request.POST.get('time')
         model.save()
         return HttpResponse(str(diff) + "//" + str(model.result))
 
@@ -99,6 +101,7 @@ def ansCurr(request):
         data = json.loads(result.read())
         rate = data['query']['results']['rate']['Rate']
         model.result = round(float(rate) * model.question,2)
+        model.time = request.POST.get('time')
 
         diff = model.result - model.answer        
         model.save()
@@ -118,9 +121,6 @@ def physics(request,type):
     out.fr = random.choice(array)
     array.delete(out.fr)
     out.to = random.choice(array)
-    
-    
-    
     
     
     

@@ -1,3 +1,5 @@
+include ('time.js');
+
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -20,7 +22,7 @@ function getCookie(name) {
 
 
 function create_post(mId,urlPath) {
-	
+	timer_is_on = 0;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -32,7 +34,7 @@ function create_post(mId,urlPath) {
     	url : urlPath, // the endpoint
         type : "POST", // http method
         //TODO userId
-        data : { input : $('#input').val(), userId: 0, modelId: mId }, // data sent with the post request
+        data : { input : $('#input').val(), userId: 0, modelId: mId, time:  minutes*60 + c}, // data sent with the post request
 
         // handle a successful response
         success : function(response) {
