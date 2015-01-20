@@ -2,14 +2,11 @@
 from django.conf.urls import *
 
 from learning import views
+from learning.views import *
 
 urlpatterns = patterns("",
     url(r'^$', views.index, name='index'),
-    url(r'assig/$',views.MAssig, name='math/assig'),
-    url(r'answeredMath',views.answeredMath, name='math/assig/asnweredMath'),
-    url(r'ansCurr',views.ansCurr, name='curr/ansCurr'),
-    url(r'sqrt',views.MSqrt,name="math/sqrt"),
-    url(r'ansSqrt',views.ansSqrt,name="math/ansSqrt"),
-    url(r'^e',views.Currency,{'curr':'EUR'}),
-    url(r'^c',views.Currency,{'curr':'CZK'}),
+    url(r'^curr/(?P<type>[a-z]+)',CreateFrTo.as_view()),
+    url(r'^phys/(?P<type>[a-z]+)',CreateFrTo.as_view()),
+    url(r'^math/(?P<type>[a-z]+)',CreateMath.as_view()),
 )    

@@ -13,15 +13,15 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 
-{{ assig.result }}
-<div>
-<div>
+{{ type}}
+{% load staticfiles %}
 
-<form id="assigForm" action="/curr/c">{% csrf_token %}
+
+<form id="assigForm" action="/learning/curr/c" method="POST">{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgEu" align="center">
 		<script>
-		var from = "{{assig.fr}}";
+		var from = "{{fr}}";
 		if(from == 'CZK'){
 			var div = document.getElementById('imgEu');
 			div.id = "imgCz";
@@ -29,14 +29,13 @@
 		</script>
 			<br><br><br><br>
 			<label class="small-9 collumns" id="label">
-				<script src="/static/js/Currency.js"></script>
-				{{assig.question}}<script>decider("{{assig.fr}}");</script> ({{assig.fr}}) = ? <script>decider("{{assig.to}}");</script> ({{assig.to}}) 
+				<script src="{% static "js/Currency.js" %}"></script>
+				{{question}}<script>decider("{{fr}}");</script> ({{fr}}) = ? <script>decider("{{to}}");</script> ({{to}}) 
 			</label>
-		
 			<div class="large-3 collumns" id="userPart">
 				<div class="row collapse">
 					<div class="small-9 columns" >
-						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" min="0"/>
+						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" min="0" required/>
 					</div>
 					<div id="assigment"></div>
 				</div>
@@ -47,16 +46,23 @@
 			<input type="submit" class="button" value="Odpovedat" />
 		</div>
 	</div>
-	<script src="/static/js/jquery-1.11.1.min.js"></script>
-	<script src="/static/js/answerForm.js"></script>
+	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+	<script src="{% static "js/answerForm.js" %}"></script>
 	<script>
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 			var doc = document.getElementById("assigForm");
-			if("{{assig.fr}}" == 'EUR')
-				doc.setAttribute("action","/curr/e");
+			if("{{fr}}" == 'EUR')
+				doc.setAttribute("action","/learning/curr/e");
 	    	event.preventDefault();
-	    	create_post("{{assig.id}}","/curr/ansCurr");
+	    	//to do model id or something
+	    	var jsonString= JSON.stringify({
+   				type:"{{type}}",
+   				fr:"{{fr}}",
+   				to:"{{to}}",
+   				question:"{{question}}",
+   			});
+	    	create_post(jsonString);
 		});
 
 	</script>
@@ -64,18 +70,18 @@
 </div>
 <form>
 	<input type="text" id="txt">
-	</div><script src="/static/js/time.js"></script>
+	</div><script src="{% static "js/time.js"%}"></script>
 </form>
 <script src="/js/foundation.min.js"></script>
 <style>
 	#imgEu{  
-		background: url(/static/img/euro.png) no-repeat;
+		background: url({% static "img/euro.png" %}) no-repeat;
 		background-color: transparent;
 		background-size: 100% 100%;
 		height: 500px;
 		}
 	#imgCz{  
-		background: url(/static/img/cz.png) no-repeat;
+		background: url({% static "img/cz.png" %}) no-repeat;
 		background-color: transparent;
 		background-size: 100% 100%;
 		height: 500px;
@@ -97,7 +103,6 @@
 		margin-left: 35px;
 	}
 </style>
-</div>
 {% endblock base_body %}
 
 {% else %}

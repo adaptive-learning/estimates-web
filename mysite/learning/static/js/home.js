@@ -36,16 +36,16 @@ function home(a){
 	}
 	switch(a){
 		case 'math':
-			createHrefButton('a','Odmocniny/mocniny','math/sqrt',choice,false);
-			createHrefButton('a','Priklady','math/assig',choice,true);
+			createHrefButton('a','Odmocniny/mocniny','learning/math/sqrt',choice,false);
+			createHrefButton('a','Priklady','learning/math/equa',choice,true);
 			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';
 			break;
 		case 'fyz':
 			document.getElementById("header").innerHTML = "Odhady Fyzikalnych jednotiek";
 			break;
 		case 'curr':
-			createHrefButton('a','Eurá (€)','curr/e',choice,false);
-			createHrefButton('a','České koruny (CZK)','curr/c',choice,true);
+			createHrefButton('a','Eurá (€)','learning/curr/e',choice,false);
+			createHrefButton('a','České koruny (CZK)','learning/curr/c',choice,true);
 			document.getElementById("header").innerHTML = "Odhady meny";
 			break;
 		case 'home':

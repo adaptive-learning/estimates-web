@@ -7,7 +7,6 @@
 </head>
 <html>
 
-{% if assig %}
 
 
 {% block base_body %}
@@ -16,27 +15,18 @@
 {{ assig.result }}
 <br>
 <div>
-<form id="assigForm" action="/math/sqrt/">{% csrf_token %}
+<form id="assigForm" action="/learning/math/sqrt">{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
 				<br><br><br><br>
 				<label class="small-8 collumns" id="label" for="input">
-					<script>
-						var oper = "{{assig.oper.0}}";
-						var question = "{{assig.question}}";
-						if (oper == '1'){
-							document.write("odmocnina z: ",question);
-						} else {
-							document.write(question+"^"+"{{assig.pow}}");
-						}
-						document.write(" = ?");
-					</script>
+					&radic;{{question}} = ?
 				</label>
 				<br>
 				<div class="large-3 collumns" id="userPart">
 					<div class="row collapse">
 						<div class="small-9 columns" >
-							<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" min="0"/>
+							<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" min="0" required/>
 						</div>
 						<div id="assigment"></div><br>
 					</div>
@@ -54,7 +44,13 @@
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 		    event.preventDefault();
-		    create_post("{{assig.id}}","/math/ansSqrt/");
+		    var jsonString= JSON.stringify({
+   				type:"{{type}}",
+   				fr:"{{fr}}",
+   				to:"{{to}}",
+   				question:"{{question}}",
+   			});
+		    create_post(jsonString);
 		});
 	</script>
 </form>
@@ -88,9 +84,5 @@
 	}
 </style>
 {% endblock base_body %}
-
-{% else %}
-	<p>No assigment is available</p>
-{% endif %}
 </html>
  

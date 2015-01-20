@@ -21,7 +21,8 @@ function getCookie(name) {
 }
 
 
-function create_post(mId,urlPath) {
+// function create_post(mId,urlPath) {
+function create_post(data) {
 	timer_is_on = 0;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
@@ -31,28 +32,25 @@ function create_post(mId,urlPath) {
 		}
 	});
     $.ajax({
-    	url : urlPath, // the endpoint
+    	url : "", // the endpoint
         type : "POST", // http method
         //TODO userId
-        data : { input : $('#input').val(), userId: 0, modelId: mId, time:  minutes*60 + c}, // data sent with the post request
-
+        // data : { answer : $('#input').val(), userId: 0, time:  minutes*60 + c, }, // data sent with the post request
+        data : { answer : $('#input').val(), userId: 0, time:  minutes*60 + c, data: data}, // data sent with the post request
+		
         // handle a successful response
         success : function(response) {
-        	
             var splitter = response.split("//");
             answer(splitter[0],splitter[1]);
         },
-
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
-        	
             $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
                 " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
             alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
 };
-
 
 function answer(diff,result){
 	var img = document.createElement('img');
