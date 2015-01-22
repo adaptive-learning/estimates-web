@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render, redirect
+# from django.shortcuts import render_to_response, 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext, loader
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
@@ -9,6 +9,7 @@ import random, json
 import simplejson
 import urllib2
 from django.core import serializers
+from django.template.response import TemplateResponse
 #  some_app/views.py
 
 
@@ -30,8 +31,10 @@ class QType(enum.Enum):
     TEMP = 7
 
 def index(request):
-    return render_to_response('home/index.html')
-
+    print request.user
+#     return render_to_response('home/index.html',request.user)
+#     return  HttpResponse('home/index.html')
+    return TemplateResponse(request,'home/index.html')
 
     
 class AjaxableResponseMixin(object):
@@ -42,7 +45,7 @@ class AjaxableResponseMixin(object):
             print self.model.params.param1
             self.model.result = eval(self.model.params.param1)
         elif type == 'sqrt' :
-            self.model.result = round(sqrt(self.model.question),2) 
+            self.model.result = round(sqrt(float(self.model.question)),2) 
         elif type == 'e' or type == 'c' :
             raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22"+ self.model.params.param1 + self.model.params.param2 +"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
             data = json.loads(raw.read())

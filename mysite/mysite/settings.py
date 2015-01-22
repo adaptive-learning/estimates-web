@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'learning',
     'foundation',
     'compressor',
+    'users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -70,7 +71,8 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'sk-SK'
 
 TIME_ZONE = 'Europe/Bratislava'
 
@@ -99,3 +101,5 @@ COMPRESS_ROOT = (
 ## https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/learning'

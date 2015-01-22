@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends "foundation/base.html" %}
+<head>
+	
+	
+	
+</head>
+<html>
+
+
+
+{% block base_body %}
+{%include "navBar/bar.html" %}
+<form id="register" method="post">{% csrf_token %}
+	<div class="row center">
+		<br><br>
+		<div class="rows collapse">
+		<div class="small-3 collumns">
+			{% spaceless %}
+			{% for item in form %}
+				<label>{{item.label}}</label>
+				{{item}}
+				<font color="red">{{item.errors}}</font>
+			{% endfor %}
+			
+			{% endspaceless %}
+			<input type="submit" name="Registrovat" value="Prihlásiť" class="button">
+		</div>
+		</div>
+	</div>
+</form>
+{% endblock base_body %}
