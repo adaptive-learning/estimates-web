@@ -5,17 +5,23 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from forms import UserCreateForm
 from django import forms
+from django.core.exceptions import ValidationError
 from django.views.generic.edit import CreateView, FormView, View
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 
 class CreateUser(CreateView):
-    template_name = 'users/register.html'
+    template_name = 'registration/register.html'
     form_class=UserCreateForm
-    def post(self,request):
-        super(CreateUser,self).post(request)
-        return HttpResponseRedirect('/learning')
-        
+#     def post(self,request):
+# #         try:
+#         reque = super(CreateUser,self).post(request)
+# #         except ValidationError :
+# #             raise Exception("")
+#         return HttpResponseRedirect('/learning',reque)
+    def form_valid(self,form):
+        ret = super(CreateView,self).form_valid(form)
+        return HttpResponseRedirect('/learning',ret)
         
 class UserInfo(View):
     pass

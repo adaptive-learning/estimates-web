@@ -31,9 +31,6 @@ class QType(enum.Enum):
     TEMP = 7
 
 def index(request):
-    print request.user
-#     return render_to_response('home/index.html',request.user)
-#     return  HttpResponse('home/index.html')
     return TemplateResponse(request,'home/index.html')
 
     
