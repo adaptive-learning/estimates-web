@@ -13,25 +13,20 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 
-{{ type}}
 {% load staticfiles %}
 
-
-<form id="assigForm" action="/learning/curr/c" method="POST">{% csrf_token %}
+<br>
+<form id="assigForm" action="/learning/curr/c" method="post">{% csrf_token %}
 	<div class="row">
-		<div class="row collapse" id="imgEu" align="center">
-		<script>
-		var from = "{{fr}}";
-		if(from == 'CZK'){
-			var div = document.getElementById('imgEu');
-			div.id = "imgCz";
-		}
-		</script>
-			<br><br><br><br>
+		<div class="row collapse" id="imgFyz" align="center">
+
+			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
-				<script src="{% static "js/Currency.js" %}"></script>
+				<script src="{% static "js/frTo.js" %}"></script>
 				{{question}}<script>decider("{{fr}}");</script> ({{fr}}) = ? <script>decider("{{to}}");</script> ({{to}}) 
 			</label>
+			
+			<br>
 			<div class="large-3 collumns" id="userPart">
 				<div class="row collapse">
 					<div class="small-9 columns" >
@@ -42,6 +37,7 @@
 			</div>
 			<div class="large-6 rows" id="answer"></div>
 		</div>
+		<br>
 		<div id = "next">
 			<input type="submit" class="button" value="Odpovedat" />
 		</div>
@@ -52,8 +48,8 @@
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 			var doc = document.getElementById("assigForm");
-			if("{{fr}}" == 'EUR')
-				doc.setAttribute("action","/learning/curr/e");
+			// if("{{fr}}" == 'EUR')
+			doc.setAttribute("action","/learning/conv/{{type}}");
 	    	event.preventDefault();
 	    	//to do model id or something
 	    	var jsonString= JSON.stringify({
@@ -74,12 +70,17 @@
 </form>
 <script src="/js/foundation.min.js"></script>
 <style>
+	#imgFyz{  
+		background: url({% static "img/MathBoard.png" %}) no-repeat;
+		background-size: 100% 100%;
+		height: 500px;
+	}
 	#imgEu{  
 		background: url({% static "img/euro.png" %}) no-repeat;
 		background-color: transparent;
 		background-size: 100% 100%;
 		height: 500px;
-		}
+	}
 	#imgCz{  
 		background: url({% static "img/cz.png" %}) no-repeat;
 		background-color: transparent;
@@ -87,12 +88,12 @@
 		height: 500px;
 	}
 	#label{
-		color: black;
+		color: white;
 		font: normal 25px courier !important;
 	}
 	#input{
 	    background-color:rgba(0, 0, 0, 0);
-	    color:black;
+	    color:white;
 	    border: none;
 	    outline:none;
 	    height:35px;
@@ -103,6 +104,19 @@
 		margin-left: 35px;
 	}
 </style>
+<script>
+	var from = "{{fr}}";
+	if(from == 'CZK'){
+		$("#imgFyz").attr("id","imgCz");
+		$("#label").css("color","black");
+		$("#input").css("color","black");
+	}
+	if(from == 'EUR'){
+		$("#imgFyz").attr("id","imgEu");
+		$("#label").css("color","black");
+		$("#input").css("color","black");
+	}
+</script>
 {% endblock base_body %}
 
 {% else %}

@@ -26,6 +26,12 @@ function decider(curr){
 		case 'EUR': 
 			document.write("€");	
 			break;
+		case 'fahrenheit':
+			document.write("°f");
+			break;
+		case 'celsium':
+			document.write("°C");
+			break;
 	}
 }
 

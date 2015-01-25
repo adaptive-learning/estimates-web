@@ -36,16 +36,20 @@ function home(a){
 	}
 	switch(a){
 		case 'math':
-			createHrefButton('a','Odmocniny/mocniny','learning/math/sqrt',choice,false);
-			createHrefButton('a','Priklady','learning/math/equa',choice,true);
+			createHrefButton('a','Odmocniny','/learning/math/sqrt',choice,false);
+			createHrefButton('a','Priklady','/learning/math/equa',choice,true);
 			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';
 			break;
 		case 'fyz':
+			createHrefButton('a','Vzdialenost','/learning/conv/len',choice,false);
+			createHrefButton('a','Plocha','/learning/conv/surf',choice,false);
+			createHrefButton('a','Objem','/learning/conv/vol',choice,false);
+			createHrefButton('a','Teplota','/learning/conv/temp',choice,true);
 			document.getElementById("header").innerHTML = "Odhady Fyzikalnych jednotiek";
 			break;
 		case 'curr':
-			createHrefButton('a','Eurá (€)','learning/curr/e',choice,false);
-			createHrefButton('a','České koruny (CZK)','learning/curr/c',choice,true);
+			createHrefButton('a','Eurá (€)','/learning/conv/e',choice,false);
+			createHrefButton('a','České koruny (CZK)','/learning/conv/c',choice,true);
 			document.getElementById("header").innerHTML = "Odhady meny";
 			break;
 		case 'home':

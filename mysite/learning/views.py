@@ -10,6 +10,7 @@ import simplejson
 import urllib2
 from django.core import serializers
 from django.template.response import TemplateResponse
+from pint import UnitRegistry
 #  some_app/views.py
 
 
@@ -18,23 +19,26 @@ from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormView, CreateView 
 
 
-from django_enumfield import enum
-
-class QType(enum.Enum):
-    EQUA = 0
-    VOL = 1
-    EUR = 2
-    CZK = 3
-    CAP = 4
-    AREA = 5
-    DIST = 6
-    TEMP = 7
-
 def index(request):
     return TemplateResponse(request,'home/index.html')
 
     
 class AjaxableResponseMixin(object):
+    def arrayToType(self,type):
+        if type == None :
+            raise Exception('type in arrayToType is None')
+        if type == 'e' or type == "c":
+            return ["USD","PLN","HUF","CHF","GBP","RUB","CZK","EUR"]
+        elif type == 'vol':
+            return ["mm**3","cm**3","dm**3","m**3","km**3","ml","l","dl","hl"]
+        elif type == 'surf' :
+            return ["mm**2","cm**2","dm**2","m**2","km**2","are","hare"]
+        elif type == 'len' :
+            return ["mm","cm","dm","m","km","mile","inch"]
+        elif type == 'temp' :
+            return ["kelvin","degF","degC"] 
+        else :
+            raise Exception('type is unknow command %s' %(type))
     
     def decider(self,type):
 #         type = 'e'
@@ -49,6 +53,16 @@ class AjaxableResponseMixin(object):
             rate = data['query']['results']['rate']['Rate']
             
             self.model.result = round(float(rate) * float(self.model.question),2)
+        elif type == 'vol' or 'surf' or 'len' or 'temp':
+            array = self.arrayToType(type)
+            src = self.model.params.param1
+            dst = self.model.params.param2
+            if src in array and dst in array:
+                Q_ = UnitRegistry().Quantity
+                src = self.model.question + src
+                self.model.result = round(Q_(src).to(dst).magnitude,2)
+            else:
+                raise Exception("error unknow value of %s or %s"%(self.model.params.param1,self.model.params.param2))
         else :
             raise Exception('type is unknow command %s' %s(type))
         
@@ -71,6 +85,11 @@ class AjaxableResponseMixin(object):
         self.model.question = js['question']
         self.model.type = t
         self.model.params = p
+#         check this
+        if self.request.user.is_authenticated():
+            self.model.user = self.request.user
+        else :
+            self.model.user = None
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
 
@@ -98,6 +117,8 @@ class CreateQuestion(AjaxableResponseMixin,CreateView):
         self.type= self.kwargs.get('type',None)
         if self.type == None:
             raise Exception("type in CreateQuestion is None")
+        raw = urllib2.urlopen("https://www.google.com/finance/converter?a=1&from=EUR&to=USD&meta=ei%3DzUnFVNmMDurGwAP1gIFg")
+        print raw
         ctx['type'] = self.type
         return ctx
     def randArray(self,range,array,fr = None):
@@ -107,46 +128,30 @@ class CreateQuestion(AjaxableResponseMixin,CreateView):
         to = random.choice(array)
         q = random.randrange(range[0],range[1])
         return (fr,to,q)
-    
 
         
 class CreateFrTo(CreateQuestion):
     default = None
     array = None
     range = None
-    template_name = 'learning/curr/assig.html'
+    template_name = 'learning/frTo.html'
     def init(self) :
         if self.type == None :
             raise Exception('type in CreateFrTo is None')
+        self.range = (1,100)
         if self.type == 'e' :
-            self.array = ["USD","PLN","HUF","CHF","GBP","RUB","CZK","EUR"]
             self.range = (10,120)
             self.default = 'EUR'
         elif self.type == 'c':
-            self.array = ["USD","PLN","HUF","CHF","GBP","RUB","CZK","EUR"]
             self.range = (300,3000)
             self.default = 'CZK'
-        elif(self.type == 'fd'):
-            self.array = ["mm3","cm3","dm3","m3","km3","l","dcl","ml","hl"]
-        elif(self.type == 1):
-            self.array = ["mm2","cm2","m2","km2","ar","ha"]
-        elif(self.type == 2):
-            self.array = ["mm","cm","dm","m","km","mile"]
-        elif(self.type == 3):
-            self.array = ["fahrenheit","celsium"]
-        else :
-            raise Exception('type is unknow command %s' %s(self.type))
+        elif self.type == 'temp' :
+            self.range = (-40,40)
             
-        if self.array == None or self.range == None :
-            raise Exception('array or range is null %s %s' % (self.array, self.range))
+        if self.range == None :
+            raise Exception('range is null %s' % (self.range))
         
-        if self.default == None:
-            self.fr,self.to,self.question = self.randArray(self.range,self.array)
-        else:
-            self.fr,self.to,self.question = self.randArray(self.range,self.array,self.default)
-#         ToDo
-#         find fr to in TypeModel and add like Foreign Key
-#         find if there are public / private and get   
+        self.fr,self.to,self.question = self.randArray(self.range,self.arrayToType(self.type),self.default)
      
     def get_context_data(self, **kwargs):
         print "am i"
@@ -178,7 +183,7 @@ class CreateMath(CreateQuestion):
     def init(self):
         if self.type == 'equa':
             self.question = self.createEquation("+-*",(2,4),(100,300))
-            self.template_name = 'learning/math/equa.html'
+            self.template_name = 'math/equa.html'
         elif self.type == 'sqrt':
             self.question = random.randrange(1,256)
         else:

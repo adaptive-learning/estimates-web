@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class IntModel(models.Model):
@@ -14,6 +15,7 @@ class FloatModel(models.Model):
     params = models.ForeignKey('Params')
     type = models.ForeignKey('Type')
     time = models.IntegerField()
+    user = models.IntegerField(null = True)
     
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)
