@@ -43,7 +43,6 @@ class AjaxableResponseMixin(object):
     def decider(self,type):
 #         type = 'e'
         if type == 'equa' :
-            print self.model.params.param1
             self.model.result = eval(self.model.params.param1)
         elif type == 'sqrt' :
             self.model.result = round(sqrt(float(self.model.question)),2) 
@@ -118,7 +117,7 @@ class CreateQuestion(AjaxableResponseMixin,CreateView):
         if self.type == None:
             raise Exception("type in CreateQuestion is None")
         raw = urllib2.urlopen("https://www.google.com/finance/converter?a=1&from=EUR&to=USD&meta=ei%3DzUnFVNmMDurGwAP1gIFg")
-        print raw
+
         ctx['type'] = self.type
         return ctx
     def randArray(self,range,array,fr = None):
@@ -154,7 +153,6 @@ class CreateFrTo(CreateQuestion):
         self.fr,self.to,self.question = self.randArray(self.range,self.arrayToType(self.type),self.default)
      
     def get_context_data(self, **kwargs):
-        print "am i"
         ctx = super(CreateFrTo, self).get_context_data(**kwargs)
         self.init()
         ctx['fr'] = self.fr
@@ -194,7 +192,6 @@ class CreateMath(CreateQuestion):
         ctx = super(CreateMath, self).get_context_data(**kwargs)
         
         self.init()
-        print self.question
         ctx['question'] = self.question
         return ctx
     
