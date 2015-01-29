@@ -8,3 +8,4 @@
     django_compressor
     libpq-dev
     python-dev
+    pint
