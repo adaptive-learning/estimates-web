@@ -32,9 +32,9 @@ class AjaxableResponseMixin(object):
         elif type == 'vol':
             return ["mm**3","cm**3","dm**3","m**3","km**3","ml","l","dl","hl"]
         elif type == 'surf' :
-            return ["mm**2","cm**2","dm**2","m**2","km**2","are","hare"]
+            return ["mm**2","cm**2","dm**2","m**2","km**2","are","acre"]
         elif type == 'len' :
-            return ["mm","cm","dm","m","km","mile","inch"]
+            return ["mm","cm","dm","m","km","mile","inch","ft"]
         elif type == 'temp' :
             return ["kelvin","degF","degC"] 
         else :
@@ -57,8 +57,8 @@ class AjaxableResponseMixin(object):
             src = self.model.params.param1
             dst = self.model.params.param2
             if src in array and dst in array:
-                Q_ = UnitRegistry().Quantity
-                src = self.model.question + src
+                Q_ = UnitRegistry(autoconvert_offset_to_baseunit = True).Quantity
+                src = str(self.model.question) + src
                 self.model.result = round(Q_(src).to(dst).magnitude,2)
             else:
                 raise Exception("error unknow value of %s or %s"%(self.model.params.param1,self.model.params.param2))
@@ -107,7 +107,7 @@ class AjaxableResponseMixin(object):
             return HttpResponse(str(diff) + '//' + str(self.model.result))
 #         ToDo elif
     
-class CreateQuestion(AjaxableResponseMixin,CreateView):   
+class CreateQuestion(CreateView):   
     
     model = FloatModel
     fields = ['answer']
@@ -129,7 +129,7 @@ class CreateQuestion(AjaxableResponseMixin,CreateView):
         return (fr,to,q)
 
         
-class CreateFrTo(CreateQuestion):
+class CreateFrTo(AjaxableResponseMixin, CreateQuestion):
     default = None
     array = None
     range = None
@@ -162,7 +162,7 @@ class CreateFrTo(CreateQuestion):
     
 
         
-class CreateMath(CreateQuestion):
+class CreateMath(AjaxableResponseMixin, CreateQuestion):
     template_name = 'learning/math/sqrt.html'
     def createEquation(self,oper,numEle,rangeEle):
         j = random.randint(numEle[0], numEle[1])
