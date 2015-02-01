@@ -34,9 +34,7 @@ function create_post(data) {
     $.ajax({
     	url : "", // the endpoint
         type : "POST", // http method
-        //TODO userId
-        // data : { answer : $('#input').val(), userId: 0, time:  minutes*60 + c, }, // data sent with the post request
-        data : { answer : $('#input').val(), userId: 0, time:  minutes*60 + c, data: data}, // data sent with the post request
+        data : { answer : $('#input').val(), time:  minutes*60 + c, data: data}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {

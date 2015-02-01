@@ -1,4 +1,3 @@
-# from django.shortcuts import render_to_response, 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext, loader
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
@@ -7,15 +6,14 @@ from math import sqrt
 from forms import FloatForm
 import random, json
 import simplejson
+from django.contrib.auth import get_user
 import urllib2
 from django.core import serializers
 from django.template.response import TemplateResponse
 from pint import UnitRegistry
-#  some_app/views.py
 
 
 from django.views.generic import TemplateView, View
-# from learning.forms import IntForm
 from django.views.generic.edit import FormView, CreateView 
 
 
@@ -84,9 +82,9 @@ class AjaxableResponseMixin(object):
         self.model.question = js['question']
         self.model.type = t
         self.model.params = p
-#         check this
+# #         check this
         if self.request.user.is_authenticated():
-            self.model.user = self.request.user
+            self.model.user = get_user(self.request)
         else :
             self.model.user = None
         self.model.answer = self.post.get('answer')

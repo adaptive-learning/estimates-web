@@ -15,7 +15,7 @@ class FloatModel(models.Model):
     params = models.ForeignKey('Params')
     type = models.ForeignKey('Type')
     time = models.IntegerField()
-    user = models.IntegerField(null = True)
+    user = models.ForeignKey(User, null = True)
     
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)
