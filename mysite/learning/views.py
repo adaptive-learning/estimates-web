@@ -1,18 +1,16 @@
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.template import RequestContext, loader
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from learning.models import *
+from django.http import HttpResponse, HttpResponseBadRequest
+# from django.template import RequestContext, loader
+from django.core.urlresolvers import reverse
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from math import sqrt
-from forms import FloatForm
-import random, json
-import simplejson
+import random, json, urllib2
 from django.contrib.auth import get_user
-import urllib2
-from django.core import serializers
-from django.template.response import TemplateResponse
 from pint import UnitRegistry
+from django.template.response import TemplateResponse
 
 
+from django.views.generic.base import RedirectView
 from django.views.generic import TemplateView, View
 from django.views.generic.edit import FormView, CreateView 
 
@@ -20,9 +18,12 @@ from django.views.generic.edit import FormView, CreateView
 def index(request):
     return TemplateResponse(request,'home/index.html')
 
-    
-class AjaxableResponseMixin(object):
-    def arrayToType(self,type):
+def converter(amount,src,dst):
+    Q_ = UnitRegistry(autoconvert_offset_to_baseunit = True).Quantity
+    src = str(amount) + src
+    return Q_(src).to(dst).magnitude
+
+def arrayToType(type):
         if type == None :
             raise Exception('type in arrayToType is None')
         if type == 'e' or type == "c":
@@ -37,9 +38,27 @@ class AjaxableResponseMixin(object):
             return ["kelvin","degF","degC"] 
         else :
             raise Exception('type is unknow command %s' %(type))
-    
+       
+      
+class CreateQuestion(CreateView):
+        
+    model = FloatModel
+    fields = ['answer']    
+            
+    def randType(self,name):
+        if name == None:
+            raise Expcetion('name is unknow %s' %(type))
+        
+        if name == "all":
+            name = random.choice(["phys","math","curr"])
+        if name == 'phys':
+            return random.choice(["vol","surf","len","temp"])
+        elif name == 'math':
+            return random.choice(["sqrt","equa"])
+        elif name == 'curr':
+            return random.choice(["e","c"])
+            
     def decider(self,type):
-#         type = 'e'
         if type == 'equa' :
             self.model.result = eval(self.model.params.param1)
         elif type == 'sqrt' :
@@ -50,20 +69,16 @@ class AjaxableResponseMixin(object):
             rate = data['query']['results']['rate']['Rate']
             
             self.model.result = round(float(rate) * float(self.model.question),2)
-        elif type == 'vol' or 'surf' or 'len' or 'temp':
-            array = self.arrayToType(type)
+        elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
+            array = arrayToType(type)
             src = self.model.params.param1
             dst = self.model.params.param2
             if src in array and dst in array:
-                Q_ = UnitRegistry(autoconvert_offset_to_baseunit = True).Quantity
-                src = str(self.model.question) + src
-                self.model.result = round(Q_(src).to(dst).magnitude,2)
+                self.model.result = round(converter(self.model.question,src,dst),2)
             else:
                 raise Exception("error unknow value of %s or %s"%(self.model.params.param1,self.model.params.param2))
         else :
             raise Exception('type is unknow command %s' %s(type))
-        
-        
         
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
@@ -82,14 +97,35 @@ class AjaxableResponseMixin(object):
         self.model.question = js['question']
         self.model.type = t
         self.model.params = p
-# #         check this
         if self.request.user.is_authenticated():
             self.model.user = get_user(self.request)
         else :
             self.model.user = None
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
-
+        
+    def randArray(self,range,array,fr = None):
+        if fr == None :
+            fr = random.choice(array)          
+        array.remove(fr)
+        to = random.choice(array)
+        q = random.randrange(range[0],range[1])
+        return (fr,to,q)
+    
+    def get_context_data(self, **kwargs):
+        ctx = super(CreateQuestion, self).get_context_data(**kwargs)
+        self.type= self.kwargs.get('type',None)
+        if self.type == None:
+            raise Exception("type in CreateQuestion is None")
+        splitted = self.type.split('-')
+        print self.request.path
+        if len(splitted) == 2 and splitted[1] == 'all':
+            self.type = self.randType(splitted[0])
+            ctx['action'] = self.request.path
+        ctx['type'] = self.type
+        return ctx
+    
+class AjaxableResponseMixin(CreateQuestion):
     def form_invalid(self, form):
         if self.request.is_ajax():
             return HttpResponseBadRequest(json.dumps(form.errors))
@@ -104,34 +140,22 @@ class AjaxableResponseMixin(object):
             diff = self.model.result - float(self.model.answer)
             return HttpResponse(str(diff) + '//' + str(self.model.result))
 #         ToDo elif
-    
-class CreateQuestion(CreateView):   
-    
-    model = FloatModel
-    fields = ['answer']
-    def get_context_data(self, **kwargs):
-        ctx = super(CreateQuestion, self).get_context_data(**kwargs)
-        self.type= self.kwargs.get('type',None)
-        if self.type == None:
-            raise Exception("type in CreateQuestion is None")
-        raw = urllib2.urlopen("https://www.google.com/finance/converter?a=1&from=EUR&to=USD&meta=ei%3DzUnFVNmMDurGwAP1gIFg")
-
-        ctx['type'] = self.type
-        return ctx
-    def randArray(self,range,array,fr = None):
-        if fr == None :
-            fr = random.choice(array)            
-        array.remove(fr)
-        to = random.choice(array)
-        q = random.randrange(range[0],range[1])
-        return (fr,to,q)
-
         
-class CreateFrTo(AjaxableResponseMixin, CreateQuestion):
+class CreateFrTo(AjaxableResponseMixin):
     default = None
     array = None
     range = None
     template_name = 'learning/frTo.html'
+     
+    def randArray(self,range,array,fr = None):
+        fr,to,q = super(CreateFrTo,self).randArray(range,array,fr)
+        if self.type != 'e' and self.type !='c':
+            m = converter(q,fr,to)
+            if round(m,2) == 0:
+                print "fungujem"
+                q *= pow(10,len(str(m))-2)
+        return fr,to,q                      
+                
     def init(self) :
         if self.type == None :
             raise Exception('type in CreateFrTo is None')
@@ -144,13 +168,15 @@ class CreateFrTo(AjaxableResponseMixin, CreateQuestion):
             self.default = 'CZK'
         elif self.type == 'temp' :
             self.range = (-40,40)
-            
+             
         if self.range == None :
             raise Exception('range is null %s' % (self.range))
-        
-        self.fr,self.to,self.question = self.randArray(self.range,self.arrayToType(self.type),self.default)
-     
+         
+        self.fr,self.to,self.question = self.randArray(self.range,arrayToType(self.type),self.default)
+             
+      
     def get_context_data(self, **kwargs):
+        print kwargs
         ctx = super(CreateFrTo, self).get_context_data(**kwargs)
         self.init()
         ctx['fr'] = self.fr
@@ -160,7 +186,7 @@ class CreateFrTo(AjaxableResponseMixin, CreateQuestion):
     
 
         
-class CreateMath(AjaxableResponseMixin, CreateQuestion):
+class CreateMath(AjaxableResponseMixin):
     template_name = 'learning/math/sqrt.html'
     def createEquation(self,oper,numEle,rangeEle):
         j = random.randint(numEle[0], numEle[1])
@@ -179,11 +205,11 @@ class CreateMath(AjaxableResponseMixin, CreateQuestion):
     def init(self):
         if self.type == 'equa':
             self.question = self.createEquation("+-*",(2,4),(100,300))
-            self.template_name = 'math/equa.html'
+            self.template_name = 'learning/math/equa.html'
         elif self.type == 'sqrt':
             self.question = random.randrange(1,256)
         else:
-            raise Exception("unknow type in CreateMath %s" %s (self.type))
+            raise Exception("unknow type in CreateMath: %s" % (self.type))
             
         
     def get_context_data(self, **kwargs):
@@ -192,7 +218,7 @@ class CreateMath(AjaxableResponseMixin, CreateQuestion):
         self.init()
         ctx['question'] = self.question
         return ctx
-    
+
     ############################################################################
 
     

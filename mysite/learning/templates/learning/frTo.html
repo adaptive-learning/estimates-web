@@ -16,7 +16,7 @@
 {% load staticfiles %}
 
 <br>
-<form id="assigForm" action="/learning/curr/c" method="post">{% csrf_token %}
+<form id="assigForm" action={{action}} method="post">{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgFyz" align="center">
 
@@ -48,10 +48,7 @@
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 			var doc = document.getElementById("assigForm");
-			// if("{{fr}}" == 'EUR')
-			doc.setAttribute("action","/learning/conv/{{type}}");
 	    	event.preventDefault();
-	    	//to do model id or something
 	    	var jsonString= JSON.stringify({
    				type:"{{type}}",
    				fr:"{{fr}}",
