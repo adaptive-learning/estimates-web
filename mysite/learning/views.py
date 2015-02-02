@@ -8,7 +8,7 @@ import random, json, urllib2
 from django.contrib.auth import get_user
 from pint import UnitRegistry
 from django.template.response import TemplateResponse
-
+from django.shortcuts import redirect
 
 from django.views.generic.base import RedirectView
 from django.views.generic import TemplateView, View
@@ -24,39 +24,39 @@ def converter(amount,src,dst):
     return Q_(src).to(dst).magnitude
 
 def arrayToType(type):
-        if type == None :
-            raise Exception('type in arrayToType is None')
-        if type == 'e' or type == "c":
-            return ["USD","PLN","HUF","CHF","GBP","RUB","CZK","EUR"]
-        elif type == 'vol':
-            return ["mm**3","cm**3","dm**3","m**3","km**3","ml","l","dl","hl"]
-        elif type == 'surf' :
-            return ["mm**2","cm**2","dm**2","m**2","km**2","are","acre"]
-        elif type == 'len' :
-            return ["mm","cm","dm","m","km","mile","inch","ft"]
-        elif type == 'temp' :
-            return ["kelvin","degF","degC"] 
-        else :
-            raise Exception('type is unknow command %s' %(type))
+    if type == None :
+        raise Exception('type in arrayToType is None')
+    if type == 'e' or type == "c":
+        return ["USD","PLN","HUF","CHF","GBP","RUB","CZK","EUR"]
+    elif type == 'vol':
+        return ["mm**3","cm**3","dm**3","m**3","km**3","ml","l","dl","hl"]
+    elif type == 'surf' :
+        return ["mm**2","cm**2","dm**2","m**2","km**2","are","acre"]
+    elif type == 'len' :
+        return ["mm","cm","dm","m","km","mile","inch","ft"]
+    elif type == 'temp' :
+        return ["kelvin","degF","degC"] 
+    else :
+        raise Exception('type is unknow command %s' %(type))
        
+def rand_type(name):
+    if name == None:
+        raise Expcetion('name is unknow %s' %(name))
+    if name == 'phys':
+        return random.choice(["vol","surf","len","temp"])
+    elif name == 'math':
+        return random.choice(["sqrt","equa"])
+    elif name == 'curr':
+        return random.choice(["e","c"])
+    else :
+        raise Exception("name in rand_type is unknown: %s" % (name))
+      
       
 class CreateQuestion(CreateView):
         
     model = FloatModel
     fields = ['answer']    
-            
-    def randType(self,name):
-        if name == None:
-            raise Expcetion('name is unknow %s' %(type))
         
-        if name == "all":
-            name = random.choice(["phys","math","curr"])
-        if name == 'phys':
-            return random.choice(["vol","surf","len","temp"])
-        elif name == 'math':
-            return random.choice(["sqrt","equa"])
-        elif name == 'curr':
-            return random.choice(["e","c"])
             
     def decider(self,type):
         if type == 'equa' :
@@ -117,11 +117,16 @@ class CreateQuestion(CreateView):
         self.type= self.kwargs.get('type',None)
         if self.type == None:
             raise Exception("type in CreateQuestion is None")
+
         splitted = self.type.split('-')
-        print self.request.path
-        if len(splitted) == 2 and splitted[1] == 'all':
-            self.type = self.randType(splitted[0])
-            ctx['action'] = self.request.path
+        if len(splitted) == 2 and (splitted[1] == 'all' or splitted[1]=='a'):
+            if splitted[1]=='a':
+                print "here"
+                ctx['action'] = '/learning/all-all'
+            else :
+                ctx['action'] = self.request.path
+            self.type = rand_type(splitted[0])
+#         print ctx['action']
         ctx['type'] = self.type
         return ctx
     
@@ -178,6 +183,7 @@ class CreateFrTo(AjaxableResponseMixin):
     def get_context_data(self, **kwargs):
         print kwargs
         ctx = super(CreateFrTo, self).get_context_data(**kwargs)
+        print self.type
         self.init()
         ctx['fr'] = self.fr
         ctx['to'] = self.to
@@ -219,6 +225,22 @@ class CreateMath(AjaxableResponseMixin):
         ctx['question'] = self.question
         return ctx
 
+def random_redirect(request):
+#     permament = False
+#     pattern_name = 'learning'
+#     query_string = False
+#     def get_redirect_url(self,*args,**kwargs):
+# #                 if name == "all":
+
+    cat = {'phys':'conv','math':'math','curr':'conv'}
+    name = random.choice(cat.keys())
+    print name
+#     n = rand_type(name)
+# #     if name == 'phys' or name == 'curr'
+    url = '/learning/%s/%s-a' % (cat.get(name),name)
+    print url
+    return redirect(url)
+#     return super(RandomRedirect, self).get_redirect_url(*args, **kwargs)
     ############################################################################
 
     
