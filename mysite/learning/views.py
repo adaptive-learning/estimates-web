@@ -24,6 +24,7 @@ def converter(amount,src,dst):
     return Q_(src).to(dst).magnitude
 
 def arrayToType(type):
+   
     if type == None :
         raise Exception('type in arrayToType is None')
     if type == 'e' or type == "c":
@@ -121,12 +122,10 @@ class CreateQuestion(CreateView):
         splitted = self.type.split('-')
         if len(splitted) == 2 and (splitted[1] == 'all' or splitted[1]=='a'):
             if splitted[1]=='a':
-                print "here"
                 ctx['action'] = '/learning/all-all'
             else :
                 ctx['action'] = self.request.path
             self.type = rand_type(splitted[0])
-#         print ctx['action']
         ctx['type'] = self.type
         return ctx
     
@@ -157,7 +156,6 @@ class CreateFrTo(AjaxableResponseMixin):
         if self.type != 'e' and self.type !='c':
             m = converter(q,fr,to)
             if round(m,2) == 0:
-                print "fungujem"
                 q *= pow(10,len(str(m))-2)
         return fr,to,q                      
                 
@@ -181,9 +179,7 @@ class CreateFrTo(AjaxableResponseMixin):
              
       
     def get_context_data(self, **kwargs):
-        print kwargs
         ctx = super(CreateFrTo, self).get_context_data(**kwargs)
-        print self.type
         self.init()
         ctx['fr'] = self.fr
         ctx['to'] = self.to
@@ -226,21 +222,10 @@ class CreateMath(AjaxableResponseMixin):
         return ctx
 
 def random_redirect(request):
-#     permament = False
-#     pattern_name = 'learning'
-#     query_string = False
-#     def get_redirect_url(self,*args,**kwargs):
-# #                 if name == "all":
-
     cat = {'phys':'conv','math':'math','curr':'conv'}
     name = random.choice(cat.keys())
-    print name
-#     n = rand_type(name)
-# #     if name == 'phys' or name == 'curr'
     url = '/learning/%s/%s-a' % (cat.get(name),name)
-    print url
     return redirect(url)
-#     return super(RandomRedirect, self).get_redirect_url(*args, **kwargs)
     ############################################################################
 
     
