@@ -14,9 +14,9 @@
 {%include "navBar/bar.html" %}
 
 {% load staticfiles %}
-
+{{action}}
 <br>
-<form id="assigForm" action={{action}} method="post">{% csrf_token %}
+<form id="assigForm" method="post" action={{action}} >{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgFyz" align="center">
 
@@ -40,6 +40,7 @@
 		<br>
 		<div id = "next">
 			<input type="submit" class="button" value="Odpovedat" />
+			<!-- <button id="hint" class="button">Nápoveda</button> -->
 		</div>
 	</div>
 	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
@@ -57,7 +58,6 @@
    			});
 	    	create_post(jsonString);
 		});
-
 	</script>
 </form>
 </div>
@@ -119,5 +119,19 @@
 {% else %}
 	<p>No assigment is available</p>
 {% endif %}
+
+<!-- 
+<script src="{% static "js/hint.js" %}">
+	 // $.post('controller/addBookmark', function(data) {
+	 	// alert('Your bookmark has been saved, The contents of the page were:' + data); 
+	 // });
+	$(document).ready(function(){
+	    $("hint").click(function(){
+	    	// hint("e");
+	    	alert("e");
+	    });
+   });
+</script> -->
+
 </html>
  

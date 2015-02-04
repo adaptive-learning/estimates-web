@@ -135,6 +135,7 @@ class AjaxableResponseMixin(CreateQuestion):
             return HttpResponseBadRequest(json.dumps(form.errors))
 
     def form_valid(self, form):
+        print "i am in"
         if self.request.is_ajax():
             self.model = FloatModel()
             self.post = self.request.POST
@@ -143,7 +144,6 @@ class AjaxableResponseMixin(CreateQuestion):
             self.model.save()
             diff = self.model.result - float(self.model.answer)
             return HttpResponse(str(diff) + '//' + str(self.model.result))
-#         ToDo elif
         
 class CreateFrTo(AjaxableResponseMixin):
     default = None
