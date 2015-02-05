@@ -16,6 +16,7 @@ class FloatModel(models.Model):
     type = models.ForeignKey('Type')
     time = models.IntegerField()
     user = models.ForeignKey(User, null = True)
+    usedHint = models.BooleanField()
     
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)

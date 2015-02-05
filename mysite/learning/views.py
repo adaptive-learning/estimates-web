@@ -52,41 +52,45 @@ def rand_type(name):
     else :
         raise Exception("name in rand_type is unknown: %s" % (name))
       
-      
+
+    
+def decider(type,question,src,dst):
+    if type == 'equa' :
+        return eval(src)
+    elif type == 'sqrt' :
+        return round(sqrt(float(question)),2) 
+    elif type == 'e' or type == 'c' :
+        raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22"+ src + dst +"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
+        rate = json.loads(raw.read())['query']['results']['rate']['Rate']
+        
+        return round(float(rate) * float(question),2)
+    elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
+        array = arrayToType(type)
+        if src in array and dst in array:
+            return round(converter(question,src,dst),2)
+        else:
+            raise Exception("error unknow value of %s or %s"%(src,dst))
+    else :
+        raise Exception('type is unknow command %s' %s(type))      
+    
+def get_hint(request):
+    if request.method == "POST" and request.is_ajax():
+        j = json.loads(request.POST.get('data'))
+        res = decider(j['type'],1,j['fr'],j['to'])
+        if abs(res) <= 0.001:
+            print res
+            return HttpResponse(decider(j['type'],1,j['to'],j['fr']))
+        return HttpResponse(res)
+    
 class CreateQuestion(CreateView):
         
     model = FloatModel
-    fields = ['answer']    
-        
-            
-    def decider(self,type):
-        if type == 'equa' :
-            self.model.result = eval(self.model.params.param1)
-        elif type == 'sqrt' :
-            self.model.result = round(sqrt(float(self.model.question)),2) 
-        elif type == 'e' or type == 'c' :
-            raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22"+ self.model.params.param1 + self.model.params.param2 +"%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
-            data = json.loads(raw.read())
-            rate = data['query']['results']['rate']['Rate']
-            
-            self.model.result = round(float(rate) * float(self.model.question),2)
-        elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
-            array = arrayToType(type)
-            src = self.model.params.param1
-            dst = self.model.params.param2
-            if src in array and dst in array:
-                self.model.result = round(converter(self.model.question,src,dst),2)
-            else:
-                raise Exception("error unknow value of %s or %s"%(self.model.params.param1,self.model.params.param2))
-        else :
-            raise Exception('type is unknow command %s' %s(type))
-        
+    fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
         try: 
             p = Params.objects.get(param1 = js['fr'], param2 = str(js['to']))
         except Params.DoesNotExist:
-
             p = Params(param1 = js['fr'], param2 = str(js['to']))
             p.save()
         try:
@@ -96,6 +100,10 @@ class CreateQuestion(CreateView):
             t.save()
             
         self.model.question = js['question']
+        if js['used_hint'] == '0':
+            self.model.usedHint = False
+        else :
+            self.model.usedHint = True
         self.model.type = t
         self.model.params = p
         if self.request.user.is_authenticated():
@@ -135,12 +143,11 @@ class AjaxableResponseMixin(CreateQuestion):
             return HttpResponseBadRequest(json.dumps(form.errors))
 
     def form_valid(self, form):
-        print "i am in"
         if self.request.is_ajax():
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
-            self.decider(self.model.type.type)
+            self.model.result = decider(self.model.type.type,self.model.question,self.model.params.param1,self.model.params.param2)
             self.model.save()
             diff = self.model.result - float(self.model.answer)
             return HttpResponse(str(diff) + '//' + str(self.model.result))
@@ -155,8 +162,13 @@ class CreateFrTo(AjaxableResponseMixin):
         fr,to,q = super(CreateFrTo,self).randArray(range,array,fr)
         if self.type != 'e' and self.type !='c':
             m = converter(q,fr,to)
-            if round(m,2) == 0:
-                q *= pow(10,len(str(m))-2)
+            if round(m,2) == 0.0:
+                pre = str(m).split("e-")
+                if len(pre) == 2:
+                    h = pow(10,int(pre[1])-1)
+                else:
+                    h = pow(10,len(str(m))-2)
+                q = random.randrange(range[0]*h,range[1]*h)
         return fr,to,q                      
                 
     def init(self) :

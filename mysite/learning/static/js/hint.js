@@ -1,6 +1,6 @@
+var used_hint=0;
+
 function hint(data) {
-	timer_is_on = 0;
-	alert(data);
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -9,13 +9,15 @@ function hint(data) {
 		}
 	});
     $.ajax({
-    	url : "/ebenci", // the endpoint
+    	url : "/learning/get_hint", // the endpoint
         type : "POST", // http method
-        data : { data: data}, // data sent with the post request
+        data : { data:data}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {
-            alert("success");
+			$('#after').text(response);
+    	    $('#myModal').foundation('reveal', 'open');
+    	    used_hint = 1;
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {

@@ -38,11 +38,19 @@
 			<div class="large-6 rows" id="answer"></div>
 		</div>
 		<br>
-		<div id = "next">
+	  	<div class="large-1 columns" id="next">
 			<input type="submit" class="button" value="Odpovedat" />
-			<!-- <button id="hint" class="button">Nápoveda</button> -->
 		</div>
+  		<div class="large-1 large-offset-5 columns">
+  			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
+  		</div>
 	</div>
+	
+	<div id="myModal" class="reveal-modal small" data-reveal>
+		1 {{fr}} -> <span id="after"></span> {{to}}		
+		<a class="close-reveal-modal">&#215;</a>
+	</div>
+	
 	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
 	<script src="{% static "js/answerForm.js" %}"></script>
 	<script>
@@ -50,20 +58,30 @@
 		$('#assigForm').on('submit', function(event){
 			var doc = document.getElementById("assigForm");
 	    	event.preventDefault();
-	    	var jsonString= JSON.stringify({
+	    	create_post(JSON.stringify({
    				type:"{{type}}",
    				fr:"{{fr}}",
    				to:"{{to}}",
    				question:"{{question}}",
-   			});
-	    	create_post(jsonString);
+   				used_hint:used_hint,
+   			}));
 		});
 	</script>
 </form>
-</div>
+<script src="{% static "js/hint.js"%}"></script>
+<script>
+		
+	    function useHint(){
+	        hint(JSON.stringify({
+			type:"{{type}}",
+			fr:"{{fr}}",
+			to:"{{to}}"}));
+	    };
+</script>
+
 <form>
 	<input type="text" id="txt">
-	</div><script src="{% static "js/time.js"%}"></script>
+ 	<script src="{% static "js/time.js"%}"></script>
 </form>
 <script src="/js/foundation.min.js"></script>
 <style>
@@ -120,17 +138,15 @@
 	<p>No assigment is available</p>
 {% endif %}
 
-<!-- 
-<script src="{% static "js/hint.js" %}">
+
+<!-- <script src="{% static "js/hint.js" %}">
 	 // $.post('controller/addBookmark', function(data) {
 	 	// alert('Your bookmark has been saved, The contents of the page were:' + data); 
-	 // });
-	$(document).ready(function(){
-	    $("hint").click(function(){
+	 // });	 
+	    $("button").click(function(){
 	    	// hint("e");
 	    	alert("e");
 	    });
-   });
 </script> -->
 
 </html>
