@@ -70,7 +70,7 @@ function answer(diff,result){
 	}
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
-	next.setAttribute('type','submit');
+	next.setAttribute('type','button');
 	next.setAttribute('class','button');
 	
 	if (next.addEventListener) 

@@ -100,10 +100,13 @@ class CreateQuestion(CreateView):
             t.save()
             
         self.model.question = js['question']
-        if js['used_hint'] == '0':
+        try:
+            if js['used_hint'] == '0':
+                self.model.usedHint = False
+            else :
+                self.model.usedHint = True
+        except KeyError:
             self.model.usedHint = False
-        else :
-            self.model.usedHint = True
         self.model.type = t
         self.model.params = p
         if self.request.user.is_authenticated():
@@ -144,6 +147,7 @@ class AjaxableResponseMixin(CreateQuestion):
 
     def form_valid(self, form):
         if self.request.is_ajax():
+            print "i am here twice?"
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
