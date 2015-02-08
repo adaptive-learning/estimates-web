@@ -59,12 +59,11 @@
 			var doc = document.getElementById("assigForm");
 	    	event.preventDefault();
 	    	create_post(JSON.stringify({
-   				type:"{{type}}",
    				fr:"{{fr}}",
    				to:"{{to}}",
    				question:"{{question}}",
    				used_hint:used_hint,
-   			}));
+   			}),"{{type}}");
 		});
 	</script>
 </form>

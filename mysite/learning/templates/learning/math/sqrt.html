@@ -45,12 +45,11 @@
 		$('#assigForm').on('submit', function(event){
 		    event.preventDefault();
 		    var jsonString= JSON.stringify({
-   				type:"{{type}}",
    				fr:"{{fr}}",
    				to:"{{to}}",
    				question:"{{question}}",
    			});
-		    create_post(jsonString);
+		    create_post(jsonString,"{{type}}");
 		});
 	</script>
 </form>

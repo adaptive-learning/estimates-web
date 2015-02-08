@@ -22,7 +22,8 @@ function getCookie(name) {
 
 
 // function create_post(mId,urlPath) {
-function create_post(data) {
+function create_post(data,t) {
+	
 	timer_is_on = 0;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
@@ -34,12 +35,12 @@ function create_post(data) {
     $.ajax({
     	url : "", // the endpoint
         type : "POST", // http method
-        data : { answer : $('#input').val(), time:  minutes*60 + c, data: data}, // data sent with the post request
+        data : { answer : $('#input').val(), time:  minutes*60 + c, data: data, type: t}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {
             var splitter = response.split("//");
-            answer(splitter[0],splitter[1]);
+            answer(splitter[0],splitter[1],t);
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -50,7 +51,7 @@ function create_post(data) {
     });
 };
 
-function answer(diff,result){
+function answer(diff,result,type){
 	var img = document.createElement('img');
 	resize(img);
 	var div = document.getElementById("assigment");
@@ -61,12 +62,27 @@ function answer(diff,result){
 	onclick = function(){
 		window.location.href = $('#assigForm').attr('action');
 	};
-	if(diff > -0.0001 && diff < 0.0001){
-		img.src = "/static/img/true.png";
-		setTimeout(onclick,3000);
-		return false;		
+	if(type == "e" || type == "c"){
+		if (diff < 0.01){
+			txt_message = "vas odhad bol presny" + result;
+		} else if (diff < 0.05){
+			txt_message = "vas odhad bol takmer presny" + result;	
+		} else if (diff < 0.075){
+			txt_message = "odhadli ste priblizne správne" + result;
+		} else if (diff < 0.1){
+			txt_message = "vas odhad nie je správny" + result;
+		} else {
+			txt_message = "vas odhad je mimo" + result;
+		}
 	} else {
-		img.src = "/static/img/false.png";
+		if(diff > -0.0001 && diff < 0.0001){
+			img.src = "/static/img/true.png";
+			setTimeout(onclick,3000);
+			return false;		
+		} else {
+			img.src = "/static/img/false.png";
+			txt_message = "správna odpoveď bola: " + result + " líšili ste sa o: " + diff;
+		}
 	}
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
@@ -81,7 +97,7 @@ function answer(diff,result){
 	d.appendChild(next);
 	var a = document.getElementById("answer");
 	delet(a);
-	a.appendChild(document.createTextNode("správna odpoveď bola: " + result + " líšili ste sa o: " + diff));
+	a.appendChild(document.createTextNode(txt_message));
 	return false;
 }
 
