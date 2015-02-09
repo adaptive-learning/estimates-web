@@ -186,13 +186,13 @@ class AjaxableResponseMixin(CreateQuestion):
             self.model.result = res[0]
             self.model.save()
             diff = self.model.result - float(self.model.answer)
-            if len(res) != 1:
+#             if len(res) != 1:
 #             else:
 #                 return HttpResponse(res[1]-self.model.answer + "//" + )
-                print "res",res[1]
-                print "abs(diff):",abs(diff)
-                diff = abs(diff)/res[1]
-                print "diff to send",diff
+#                 print "res",res[1]
+            print "abs(diff):",abs(diff)
+            diff = abs(diff)/self.model.result
+            print "diff to send",diff
                 
             return HttpResponse(str(diff) + '//' + str(self.model.result))
         

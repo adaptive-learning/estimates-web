@@ -62,28 +62,28 @@ function answer(diff,result,type){
 	onclick = function(){
 		window.location.href = $('#assigForm').attr('action');
 	};
-	if(type == "e" || type == "c"){
-		if (diff < 0.01){
+	// if(type == "e" || type == "c"){ 
+		if (diff < 0.05){
 			txt_message = "vas odhad bol presny" + result;
-		} else if (diff < 0.05){
-			txt_message = "vas odhad bol takmer presny" + result;	
-		} else if (diff < 0.075){
-			txt_message = "odhadli ste priblizne správne" + result;
 		} else if (diff < 0.1){
+			txt_message = "vas odhad bol takmer presny" + result;	
+		} else if (diff < 0.15){
+			txt_message = "odhadli ste priblizne správne" + result;
+		} else if (diff < 0.2){
 			txt_message = "vas odhad nie je správny" + result;
 		} else {
 			txt_message = "vas odhad je mimo" + result;
 		}
-	} else {
-		if(diff > -0.0001 && diff < 0.0001){
-			img.src = "/static/img/true.png";
-			setTimeout(onclick,3000);
-			return false;		
-		} else {
-			img.src = "/static/img/false.png";
-			txt_message = "správna odpoveď bola: " + result + " líšili ste sa o: " + diff;
-		}
-	}
+	// } else {
+		// if(diff > -0.0001 && diff < 0.0001){
+			// img.src = "/static/img/true.png";
+			// setTimeout(onclick,3000);
+			// return false;		
+		// } else {
+			// img.src = "/static/img/false.png";
+			// txt_message = "správna odpoveď bola: " + result + " líšili ste sa o: " + diff;
+		// }
+	// }
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
 	next.setAttribute('type','button');
