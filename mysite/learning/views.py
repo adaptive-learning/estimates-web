@@ -58,16 +58,16 @@ def decider(type, question, src, dst,f = 2):
     if type == 'equa' :
         return eval(src)
     elif type == 'sqrt' :
-        return [round(sqrt(float(question)), f)]
+        return round(sqrt(float(question)), f)
     elif type == 'e' or type == 'c' :
         raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22" + src + dst + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
         rate = json.loads(raw.read())['query']['results']['rate']['Rate']
         range = type_to_range(type)        
-        return [round(float(rate) * float(question), f),(range[1]-range[0])*float(rate)]
+        return round(float(rate) * float(question), f)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
         array = arrayToType(type)
         if src in array and dst in array:
-            return [round(converter(question, src, dst), f)]
+            return (round(converter(question, src, dst),f))
         else:
             raise Exception("error unknow value of %s or %s" % (src, dst))
     else :
@@ -101,33 +101,19 @@ class CreateQuestion(CreateView):
     model = FloatModel
     fields = ['answer']            
     def parseToModel(self):
-
-        js = json.loads(self.post.get('data'))
-        ########temporaly // ToDo: replace block
-        typ=self.post.get('type')
-        ########temporaly // ToDo: replace block
+        js = json.loads()
         print "type",typ;
         try: 
             p = Params.objects.get(param1=js['fr'], param2=str(js['to']))
         except Params.DoesNotExist:
             p = Params(param1=js['fr'], param2=str(js['to']))
             p.save()
-            
-#         ########temporaly // ToDo: delete line
-#         try:
-#             t = Type.objects.get(type=js['type'])
-#         except Type.DoesNotExist:
-#             t = Type(type=js['type'])
-#             t.save()
-#             
-        ########temporaly // ToDo: replace block
 
         try:
-            t = Type.objects.get(type=typ)
+            t = Type.objects.get(self.post.get('data'))
         except Type.DoesNotExist:
             t = Type(type=typ)
             t.save()
-        ########temporaly // ToDo: replace block
         self.model.question = js['question']
         try:
             if js['used_hint'] == '0':
@@ -176,25 +162,16 @@ class AjaxableResponseMixin(CreateQuestion):
 
     def form_valid(self, form):
         if self.request.is_ajax():
-            print "i am here twice?"
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
-#             if self.model.type.type == 'e' or self.model.type.type == 'c'
-#             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
-            res = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
-            self.model.result = res[0]
+            self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
             self.model.save()
             diff = self.model.result - float(self.model.answer)
-#             if len(res) != 1:
-#             else:
-#                 return HttpResponse(res[1]-self.model.answer + "//" + )
-#                 print "res",res[1]
-            print "abs(diff):",abs(diff)
             diff = abs(diff)/self.model.result
             print "diff to send",diff
                 
-            return HttpResponse(str(diff) + '//' + str(self.model.result))
+            return HttpResponse(str(diff))
         
 class CreateFrTo(AjaxableResponseMixin):
     default = None
@@ -219,7 +196,6 @@ class CreateFrTo(AjaxableResponseMixin):
                 
     def init(self) :
         range = type_to_range(self.type)
-#         print range
         if self.type == 'e' :
             self.default = 'EUR'
         elif self.type == 'c':

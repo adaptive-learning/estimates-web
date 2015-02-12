@@ -14,7 +14,6 @@
 {%include "navBar/bar.html" %}
 
 {% load staticfiles %}
-{{action}}
 <br>
 <form id="assigForm" method="post" action={{action}} >{% csrf_token %}
 	<div class="row">
@@ -41,7 +40,7 @@
 	  	<div class="large-1 columns" id="next">
 			<input type="submit" class="button" value="Odpovedat" />
 		</div>
-  		<div class="large-1 large-offset-5 columns">
+  		<div class="large-1 large-offset-5 columns" id="hint">
   			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
   		</div>
 	</div>

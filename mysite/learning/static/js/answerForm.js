@@ -39,8 +39,8 @@ function create_post(data,t) {
 		
         // handle a successful response
         success : function(response) {
-            var splitter = response.split("//");
-            answer(splitter[0],splitter[1],t);
+            // var splitter = response.split("//");
+            answer(response,t);
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -51,11 +51,12 @@ function create_post(data,t) {
     });
 };
 
-function answer(diff,result,type){
+function answer(diff,type){
 	var img = document.createElement('img');
 	resize(img);
 	var div = document.getElementById("assigment");
 	delet(div);
+	delet(document.getElementById("hint"));
 	div.appendChild(img);
 	var d = document.getElementById("next");
 	delet(d);
@@ -63,27 +64,32 @@ function answer(diff,result,type){
 		window.location.href = $('#assigForm').attr('action');
 	};
 	// if(type == "e" || type == "c"){ 
-		if (diff < 0.05){
-			txt_message = "vas odhad bol presny" + result;
-		} else if (diff < 0.1){
-			txt_message = "vas odhad bol takmer presny" + result;	
-		} else if (diff < 0.15){
-			txt_message = "odhadli ste priblizne správne" + result;
-		} else if (diff < 0.2){
-			txt_message = "vas odhad nie je správny" + result;
-		} else {
-			txt_message = "vas odhad je mimo" + result;
-		}
-	// } else {
-		// if(diff > -0.0001 && diff < 0.0001){
-			// img.src = "/static/img/true.png";
-			// setTimeout(onclick,3000);
-			// return false;		
-		// } else {
-			// img.src = "/static/img/false.png";
-			// txt_message = "správna odpoveď bola: " + result + " líšili ste sa o: " + diff;
-		// }
-	// }
+	if (diff < 0.05){
+		txt_message = "vas odhad je presny " + result;
+		img.src = "/static/img/true.png";
+	} else if (diff < 0.1){
+		txt_message = "vas odhad je takmer presny " + result;
+		img.src = "/static/img/true.png";	
+	} else if (diff < 0.15){
+		txt_message = "vas odhad je priblizne správne " + result;
+		img.src = "/static/img/true.png";
+	} else if (diff < 0.2){
+		txt_message = "vas odhad nie je správny " + result;
+		img.src = "/static/img/false.png";
+	} else {
+		txt_message = "vas odhad je mimo " + result;
+		img.src = "/static/img/false.png";
+	}
+	
+	if(time < 10){
+		txt_message += "a velmi rychly";
+	} else  if (time < 20){
+		txt_message += "a rychlo";
+	} else if (time < 35){
+		txt_message += "a priemerne rychlo";
+	} else {
+		txt_message += "a pomaly";
+	}
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
 	next.setAttribute('type','button');
