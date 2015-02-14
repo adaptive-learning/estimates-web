@@ -1,6 +1,5 @@
 from learning.models import *
 from django.http import HttpResponse, HttpResponseBadRequest
-# from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from math import sqrt
@@ -10,9 +9,21 @@ from pint import UnitRegistry
 from django.template.response import TemplateResponse
 from django.shortcuts import redirect
 
-from django.views.generic.base import RedirectView
-from django.views.generic import TemplateView, View
-from django.views.generic.edit import FormView, CreateView 
+from django.views.generic.edit import CreateView 
+
+TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
+              'c': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "EUR"],
+              'vol': ["mm**3", "cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl"],
+              'surf': ["mm**2", "cm**2", "dm**2", "m**2", "km**2", "are", "acre"],
+              'len': ["mm", "cm", "dm", "m", "km", "mile", "inch", "ft"],
+              'temp':["kelvin", "degF", "degC"],
+             }
+NameTypes = {'math': ["sqrt", "equa"],
+             'curr': ["e", "c"],
+             'phys': ["vol", "surf", "len", "temp"],
+            }
+
+
 
 
 def index(request):
@@ -101,18 +112,20 @@ class CreateQuestion(CreateView):
     model = FloatModel
     fields = ['answer']            
     def parseToModel(self):
-        js = json.loads()
-        print "type",typ;
+        js = json.loads(self.post.get('data'))
+#         print "type",typ;
         try: 
             p = Params.objects.get(param1=js['fr'], param2=str(js['to']))
         except Params.DoesNotExist:
             p = Params(param1=js['fr'], param2=str(js['to']))
             p.save()
 
+        type = self.post.get('type')
+        print 'type',type
         try:
-            t = Type.objects.get(self.post.get('data'))
+            t = Type.objects.get(type=type)
         except Type.DoesNotExist:
-            t = Type(type=typ)
+            t = Type(type)
             t.save()
         self.model.question = js['question']
         try:
@@ -144,7 +157,9 @@ class CreateQuestion(CreateView):
         self.type = self.kwargs.get('type', None)
         if self.type == None:
             raise Exception("type in CreateQuestion is None")
-
+        
+#         print (TypeParams.get("e"))
+        
         splitted = self.type.split('-')
         if len(splitted) == 2 and (splitted[1] == 'all' or splitted[1] == 'a'):
             if splitted[1] == 'a':

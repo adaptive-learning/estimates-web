@@ -63,21 +63,24 @@ function answer(diff,type){
 	onclick = function(){
 		window.location.href = $('#assigForm').attr('action');
 	};
+	alert(diff);
 	// if(type == "e" || type == "c"){ 
 	if (diff < 0.05){
-		txt_message = "vas odhad je presny " + result;
+		txt_message = "vas odhad je presny ";
 		img.src = "/static/img/true.png";
 	} else if (diff < 0.1){
-		txt_message = "vas odhad je takmer presny " + result;
+		txt_message = "vas odhad je takmer presny ";
 		img.src = "/static/img/true.png";	
 	} else if (diff < 0.15){
-		txt_message = "vas odhad je priblizne správne " + result;
+		txt_message = "vas odhad je priblizne správne ";
 		img.src = "/static/img/true.png";
 	} else if (diff < 0.2){
-		txt_message = "vas odhad nie je správny " + result;
+		txt_message = "vas odhad nie je správny ";
 		img.src = "/static/img/false.png";
 	} else {
-		txt_message = "vas odhad je mimo " + result;
+		
+		txt_message = "vas odhad je mimo ";
+		
 		img.src = "/static/img/false.png";
 	}
 	
@@ -90,6 +93,7 @@ function answer(diff,type){
 	} else {
 		txt_message += "a pomaly";
 	}
+	
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
 	next.setAttribute('type','button');
