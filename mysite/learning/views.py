@@ -113,15 +113,13 @@ class CreateQuestion(CreateView):
     fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
-#         print "type",typ;
         try: 
             p = Params.objects.get(param1=js['fr'], param2=str(js['to']))
         except Params.DoesNotExist:
-            p = Params(param1=js['fr'], param2=str(js['to']))
-            p.save()
-
+            p = Params(param1=js['fr'], param2=str(js['to'])).save()
+            print "saving new param?"
         type = self.post.get('type')
-        print 'type',type
+        print p
         try:
             t = Type.objects.get(type=type)
         except Type.DoesNotExist:
@@ -157,9 +155,7 @@ class CreateQuestion(CreateView):
         self.type = self.kwargs.get('type', None)
         if self.type == None:
             raise Exception("type in CreateQuestion is None")
-        
-#         print (TypeParams.get("e"))
-        
+
         splitted = self.type.split('-')
         if len(splitted) == 2 and (splitted[1] == 'all' or splitted[1] == 'a'):
             if splitted[1] == 'a':
@@ -181,9 +177,23 @@ class AjaxableResponseMixin(CreateQuestion):
             self.post = self.request.POST
             self.parseToModel()
             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
-            self.model.save()
             diff = self.model.result - float(self.model.answer)
             diff = abs(diff)/self.model.result
+            if diff < 0 :
+                diff = 0.0
+            elif diff > 1:
+                diff = 1.0
+            self.model.label = diff
+            self.model.save()
+            #include in param label...
+            p = FloatModel.objects.filter(params = self.model.params)
+            counter = 0
+            for i in p:
+                counter += i.label
+            self.model.params.label = counter / len(p)
+            self.model.params.save()
+            
+
             print "diff to send",diff
                 
             return HttpResponse(str(diff))
@@ -242,6 +252,7 @@ class CreateMath(AjaxableResponseMixin):
                 numbers[counter] %= 15
             equation += str(numbers[counter])
             counter += 1
+        
         return equation
             
     def init(self):

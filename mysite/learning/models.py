@@ -17,10 +17,12 @@ class FloatModel(models.Model):
     time = models.IntegerField()
     user = models.ForeignKey(User, null = True)
     usedHint = models.BooleanField()
+    label = models.FloatField(null = True)
     
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)
     param2 = models.CharField(max_length = 20)
+    label = models.FloatField(null = True)
     
 class Type(models.Model):
     type = models.CharField(max_length = 8)

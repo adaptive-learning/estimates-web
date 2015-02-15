@@ -39,7 +39,6 @@ function create_post(data,t) {
 		
         // handle a successful response
         success : function(response) {
-            // var splitter = response.split("//");
             answer(response,t);
         },
         // handle a non-successful response
@@ -63,7 +62,6 @@ function answer(diff,type){
 	onclick = function(){
 		window.location.href = $('#assigForm').attr('action');
 	};
-	alert(diff);
 	// if(type == "e" || type == "c"){ 
 	if (diff < 0.05){
 		txt_message = "vas odhad je presny ";
@@ -83,7 +81,7 @@ function answer(diff,type){
 		
 		img.src = "/static/img/false.png";
 	}
-	
+	time = minutes*60 + c;
 	if(time < 10){
 		txt_message += "a velmi rychly";
 	} else  if (time < 20){
