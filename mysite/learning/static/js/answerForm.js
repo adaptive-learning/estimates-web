@@ -76,18 +76,16 @@ function answer(diff,type){
 		txt_message = "vas odhad nie je správny ";
 		img.src = "/static/img/false.png";
 	} else {
-		
 		txt_message = "vas odhad je mimo ";
-		
 		img.src = "/static/img/false.png";
 	}
 	time = minutes*60 + c;
 	if(time < 10){
 		txt_message += "a velmi rychly";
 	} else  if (time < 20){
-		txt_message += "a rychlo";
+		txt_message += "a rychly";
 	} else if (time < 35){
-		txt_message += "a priemerne rychlo";
+		txt_message += "a priemerne rychly";
 	} else {
 		txt_message += "a pomaly";
 	}
@@ -96,7 +94,7 @@ function answer(diff,type){
 	next.value = "Ďalej";		
 	next.setAttribute('type','button');
 	next.setAttribute('class','button');
-	
+	hidden = document.createElement('input');
 	if (next.addEventListener) 
 			next.addEventListener('click',onclick,false); //everything else    
 		else if (choice.attachEvent)

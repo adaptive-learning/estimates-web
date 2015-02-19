@@ -22,9 +22,15 @@ class FloatModel(models.Model):
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)
     param2 = models.CharField(max_length = 20)
-    label = models.FloatField(null = True)
-    
+    type = models.ForeignKey('Type')
+
 class Type(models.Model):
     type = models.CharField(max_length = 8)
+    
+class User(User):
+    skill = models.FloatField(null = True)
+    type = models.ForeignKey('Type')
+    
+    
 
     
