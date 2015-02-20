@@ -22,7 +22,7 @@
 			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
 				<script src="{% static "js/frTo.js" %}"></script>
-				{{question}}<script>decider("{{fr}}");</script> = ? <script>decider("{{to}}");</script>
+				{{question}}<script>decider("{{p1}}");</script> = ? <script>decider("{{p2}}");</script>
 			</label>
 			
 			<br>
@@ -58,8 +58,8 @@
 			var doc = document.getElementById("assigForm");
 	    	event.preventDefault();
 	    	create_post(JSON.stringify({
-   				fr:"{{fr}}",
-   				to:"{{to}}",
+   				fr:"{{p1}}",
+   				to:"{{p2}}",
    				question:"{{question}}",
    				used_hint:used_hint,
    			}),"{{type}}");

@@ -20,7 +20,11 @@
 			<div class="row collapse" id="imgDiv" align="center">
 				<br><br><br><br>
 				<label class="small-8 collumns" id="label" for="input">
-					{{question}} = ?
+					{% if type == 'equa' %}
+						{{question}} = ?
+					{% elif type == 'sqrt' %}
+						&radic;{{question}} = ?	
+					{% endif %}
 				</label>
 				<br>
 				<div class="large-3 collumns" id="userPart">
@@ -45,9 +49,9 @@
 		$('#assigForm').on('submit', function(event){
 		    event.preventDefault();
 		    var jsonString= JSON.stringify({
-   				fr:"{{question}}",
-   				to:"{{to}}",
-   				question:0
+   				fr:"{{p1}}",
+   				to:"{{p2}}",
+   				question:"{{question}}"
    			});
 		    create_post(jsonString,"{{type}}");
 		});

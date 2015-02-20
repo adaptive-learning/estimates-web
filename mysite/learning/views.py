@@ -61,7 +61,7 @@ def get_types(name):
     
 def decider(type, question, src, dst,f = 2):
     if type == 'equa' :
-        return eval(src)
+        return eval(question)
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
     elif type == 'e' or type == 'c' :
@@ -100,7 +100,9 @@ def type_to_range(type):
     elif type == 'temp':
         return (-40, 40)
     return (1, 100)
-    
+
+
+
 class CreateQuestion(CreateView):
         
     model = FloatModel
@@ -111,8 +113,6 @@ class CreateQuestion(CreateView):
             p = Params.objects.get(param1=js['fr'], param2=str(js['to']))
         except Params.DoesNotExist:
             raise Exception("wrong params %s %s" % (js['fr'],js['to']))
-#            p = Params(param1=js['fr'], param2=str(js['to']))
-#            p.save()
         type = self.post.get('type')
         print p
         try:
@@ -153,20 +153,17 @@ class CreateQuestion(CreateView):
                 userSkill = userSkill.skill
             else :
                 p = FloatModel.objects.filter(type = t)
-                counter = 0;
-                for i in p:
-                    counter+=i.label
-                userSkill = counter / len(p)
+                userSKill = sum([x.label for x in p]) / float(len(p))
 
             for i in query:
-                counter = 0
                 if self.request.user.is_authenticated():
                     floatmodels = FloatModel.objects.filter(params = i, user = get_user(self.request).id)
                 else:
                     floatmodels = FloatModel.objects.filter(params = i)
-                for x in floatmodels:
-                    counter += x.label
-                hard = counter / len(floatmodels)
+                if len(floatmodels) != 0:
+                    hard = sum([x.label for x in floatmodels]) / float(len(floatmodels))
+                else:
+                    hard = 0.5
                 Panswer = model.Pcorrect(userSkill,hard)
                 if Ptarget >= Panswer:
                     Sprob = Panswer/Ptarget
@@ -174,7 +171,6 @@ class CreateQuestion(CreateView):
                     Sprob = (1-Panswer)/(1-Ptarget)
                 Scount = 1/sqrt(1+len(floatmodels))
                 score.append((i.id,10*Sprob+10*Scount))
-        print score
         maximum = max(score,key=lambda item:item[1])
         print maximum
         toReturn = Params.objects.get(id = maximum[0])
@@ -200,10 +196,12 @@ class CreateQuestion(CreateView):
             types = get_types(splitted[0])
         if len(splitted) == 1:
             types = [type]
-        self.fr, self.to = self.get_question(types)
-        self.type = Params.objects.get(param1=self.fr, param2=self.to).type.type
+        param1, param2 = self.get_question(types)
+        self.type = Params.objects.get(param1=param1, param2=param2).type.type
         ctx['type'] = self.type
-        return ctx
+        ctx['p1'] = param1
+        ctx['p2'] = param2
+        return (ctx, param1, param2)
     
 class AjaxableResponseMixin(CreateQuestion):
     def form_invalid(self, form):
@@ -216,10 +214,10 @@ class AjaxableResponseMixin(CreateQuestion):
             self.post = self.request.POST
             self.parseToModel()
             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
+            if self.model.type.type == "equa": self.model.question = None
             diff = self.model.result - float(self.model.answer)
             diff = abs(diff)/abs(float(self.model.result))
-            if diff > 1:
-                diff = 1.0
+            if diff > 1: diff = 1.0
             self.model.label = diff
             self.model.save()
             if self.request.user.is_authenticated():
@@ -264,46 +262,71 @@ class CreateFrTo(AjaxableResponseMixin):
              
       
     def get_context_data(self, **kwargs):
-        ctx = super(CreateFrTo, self).get_context_data(**kwargs)
+        ctx,self.fr, self.to = super(CreateFrTo, self).get_context_data(**kwargs)
         self.init()
-        ctx['fr'] = self.fr
-        ctx['to'] = self.to
         ctx['question'] = self.question
         return ctx
     
 
         
 class CreateMath(AjaxableResponseMixin):
-    template_name = 'learning/math/sqrt.html'
-    def createEquation(self, oper, numEle, rangeEle):
-        j = random.randint(numEle[0], numEle[1])
-        oper = [random.choice(oper) for _ in range(j - 1)]
-        numbers = [random.randrange(rangeEle[0], rangeEle[1]) for _ in range(j)]
-        equation = str(numbers[0])
+    template_name = 'learning/math/math.html'
+    def create_equation(p1,p2):
+        equation = []
+        print p2 
+        for i in p2:
+            if i == "0":
+                equation.append(str(random.randrange(1,51)))
+            elif i == "1":
+                equation.append(str(random.randrange(50,101)))
+            elif i == "2":
+                equation.append(str(random.randrange(100,151)))
+            elif i == "3":
+                equation.append(str(random.randrange(150,202)))
+            elif i == "4":
+                equation.append(str(random.randrange(200,257)))
+        print equation
         counter = 1
-        for char in oper:
-            equation += ' ' + char + ' '
-            if (char == '*'):
-                numbers[counter] %= 15
-            equation += str(numbers[counter])
-            counter += 1
-        
-        return equation
+        for oper in p1: 
+            equation.insert(counter,oper)
+            counter += 2
+        return ' '.join(equation) 
+    
+    def create_rand_equation(self,ran):
+        num = str(random.randrange(0,5))
+        oper = ""
+        for i in range(ran):
+            oper += str(random.choice("+-*"))
+            if oper[len(oper)-1] == '*':
+                if random.choice("ba") == 'b':
+                    num = num[:(len(num)-1)] + '0'
+                    num += str(random.randrange(0,5))
+                else:
+                    num += '0'
+            else:
+                num += str(random.randrange(0,5))
+        return (oper,num)
             
     def init(self):
         if self.type == 'equa':
-            self.question = self.createEquation("+-*", (2, 4), (100, 300))
-            self.template_name = 'learning/math/equa.html'
+            oper, num = self.create_rand_equation(random.randrange(1,4))
+            Params.objects.get_or_create(param1 = oper, param2 = num,type_id = 6)
+            self.question = create_equation(oper,num)
+            print self.question
+           # self.template_name = 'learning/math/equa.html'
         elif self.type == 'sqrt':
             self.question = random.randrange(1, 256)
+        elif self.type == 'angle':
+            self.create_angle()
         else:
             raise Exception("unknow type in CreateMath: %s" % (self.type))
             
         
     def get_context_data(self, **kwargs):
-        ctx = super(CreateMath, self).get_context_data(**kwargs)
-        
+        ctx,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
         self.init()
+        print self.question
+
         ctx['question'] = self.question
         return ctx
 

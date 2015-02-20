@@ -39,7 +39,7 @@ function create_post(data,t) {
 		
         // handle a successful response
         success : function(response) {
-            answer(response,t);
+            answer(response);
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -50,7 +50,8 @@ function create_post(data,t) {
     });
 };
 
-function answer(diff,type){
+function answer(diff){
+	
 	var img = document.createElement('img');
 	resize(img);
 	var div = document.getElementById("assigment");
@@ -89,7 +90,6 @@ function answer(diff,type){
 	} else {
 		txt_message += "a pomaly";
 	}
-	
 	var next = document.createElement('input');
 	next.value = "Ďalej";		
 	next.setAttribute('type','button');
@@ -108,8 +108,10 @@ function answer(diff,type){
 }
 
 function delet(div){
-	while(div.firstChild){
-		div.removeChild(div.firstChild);
+	if (div != null){
+		while(div.firstChild){
+			div.removeChild(div.firstChild);
+		}
 	}
 }
 
