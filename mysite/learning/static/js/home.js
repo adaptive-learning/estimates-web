@@ -36,6 +36,7 @@ function home(a){
 	switch(a){
 		case 'math':
 			createHrefButton('a','Odmocniny','/learning/math/sqrt',choice,false);
+			createHrefButton('a','Uhly','/learning/math/angle',choice,false);
 			createHrefButton('a','Priklady','/learning/math/equa',choice,false);
 			createHrefButton('a','Všetko','/learning/math/math-all/',choice,true);
 			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';

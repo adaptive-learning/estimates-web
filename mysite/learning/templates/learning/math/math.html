@@ -11,9 +11,7 @@
 
 {% block base_body %}
 {%include "navBar/bar.html" %}
-
-{{ assig.result }}
-{{question}}
+{% load staticfiles %}}
 <br>
 <div>
 <form id="assigForm" action={{action}}>{% csrf_token %}
@@ -26,10 +24,10 @@
 					{% elif type == 'sqrt' %}
 						&radic;{{question}} = ?	
 					{% elif type == 'angle' %}
-						aký je to uhol?<br>
+						Aký je to uhol?<br>
 						<canvas id="myCanvas" width="250" height="130"
 							style="solid #000000;">
-						</canvas><script src="/static/js/draw.js"></script>
+						</canvas><script src="{% static "js/draw.js"%}"></script>
 						<script>draw("{{question}}","{{p1}}",90);</script>
 					{% endif %}
 				</label>
@@ -49,8 +47,8 @@
 				<input id="sub" type="submit" class="button" value="Odpovedat" />
 			</div>
 	</div>
-	<script src="/static/js/jquery-1.11.1.min.js"></script>
-	<script src="/static/js/answerForm.js"></script>
+	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+	<script src="{% static "js/answerForm.js" %}"></script>
 	<script>
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
@@ -68,8 +66,8 @@
 <form>
 <input type="text" id="txt">
 </form>
-<script src="/static/js/time.js"></script>
-<script src="/js/foundation.min.js"></script>
+<script src="{% static "js/time.js" %}"></script>
+<script src="{% static "js/foundation.min.js" %}"></script>
 
 <style>
 	#imgDiv{  
