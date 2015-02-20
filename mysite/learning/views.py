@@ -271,7 +271,7 @@ class CreateFrTo(AjaxableResponseMixin):
         
 class CreateMath(AjaxableResponseMixin):
     template_name = 'learning/math/math.html'
-    def create_equation(p1,p2):
+    def create_equation(self,p1,p2):
         equation = []
         print p2 
         for i in p2:
@@ -311,7 +311,7 @@ class CreateMath(AjaxableResponseMixin):
         if self.type == 'equa':
             oper, num = self.create_rand_equation(random.randrange(1,4))
             Params.objects.get_or_create(param1 = oper, param2 = num,type_id = 6)
-            self.question = create_equation(oper,num)
+            self.question = self.create_equation(oper,num)
             print self.question
            # self.template_name = 'learning/math/equa.html'
         elif self.type == 'sqrt':
