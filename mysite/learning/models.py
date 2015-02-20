@@ -27,8 +27,9 @@ class Params(models.Model):
 class Type(models.Model):
     type = models.CharField(max_length = 8)
     
-class User(User):
-    skill = models.FloatField(null = True)
+class UserSkill(models.Model):
+    user = models.ForeignKey(User)
+    skill = models.FloatField()
     type = models.ForeignKey('Type')
     
     

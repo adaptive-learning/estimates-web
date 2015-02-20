@@ -146,9 +146,10 @@ class CreateQuestion(CreateView):
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
                 try:
-                    userSkill = User.objects.get(id = user.id)
-                except User.DoesNotExist:
-                    userSkill = User(id = user.id, type = t,skill = 0.5)
+                    userSkill = UserSkill.objects.get(user = user,type = t)
+                except UserSkill.DoesNotExist:
+                    print "i dont exist"
+                    userSkill = UserSkill(user = user, type = t,skill = 0.5)
                     userSkill.save()
                 userSkill = userSkill.skill
             else :
@@ -222,7 +223,7 @@ class AjaxableResponseMixin(CreateQuestion):
             self.model.save()
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
-                userSkill = User.objects.get(id = user.id)
+                userSkill = UserSkill.objects.get(user = user, type = self.model.type.type)
                 
                 try:
                     p = FloatModel.objects.filter(user = user.id, params = self.model.params)
@@ -231,6 +232,7 @@ class AjaxableResponseMixin(CreateQuestion):
                     p = FloatModel.objects.filter(params = self.model.params)
                 aver = sum([i.label for i in p])/float(len(p))
                 userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
+                if userSkill.skill < 0: userSkill.skill = 0
                 userSkill.save()
             print "diff to send",diff
                 
@@ -306,6 +308,15 @@ class CreateMath(AjaxableResponseMixin):
             else:
                 num += str(random.randrange(0,5))
         return (oper,num)
+    def create_angle(self,size):
+        if size == 0:
+            return random.randrange(1,46)
+        if size == 1:
+            return random.randrange(46,91)
+        if size == 2:
+            return random.randrange(91,136)
+        if size == 3:
+            return random.randrange(136,181)
             
     def init(self):
         if self.type == 'equa':
@@ -313,11 +324,10 @@ class CreateMath(AjaxableResponseMixin):
             Params.objects.get_or_create(param1 = oper, param2 = num,type_id = 6)
             self.question = self.create_equation(oper,num)
             print self.question
-           # self.template_name = 'learning/math/equa.html'
         elif self.type == 'sqrt':
             self.question = random.randrange(1, 256)
         elif self.type == 'angle':
-            self.create_angle()
+            self.question = self.create_angle(self.param2)
         else:
             raise Exception("unknow type in CreateMath: %s" % (self.type))
             
