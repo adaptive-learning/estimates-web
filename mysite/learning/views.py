@@ -19,7 +19,7 @@ TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
               'len': ["mm", "cm", "dm", "m", "km", "mile", "inch", "ft"],
               'temp':["kelvin", "degF", "degC"],
              }
-NameTypes = {'math': ["sqrt", "equa"],
+NameTypes = {'math': ["sqrt", "equa","angle"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
             }
@@ -64,6 +64,13 @@ def decider(type, question, src, dst,f = 2):
         return eval(question)
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
+    elif type == "angle":
+        if src == "inn":
+            return question
+        elif dst == "out":
+            return 360-question
+        else: raise Exception("wrong params") 
+            
     elif type == 'e' or type == 'c' :
         raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22" + src + dst + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
         rate = json.loads(raw.read())['query']['results']['rate']['Rate']
@@ -309,14 +316,16 @@ class CreateMath(AjaxableResponseMixin):
                 num += str(random.randrange(0,5))
         return (oper,num)
     def create_angle(self,size):
-        if size == 0:
+        if size == "0":
             return random.randrange(1,46)
-        if size == 1:
+        elif size == "1":
             return random.randrange(46,91)
-        if size == 2:
+        elif size == "2":
             return random.randrange(91,136)
-        if size == 3:
+        elif size == "3":
             return random.randrange(136,181)
+        else:
+            raise Exception("Wrong size")
             
     def init(self):
         if self.type == 'equa':

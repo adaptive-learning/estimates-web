@@ -13,6 +13,7 @@
 {%include "navBar/bar.html" %}
 
 {{ assig.result }}
+{{question}}
 <br>
 <div>
 <form id="assigForm" action={{action}}>{% csrf_token %}
@@ -25,6 +26,11 @@
 					{% elif type == 'sqrt' %}
 						&radic;{{question}} = ?	
 					{% elif type == 'angle' %}
+						aký je to uhol?<br>
+						<canvas id="myCanvas" width="250" height="130"
+							style="solid #000000;">
+						</canvas><script src="/static/js/draw.js"></script>
+						<script>draw("{{question}}","{{p1}}",90);</script>
 					{% endif %}
 				</label>
 				<br>
@@ -64,6 +70,7 @@
 </form>
 <script src="/static/js/time.js"></script>
 <script src="/js/foundation.min.js"></script>
+
 <style>
 	#imgDiv{  
 	 background: url(/static/img/MathBoard.png) no-repeat;
