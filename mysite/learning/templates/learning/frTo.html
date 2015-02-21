@@ -68,13 +68,18 @@
 </form>
 <script src="{% static "js/hint.js"%}"></script>
 <script>
-		
-	    function useHint(){
-	        hint(JSON.stringify({
-			type:"{{type}}",
-			fr:"{{fr}}",
-			to:"{{to}}"}));
-	    };
+		if ("{{type}}" == "temp"){
+			function useTempHint(){
+				tempHint("{{p1}}","{{p2}}");
+			}
+		} else {
+		    function useHint(){
+		        hint(JSON.stringify({
+				type:"{{type}}",
+				fr:"{{p1}}",
+				to:"{{p2}}"}));
+		    };
+	    }
 </script>
 
 <form>
