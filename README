@@ -2,7 +2,7 @@
     python manage.py runserver
 
  
- dependecies: 
+ dependencies: 
     django
     simplejson
     django_compressor
