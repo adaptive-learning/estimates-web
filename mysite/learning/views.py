@@ -180,6 +180,7 @@ class CreateQuestion(CreateView):
                 Scount = 1/sqrt(1+len(floatmodels))
                 score.append((i.id,10*Sprob+10*Scount))
         maximum = max(score,key=lambda item:item[1])
+        print score
         print maximum
         toReturn = Params.objects.get(id = maximum[0])
         return (toReturn.param1,toReturn.param2)
@@ -215,6 +216,30 @@ class AjaxableResponseMixin(CreateQuestion):
     def form_invalid(self, form):
         if self.request.is_ajax():
             return HttpResponseBadRequest(json.dumps(form.errors))
+    def update_skill(self):
+        if self.request.user.is_authenticated():
+            user = get_user(self.request)
+            userSkill = UserSkill.objects.get(user = user, type = self.model.type)
+            try:
+                p = FloatModel.objects.filter(user = user.id, params = self.model.params)
+            except FloatModel.DoesNotExist:
+                print "something is wrong"
+                p = FloatModel.objects.filter(params = self.model.params)
+            aver = sum([i.label for i in p])/float(len(p))
+            userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
+            if userSkill.skill < 0: userSkill.skill = 0
+            userSkill.save()
+
+    def get_proximation_error(self, model):
+        if model.type.type == "temp" and model.params.param2 != "degC":
+            model.result = converter(model.result,model.params.param2,"degC")
+            model.answer = converter(model.answer,model.params.param2,"degC")
+        if model.type.type == "equa": model.question = None
+        if abs(model.result) < 0.000001 : model.result = 0.000001
+        diff = model.result - float(model.answer)
+        diff = abs(diff)/abs(float(model.result))
+        if diff > 1: diff = 1.0
+        return diff
 
     def form_valid(self, form):
         if self.request.is_ajax():
@@ -222,28 +247,21 @@ class AjaxableResponseMixin(CreateQuestion):
             self.post = self.request.POST
             self.parseToModel()
             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
-            if self.model.type.type == "equa": self.model.question = None
-            diff = self.model.result - float(self.model.answer)
-            diff = abs(diff)/abs(float(self.model.result))
-            if diff > 1: diff = 1.0
-            self.model.label = diff
+#             if self.model.type.type == "temp" and self.model.params.param2 != "celsium":
+#                 self.model.result = converter(self.model.result,self.model.params.param2,"celsium")
+#                 self.model.answer = converter(self.model.answer,self.model.params.param2,"celsium")
+#             if self.model.type.type == "equa": self.model.question = None
+#             if abs(self.model.result) < 0.000001 : self.model.result = 0.000001
+#             diff = self.model.result - float(self.model.answer)
+#             diff = abs(diff)/abs(float(self.model.result))
+#             if diff > 1: diff = 1.0
+
+            self.model.label = self.get_proximation_error(self.model)
             self.model.save()
-            if self.request.user.is_authenticated():
-                user = get_user(self.request)
-                userSkill = UserSkill.objects.get(user = user, type = self.model.type.type)
+            self.update_skill()
+            print "diff to send",self.model.label
                 
-                try:
-                    p = FloatModel.objects.filter(user = user.id, params = self.model.params)
-                except FloatModel.DoesNotExist:
-                    print "something is wrong"
-                    p = FloatModel.objects.filter(params = self.model.params)
-                aver = sum([i.label for i in p])/float(len(p))
-                userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
-                if userSkill.skill < 0: userSkill.skill = 0
-                userSkill.save()
-            print "diff to send",diff
-                
-            return HttpResponse(str(diff))
+            return HttpResponse(str(self.model.label))
         
 class CreateFrTo(AjaxableResponseMixin):
     default = None
@@ -339,7 +357,6 @@ class CreateMath(AjaxableResponseMixin):
             self.question = self.create_angle(self.param2)
         else:
             raise Exception("unknow type in CreateMath: %s" % (self.type))
-            
         
     def get_context_data(self, **kwargs):
         ctx,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
