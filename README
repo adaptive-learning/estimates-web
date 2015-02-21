@@ -3,7 +3,8 @@
 
  
  dependencies: 
-    django
+    django 1.6 and higher
+    python 2.8 and higher
     simplejson
     django_compressor
     libpq-dev
