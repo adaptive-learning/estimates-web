@@ -156,7 +156,6 @@ class CreateQuestion(CreateView):
                 try:
                     userSkill = UserSkill.objects.get(user = user,type = t)
                 except UserSkill.DoesNotExist:
-                    print "i dont exist"
                     userSkill = UserSkill(user = user, type = t,skill = 0.5)
                     userSkill.save()
                 userSkill = userSkill.skill
@@ -179,7 +178,10 @@ class CreateQuestion(CreateView):
                 else:
                     Sprob = (1-Panswer)/(1-Ptarget)
                 Scount = 1/sqrt(1+len(floatmodels))
-                Stime = -1/(timezone.localtime(timezone.now()) - floatmodels.latest('date').date).total_seconds()
+                try:
+                    Stime = -1/(timezone.localtime(timezone.now()) - floatmodels.latest('date').date).total_seconds()
+                except FloatModel.DoesNotExist:
+                    Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
         print score

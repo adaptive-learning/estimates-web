@@ -1,6 +1,8 @@
 import math
 
-def elo(diff, prev, hard,K=0.2):
+def elo(diff, prev, hard, time = None):
+    K = 1/float((math.log(time)/math.log(2))) if time != None else 0.2
+    print "K",K
     diff = 1-((diff/.05)*25)/100
     if diff < 0 :
         diff = 0
