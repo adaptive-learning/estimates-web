@@ -6,7 +6,7 @@
     <li class="name">
       <h1><a onclick="home('home')" href="/learning">Odhad jednotiek</a></h1>
   </ul>
-  <section class="top-bar-section">
+  <section class="top-bar-section" id="bar">
     <!-- Right Nav Section -->
     <ul class="right">
       <li class="has-dropdown">
@@ -27,11 +27,11 @@
     </ul>
     </li>
 	</ul>
-    <!-- Left Nav Section -->
-    <ul class="left" id="mainMenu"></ul>
   </section>
 	<script>
-		var cList = $('#mainMenu');
+		var cList = $('<ul/>')
+			.addClass("left")
+			.appendTo($("#bar"));
 		eh = nameTypes['home'];
 		for (var i in eh){
 			value = nameTypes['home'][i];
