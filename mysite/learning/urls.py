@@ -9,4 +9,5 @@ urlpatterns = patterns("",
     url(r'^all-all',views.random_redirect),
     url(r'^conv/(?P<type>([a-z]|-)+)',views.CreateFrTo.as_view(), name = 'learning'),
     url(r'^math/(?P<type>([a-z]|-)+)',views.CreateMath.as_view()),
+    url(r'^grap/(?P<type>([a-z]|-)+)',views.CreateGraphical.as_view()),
 )    

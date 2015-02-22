@@ -24,6 +24,7 @@ TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
 NameTypes = {'math': ["sqrt", "equa","angle"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
+             'grap': ["angle"],
             }
 
 Ptarget = 0.75
@@ -361,6 +362,31 @@ class CreateMath(AjaxableResponseMixin):
         ctx['question'] = self.question
         return ctx
 
+class CreateGraphical(AjaxableResponseMixin):
+    def create_angle(self,size):
+        if size == "0":
+            return random.randrange(1,46)
+        elif size == "1":
+            return random.randrange(46,91)
+        elif size == "2":
+            return random.randrange(91,136)
+        elif size == "3":
+            return random.randrange(136,181)
+        else:
+            raise Exception("Wrong size")
+
+    def init(self):
+        if self.type == 'angle':
+            self.question = self.create_angle(self.param2)
+        else:
+            raise Exception("wrong type: %s"%type)
+        
+
+    def get_context_data(self, **kwargs):
+        ctx,self.p1,self.p2 = super(CreateGraphical,self).get_context_data(**kwargs)
+        self.init()
+        return ctx
+        
 def random_redirect(request):
     cat = {'phys':'conv', 'math':'math', 'curr':'conv'}
     name = random.choice(cat.keys())

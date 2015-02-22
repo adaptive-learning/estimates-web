@@ -4,7 +4,8 @@ include('answerForm.js');
 
 
 function decider(curr){
-	var symbol_dict = {'EUR': '€ (EUR)',
+	var symbol_dict = {
+					   'EUR': '€ (EUR)',
 					   'USD': '$ (USD)',
 				       'PLN': 'zł (PLN)',
 				       'HUF': 'Ft (HUF)',

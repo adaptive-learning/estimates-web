@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <head>
 	<script src="/js/foundation.min.js"></script>
+	<script src="/static/js/variables.js"></script>
 	<script src="/static/js/home.js"></script>
 </head>
 <html>
@@ -23,11 +24,12 @@
 <div class="collumn" align="center" id="b">
 </div>
 <div class="row" align="center" id="choice">
-	<a class="button" onclick="home('curr')">Mena</a>
-	<a class="button" onclick="home('math')"> Matematika</a>
-   	<a class="button" onclick="home('fyz')">Fyzika</a>
-   	<a class="button" onclick="home('inf')">Informatika</a>
-   	<a class="button" href="/learning/all-all">Všetko</a>
+	<script>
+		home("home");
+	</script>
+</div>
+<div class="row">
+	<a id="back" style="display:none;"><img onclick="javascript:home('home')" src="/static/img/back.png" alt="back" width="60" height="10"></a>
 </div>
 {% endblock base_body %}
 

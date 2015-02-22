@@ -1,3 +1,4 @@
+include('variables.js');
 
 function createButton(tag,name,onclick,parent,last){
 	var btn = document.createElement(tag);
@@ -28,40 +29,23 @@ function createHrefButton(tag,name,href,parent,last){
 }
 
 function home(a){
-	
 	var choice = document.getElementById('choice');
 	while(choice.firstChild){
 		choice.removeChild(choice.firstChild);
 	}
-	switch(a){
-		case 'math':
-			createHrefButton('a','Odmocniny','/learning/math/sqrt',choice,false);
-			createHrefButton('a','Uhly','/learning/math/angle',choice,false);
-			createHrefButton('a','Priklady','/learning/math/equa',choice,false);
-			createHrefButton('a','Všetko','/learning/math/math-all/',choice,true);
-			document.getElementById('header').innerHTML = 'Odhady matematickych prikladov';
-			break;
-		case 'fyz':
-			createHrefButton('a','Vzdialenosť','/learning/conv/len',choice,false);
-			createHrefButton('a','Plocha','/learning/conv/surf',choice,false);
-			createHrefButton('a','Objem','/learning/conv/vol',choice,false);		
-			createHrefButton('a','Teplota','/learning/conv/temp',choice,false);
-			createHrefButton('a','Všetko','/learning/conv/phys-all/',choice,true);
-			document.getElementById("header").innerHTML = "Odhady Fyzikalnych jednotiek";
-			break;
-		case 'curr':
-			createHrefButton('a','Eurá (€)','/learning/conv/e',choice,false);
-			createHrefButton('a','České koruny (CZK)','/learning/conv/c',choice,false);
-			createHrefButton('a','Všetko','/learning/conv/curr-all/',choice,true);
-			document.getElementById("header").innerHTML = "Odhady meny";
-			break;
-		case 'home':
-			createButton('a','Mena',function() {home('curr');},choice,false);
-			createButton('a','Matematika',function() {home('math');},choice,false);
-			createButton('a','Fyzika',function() {home('fyz');},choice,false);
-			createHrefButton('a','Všetko','/learning/all/',choice,true);
-			document.getElementById("header").innerHTML = "Odhad prevodu jednotiek";
-			break;
-			
+	if (a == 'home'){
+		for (v in nameTypes[a]){
+			var e = nameTypes[a][v];
+			createButton('a',nameReal[nameTypes[a][v]][0],function(j) {return function() {home(j);};}(e),choice,false);
+		}
+		createHrefButton('a','Všetko','/learning/all-all',choice,true);
+		$('#back').hide();
+	} else {
+		for (var v in nameTypes[a]){
+			createHrefButton('a',typeReal[nameTypes[a][v]],'/learning/'+a+'/'+nameTypes[a][v],choice,false);
+		}
+		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/',choice,true);
+		$('#back').show();
 	}
+	document.getElementById("header").innerHTML = nameReal[a][1];
 }
