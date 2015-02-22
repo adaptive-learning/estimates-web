@@ -12,6 +12,12 @@ var nameTypes = {
              'phys': ["vol", "surf", "len", "temp"],
              'grap': ["angle"],
            	};
+var nameUrls = {
+			 'math': 'math',
+	         'curr': 'conv',
+	         'phys': 'conv',
+	         'grap': 'grap',
+			};
 
 var typeReal = {
 			'sqrt':'Odmocniny',

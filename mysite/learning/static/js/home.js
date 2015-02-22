@@ -42,7 +42,7 @@ function home(a){
 		$('#back').hide();
 	} else {
 		for (var v in nameTypes[a]){
-			createHrefButton('a',typeReal[nameTypes[a][v]],'/learning/'+a+'/'+nameTypes[a][v],choice,false);
+			createHrefButton('a',typeReal[nameTypes[a][v]],'/learning/'+nameUrls[a]+'/'+nameTypes[a][v],choice,false);
 		}
 		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/',choice,true);
 		$('#back').show();
