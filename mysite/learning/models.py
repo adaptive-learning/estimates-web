@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import datetime
 from django.db import models
 
 class IntModel(models.Model):
@@ -18,6 +20,7 @@ class FloatModel(models.Model):
     user = models.ForeignKey(User, null = True)
     usedHint = models.BooleanField()
     label = models.FloatField(null = True)
+    date = models.DateTimeField(default=timezone.localtime(timezone.now()), null = True)
     
 class Params(models.Model):
     param1 = models.CharField(max_length = 20)

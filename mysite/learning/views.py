@@ -10,6 +10,8 @@ from django.template.response import TemplateResponse
 from django.shortcuts import redirect
 from model import model
 
+from django.utils import timezone
+from datetime import datetime
 from django.views.generic.edit import CreateView 
 
 TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
@@ -144,7 +146,6 @@ class CreateQuestion(CreateView):
         self.model.time = self.post.get('time')
 
     def get_question(self,types):
-                    
         score = []
         for type in types:
             t = Type.objects.get(type = type)
@@ -178,7 +179,8 @@ class CreateQuestion(CreateView):
                 else:
                     Sprob = (1-Panswer)/(1-Ptarget)
                 Scount = 1/sqrt(1+len(floatmodels))
-                score.append((i.id,10*Sprob+10*Scount))
+                Stime = -1/(timezone.localtime(timezone.now()) - floatmodels.latest('date').date).total_seconds()
+                score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
         print score
         print maximum
@@ -241,22 +243,20 @@ class AjaxableResponseMixin(CreateQuestion):
         if diff > 1: diff = 1.0
         return diff
 
+    def actualize_time(self,param,date):
+        for i in FloatModel.objects.all(params = param):
+            i.date = date
+            i.save()
+
+
     def form_valid(self, form):
         if self.request.is_ajax():
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
-#             if self.model.type.type == "temp" and self.model.params.param2 != "celsium":
-#                 self.model.result = converter(self.model.result,self.model.params.param2,"celsium")
-#                 self.model.answer = converter(self.model.answer,self.model.params.param2,"celsium")
-#             if self.model.type.type == "equa": self.model.question = None
-#             if abs(self.model.result) < 0.000001 : self.model.result = 0.000001
-#             diff = self.model.result - float(self.model.answer)
-#             diff = abs(diff)/abs(float(self.model.result))
-#             if diff > 1: diff = 1.0
-
             self.model.label = self.get_proximation_error(self.model)
+#             self.actualize_time(self.model.params,timezone.localtime(timezone.now()))
             self.model.save()
             self.update_skill()
             print "diff to send",self.model.label
