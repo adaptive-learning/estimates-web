@@ -88,7 +88,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-    'django.core.context_processors.static'
+    'django.core.context_processors.static',
 )
 
 COMPRESS_PRECOMPILERS = (

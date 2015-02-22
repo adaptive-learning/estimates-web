@@ -245,12 +245,6 @@ class AjaxableResponseMixin(CreateQuestion):
         if diff > 1: diff = 1.0
         return diff
 
-    def actualize_time(self,param,date):
-        for i in FloatModel.objects.all(params = param):
-            i.date = date
-            i.save()
-
-
     def form_valid(self, form):
         if self.request.is_ajax():
             self.model = FloatModel()
@@ -258,7 +252,6 @@ class AjaxableResponseMixin(CreateQuestion):
             self.parseToModel()
             self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
             self.model.label = self.get_proximation_error(self.model)
-#             self.actualize_time(self.model.params,timezone.localtime(timezone.now()))
             self.model.save()
             self.update_skill()
             print "diff to send",self.model.label
