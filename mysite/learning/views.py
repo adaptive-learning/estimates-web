@@ -21,10 +21,10 @@ TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
               'len': ["mm", "cm", "dm", "m", "km", "mile", "inch", "ft"],
               'temp':["kelvin", "degF", "degC"],
              }
-NameTypes = {'math': ["sqrt", "equa","angle"],
+NameTypes = {'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
-             'grap': ["angle"],
+             'grap': ["angle","water"],
             }
 
 Ptarget = 0.75
@@ -70,8 +70,8 @@ def decider(type, question, src, dst,f = 2):
     elif type == "angle":
         if src == "inn":
             return question
-        elif dst == "out":
-            return 360-question
+        elif src == "out":
+            return 360-float(question)
         else: raise Exception("wrong params") 
             
     elif type == 'e' or type == 'c' :
@@ -161,8 +161,11 @@ class CreateQuestion(CreateView):
                     userSkill.save()
                 userSkill = userSkill.skill
             else :
-                p = FloatModel.objects.filter(type = t)
-                userSKill = sum([x.label for x in p]) / float(len(p))
+                p = UserSkill.objects.filter(type = t)
+                if len(p) == 0:
+                    userSkill = 0.5
+                else:
+                    userSkill = sum(float(x.skill) for x in p) / float(len(p))
 
             for i in query:
                 if self.request.user.is_authenticated():
@@ -240,8 +243,8 @@ class AjaxableResponseMixin(CreateQuestion):
             model.result = converter(model.result,model.params.param2,"degC")
             model.answer = converter(model.answer,model.params.param2,"degC")
         if model.type.type == "equa": model.question = None
-        if abs(model.result) < 0.000001 : model.result = 0.000001
-        diff = model.result - float(model.answer)
+        if abs(float(model.result)) < 0.000001 : model.result = 0.000001
+        diff = float(model.result) - float(model.answer)
         diff = abs(diff)/abs(float(model.result))
         if diff > 1: diff = 1.0
         return diff
@@ -357,12 +360,11 @@ class CreateMath(AjaxableResponseMixin):
     def get_context_data(self, **kwargs):
         ctx,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
         self.init()
-        print self.question
-
         ctx['question'] = self.question
         return ctx
 
 class CreateGraphical(AjaxableResponseMixin):
+    template_name = "learning/grap.html"
     def create_angle(self,size):
         if size == "0":
             return random.randrange(1,46)
@@ -375,9 +377,14 @@ class CreateGraphical(AjaxableResponseMixin):
         else:
             raise Exception("Wrong size")
 
+    def create_water(self,param):
+        return random.randrange(int(param)*10+1, int(param)*10+11)
+        
     def init(self):
         if self.type == 'angle':
-            self.question = self.create_angle(self.param2)
+            self.question = self.create_angle(self.p2)
+        elif self.type == 'water':
+            self.question = self.create_water(self.p1)
         else:
             raise Exception("wrong type: %s"%type)
         
@@ -385,6 +392,8 @@ class CreateGraphical(AjaxableResponseMixin):
     def get_context_data(self, **kwargs):
         ctx,self.p1,self.p2 = super(CreateGraphical,self).get_context_data(**kwargs)
         self.init()
+        print self.question
+        ctx['question']=self.question
         return ctx
         
 def random_redirect(request):

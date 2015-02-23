@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 {% extends "foundation/base.html" %}
 <head>
-	
-	
-	
 </head>
 <html>
-
-
-
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
@@ -19,11 +13,16 @@
 			<div class="row collapse" id="imgDiv" align="center">
 				<br><br><br><br>
 				<label class="small-8 collumns" id="label" for="input">
-					{% if type == 'equa' %}
-						{{question}} = ?
-					{% elif type == 'sqrt' %}
-						&radic;{{question}} = ?	
+					{% if type == 'water' %}
+						Koľko percent vody je v pohari?	
+					{% elif type == 'angle' %}
+						Aký je to uhol?
 					{% endif %}
+					<br>
+					<canvas id="myCanvas" width="250" height="130"
+						style="solid #000000;">
+					</canvas><script src="{% static "js/draw.js" %}"></script>
+					<script>draw("{{type}}","{{question}}","{{p1}}","{{p2}}");</script>
 				</label>
 				<br>
 				<div class="large-3 collumns" id="userPart">
