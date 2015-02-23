@@ -67,6 +67,8 @@ def decider(type, question, src, dst,f = 2):
         return eval(question)
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
+    elif type == "water":
+        raise Exception("NOT IMPLEMENTED YET")
     elif type == "angle":
         if src == "inn":
             return question
@@ -86,7 +88,7 @@ def decider(type, question, src, dst,f = 2):
         else:
             raise Exception("error unknow value of %s or %s" % (src, dst))
     else :
-        raise Exception('type is unknow command %s' % s(type))      
+        raise Exception('type is unknow command %s' % (type))      
     
 def get_hint(request):
     if request.method == "POST" and request.is_ajax():
