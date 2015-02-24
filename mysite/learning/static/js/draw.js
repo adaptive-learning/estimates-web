@@ -1,5 +1,10 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
+function Point(x,y){
+	this.x = x;
+	this.y = y;
+}
+
 function draw(type,question,p1,p2){
 
 	switch(type){
@@ -7,7 +12,7 @@ function draw(type,question,p1,p2){
 			drawAngle(question,p1,90);
 			break;
 		case 'water':
-			drawGlass(question);
+			drawGlass(question,p1,p2);
 			break;
 	}
 
@@ -50,46 +55,48 @@ function drawAngleSymbol(type,ctx,xs,ys, x1,y1, xe,xy) {
     ctx.fillStyle = "black";
 }
 
-function drawGlass(v){
-	v=40;
-	var base = 50;
-	var top = 70;
+function drawGlass(v,top,height){
+	v=50;
+	var top = base + 20;
 	var h = 10;
 	var tx = (ctx.canvas.width - top)/2;
 	var bx = (ctx.canvas.width - base)/2;
 	var hy = (ctx.canvas.height - h);
-	var x1=bx;
-	var x2=bx + base;
-	var x3=tx + top;
-	var x4=tx;
-	var y1=hy;
-	var y2=hy;
-	var y3=10;
-	var y4=10;
-	ctx.moveTo(x1,y1);
-	ctx.lineTo(x2,y2);
-	ctx.lineTo(x3,y3);
-	ctx.moveTo(x1,y1);	
-	ctx.lineTo(x4,y4);
-	dy = y1 - y3;
-	dx = x1 - x3;
-	theta = Math.atan2(dy, dx);
-	theta *= 180/Math.PI;
-	var missing = Math.sqrt((Math.pow(v/Math.sin(theta),2)-Math.pow(v,2)))*2+base;
-	var mx1 = x1+base/2 - missing/5;
-	var mx2 = x1+ base/2 + missing/5;
-	var my1 = hy-v;
-	var my2 = hy-v;
-	alert(missing);
-	alert("x1 "+x1);
-	alert("mx1 "+mx1);
-	ctx.moveTo(mx1,my1);
-	ctx.lineTo(mx2,my2);
+	v = (v/100)*(hy-h);
+	var A = new Point(bx,hy);
+	var B = new Point(bx+base,hy);
+	var C = new Point(tx+top,h);
+	var D = new Point(tx,h);
+	ctx.moveTo(A.x,A.y);
+	ctx.lineTo(B.x,B.y);
+	ctx.lineTo(C.x,C.y);
+	ctx.moveTo(A.x,A.y);	
+	ctx.lineTo(D.x,D.y);
+	var angle = (find_angle(D,A,B) - 90) * (Math.PI/180);
+	var missing = Math.abs(Math.tan(angle)*v);
+	var m1 = new Point(A.x-missing,hy-v);
+	var m2 = new Point(B.x+missing,hy-v);
+	ctx.moveTo(m1.x,m1.y);
+	ctx.lineTo(m2.x,m2.y);
 	ctx.stroke();
+	ctx.fillStyle = "blue";
+	ctx.beginPath();
+		ctx.moveTo(A.x-1,A.y-1);
+		ctx.lineTo(B.x-1,B.y-1);
+		ctx.lineTo(m2.x-1,m2.y-1);
+		ctx.lineTo(m1.x+1,m2.y-1);
+		ctx.lineTo(A.x+1,A.y-1);
+	ctx.closePath();
+	ctx.fill();
 }
 
 
-
+function find_angle(A,B,C) {
+    var AB = Math.sqrt(Math.pow(B.x-A.x,2)+ Math.pow(B.y-A.y,2));    
+    var BC = Math.sqrt(Math.pow(B.x-C.x,2)+ Math.pow(B.y-C.y,2)); 
+    var AC = Math.sqrt(Math.pow(C.x-A.x,2)+ Math.pow(C.y-A.y,2));
+    return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB)) * 180/Math.PI;
+}
 
 
 
