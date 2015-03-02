@@ -13,7 +13,6 @@
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
 <br>
-<div>
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
@@ -36,27 +35,28 @@
 				</div>
 				<div class="large-6 rows" id="answer" style="color:#FFFFFF"></div>
 			</div>
-			<br>
+			<div class="progress" id="Pbar"></div>
 			<div id = "next">
 				<input id="sub" type="submit" class="button" value="Odpovedat" />
 			</div>
 	</div>
+
+</form>
 	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+	<script src="{% static "js/nextQuestion.js" %}"></script>
 	<script src="{% static "js/answerForm.js" %}"></script>
 	<script>
 		var csrftoken = getCookie('csrftoken');
 		$('#assigForm').on('submit', function(event){
 		    event.preventDefault();
 		    var jsonString= JSON.stringify({
-   				fr:"{{p1}}",
-   				to:"{{p2}}",
+   				p1:"{{p1}}",
+   				p2:"{{p2}}",
    				question:"{{question}}"
    			});
 		    create_post(jsonString,"{{type}}");
 		});
 	</script>
-</form>
-</div>
 <form>
 <input type="text" id="txt">
 </form>

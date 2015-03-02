@@ -12,6 +12,7 @@ from model import model
 
 from django.utils import timezone
 from datetime import datetime
+from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView 
 
 TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
@@ -58,7 +59,7 @@ def arrayToType(type):
        
 def get_types(name):
     if name == None:
-        raise Expcetion('name is unknow %s' % (name))
+        raise Exception('name is unknow %s' % (name))
     return NameTypes.get(name)
 
     
@@ -83,21 +84,19 @@ def decider(type, question, src, dst,f = 2):
         return round(float(rate) * float(question), f)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
         array = arrayToType(type)
-        if src in array and dst in array:
-            return (round(converter(question, src, dst),f))
-        else:
-            raise Exception("error unknow value of %s or %s" % (src, dst))
+#         if src in array and dst in array:
+        return (round(converter(question, src, dst),f))
+#         else:
+#             raise Exception("error unknow value of %s or %s" % (src, dst))
     else :
         raise Exception('type is unknow command %s' % (type))      
     
 def get_hint(request):
     if request.method == "POST" and request.is_ajax():
         j = json.loads(request.POST.get('data'))
-        res = decider(j['type'], 1, j['fr'], j['to'],5)
-        
+        res = decider(j['type'], 1, j['p1'], j['p2'],5)
         if abs(res) <= 0.001:
-#             print res
-            return HttpResponse(decider(j['type'], 1, j['to'], j['fr']))
+            return HttpResponse(decider(j['type'], 1, j['p1'], j['p2']))
         return HttpResponse(res)
     
 def type_to_range(type):
@@ -113,47 +112,13 @@ def type_to_range(type):
         return (-40, 40)
     return (1, 100)
 
-
-
-class CreateQuestion(CreateView):
-        
-    model = FloatModel
-    fields = ['answer']            
-    def parseToModel(self):
-        js = json.loads(self.post.get('data'))
-        try: 
-            p = Params.objects.get(param1=js['fr'], param2=str(js['to']))
-        except Params.DoesNotExist:
-            raise Exception("wrong params %s %s" % (js['fr'],js['to']))
-        type = self.post.get('type')
-        print p
-        try:
-            t = Type.objects.get(type=type)
-        except Type.DoesNotExist:
-            raise Exception("wrong params %s"%(type)) 
-        self.model.question = js['question']
-        try:
-            if js['used_hint'] == '0':
-                self.model.usedHint = False
-            else :
-                self.model.usedHint = True
-        except KeyError:
-            self.model.usedHint = False
-        self.model.type = t
-        self.model.params = p
-        if self.request.user.is_authenticated():
-            self.model.user = get_user(self.request)
-        else :
-            self.model.user = None
-        self.model.answer = self.post.get('answer')
-        self.model.time = self.post.get('time')
-
+class QuestionFunctions():
     def get_question(self,types):
         score = []
         for type in types:
             t = Type.objects.get(type = type)
-            query = Params.objects.filter(type = t)
-
+            query = Concept.objects.filter(type = t)
+    
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
                 try:
@@ -168,12 +133,12 @@ class CreateQuestion(CreateView):
                     userSkill = 0.5
                 else:
                     userSkill = sum(float(x.skill) for x in p) / float(len(p))
-
+    
             for i in query:
                 if self.request.user.is_authenticated():
-                    floatmodels = FloatModel.objects.filter(params = i, user = get_user(self.request).id)
+                    floatmodels = FloatModel.objects.filter(concept = i, user = get_user(self.request).id)
                 else:
-                    floatmodels = FloatModel.objects.filter(params = i)
+                    floatmodels = FloatModel.objects.filter(concept = i)
                 if len(floatmodels) != 0:
                     hard = sum([x.label for x in floatmodels]) / float(len(floatmodels))
                 else:
@@ -190,16 +155,53 @@ class CreateQuestion(CreateView):
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
+        maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print score
         print maximum
-        toReturn = Params.objects.get(id = maximum[0])
-        return (toReturn.param1,toReturn.param2)
-        
+        toReturn = Concept.objects.get(id = maximum[0])
+        return (toReturn.question,toReturn.param1,toReturn.param2)
 
-    def randArray(self, range):
-        q = random.randrange(range[0], range[1])
-        return (q)
-    
+class CreateQuestion(CreateView):
+    model = FloatModel
+    fields = ['answer']            
+    def parseToModel(self):
+        js = json.loads(self.post.get('data'))
+        try: 
+            p = js['p1'] if js['p1'] is not None else "-1"
+            p1 = Params.objects.get(param=p)
+            p = js['p2'] if js['p2'] is not None else "-1"
+            p2 = Params.objects.get(param = p)
+        except Params.DoesNotExist:
+            raise Exception("wrong params %s %s" % (js['p1'],js['p2']))
+        type = self.post.get('type')
+        try:
+            t = Type.objects.get(type=type)
+        except Type.DoesNotExist:
+            raise Exception("wrong params %s"%(type)) 
+        try:
+            print js['question'];
+            q = Questions.objects.get(question=float(js['question'].replace(',','.')))
+        except Questions.DoesNotExist:
+            raise Exception("wrong params %s"%(js['question']));
+        try:
+            if js['used_hint'] == '0':
+                self.model.usedHint = False
+            else :
+                self.model.usedHint = True
+        except KeyError:
+            self.model.usedHint = False
+        self.model.type = t
+        if self.request.user.is_authenticated():
+            self.model.user = get_user(self.request)
+        else :
+            self.model.user = None
+        try:
+            self.model.concept = Concept.objects.get(type=t, param1 = p1,param2=p2,question=q)
+        except Concept.DoesNotExit:
+            raise Exception("wrong params for Concept when parsing to model")
+        self.model.answer = self.post.get('answer')
+        self.model.time = self.post.get('time')
+
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         type = self.kwargs.get('type', None)
@@ -215,12 +217,17 @@ class CreateQuestion(CreateView):
             types = get_types(splitted[0])
         if len(splitted) == 1:
             types = [type]
-        param1, param2 = self.get_question(types)
-        self.type = Params.objects.get(param1=param1, param2=param2).type.type
+        q, param1, param2 = self.get_question(types)
+        try:
+            print q.id,param1.id,param2.id
+            self.type = Concept.objects.get(question = q,param1=param1, param2=param2).type.type
+        except Concept.DoesNotExist:
+            raise Exception("wrong params for concept in get_context_data");
+        ctx['test'] = self.kwargs.get('test',None)
         ctx['type'] = self.type
-        ctx['p1'] = param1
-        ctx['p2'] = param2
-        return (ctx, param1, param2)
+        ctx['p1'] = param1.param if param1 != None else None
+        ctx['p2'] = param2.param if param2 != None else None
+        return (ctx,q.question, param1, param2)
     
 class AjaxableResponseMixin(CreateQuestion):
     def form_invalid(self, form):
@@ -241,10 +248,10 @@ class AjaxableResponseMixin(CreateQuestion):
             userSkill.save()
 
     def get_proximation_error(self, model):
-        if model.type.type == "temp" and model.params.param2 != "degC":
-            model.result = converter(model.result,model.params.param2,"degC")
-            model.answer = converter(model.answer,model.params.param2,"degC")
-        if model.type.type == "equa": model.question = None
+        if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
+            model.result = converter(model.result,model.concept.param2.param,"degC")
+            model.answer = converter(model.answer,model.concept.param2.param,"degC")
+        if model.type.type == "equa": model.concept.question.question = None
         if abs(float(model.result)) < 0.000001 : model.result = 0.000001
         diff = float(model.result) - float(model.answer)
         diff = abs(diff)/abs(float(model.result))
@@ -256,147 +263,70 @@ class AjaxableResponseMixin(CreateQuestion):
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
-            self.model.result = decider(self.model.type.type, self.model.question, self.model.params.param1, self.model.params.param2)
+            self.model.result = decider(self.model.type.type,
+                                         self.model.concept.question.question, 
+                                         self.model.concept.param1.param, 
+                                         self.model.concept.param2.param)
             self.model.label = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
             print "diff to send",self.model.label
                 
-            return HttpResponse(str(self.model.label))
+            return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
-class CreateFrTo(AjaxableResponseMixin):
+class CreateFrTo(AjaxableResponseMixin, QuestionFunctions):
     default = None
     array = None
     range = None
     template_name = 'learning/frTo.html'
-     
-    def randArray(self, range, fr, to):
-        
-        q = super(CreateFrTo, self).randArray(range)
-        if self.type != 'e' and self.type != 'c':
-            m = converter(q, fr, to)
-            if round(m, 2) == 0.0:
-                pre = str(m).split("e-")
-                if len(pre) == 2:
-                    h = pow(10, int(pre[1]) - 1)
-                else:
-                    h = pow(10, len(str(m)) - 2)
-                q = random.randrange(range[0] * h, range[1] * h)
-        return q                      
-                
-    def init(self) :
-        range = type_to_range(self.type)
-        self.question = self.randArray(range, self.fr, self.to)
-             
-      
     def get_context_data(self, **kwargs):
-        ctx,self.fr, self.to = super(CreateFrTo, self).get_context_data(**kwargs)
-        self.init()
+        ctx,self.question,self.fr, self.to = super(CreateFrTo, self).get_context_data(**kwargs)
+#         self.init()
         ctx['question'] = self.question
         return ctx
     
 
         
-class CreateMath(AjaxableResponseMixin):
+class CreateMath(AjaxableResponseMixin, QuestionFunctions):
     template_name = 'learning/math/math.html'
-    def create_equation(self,p1,p2):
-        equation = []
-        print p2 
-        for i in p2:
-            if i == "0":
-                equation.append(str(random.randrange(1,51)))
-            elif i == "1":
-                equation.append(str(random.randrange(50,101)))
-            elif i == "2":
-                equation.append(str(random.randrange(100,151)))
-            elif i == "3":
-                equation.append(str(random.randrange(150,202)))
-            elif i == "4":
-                equation.append(str(random.randrange(200,257)))
-        print equation
-        counter = 1
-        for oper in p1: 
-            equation.insert(counter,oper)
-            counter += 2
-        return ' '.join(equation) 
-    
-    def create_rand_equation(self,ran):
-        num = str(random.randrange(0,5))
-        oper = ""
-        for i in range(ran):
-            oper += str(random.choice("+-*"))
-            if oper[len(oper)-1] == '*':
-                if random.choice("ba") == 'b':
-                    num = num[:(len(num)-1)] + '0'
-                    num += str(random.randrange(0,5))
-                else:
-                    num += '0'
-            else:
-                num += str(random.randrange(0,5))
-        return (oper,num)
-    def create_angle(self,size):
-        if size == "0":
-            return random.randrange(1,46)
-        elif size == "1":
-            return random.randrange(46,91)
-        elif size == "2":
-            return random.randrange(91,136)
-        elif size == "3":
-            return random.randrange(136,181)
-        else:
-            raise Exception("Wrong size")
-            
-    def init(self):
-        if self.type == 'equa':
-            oper, num = self.create_rand_equation(random.randrange(1,4))
-            Params.objects.get_or_create(param1 = oper, param2 = num,type_id = 6)
-            self.question = self.create_equation(oper,num)
-            print self.question
-        elif self.type == 'sqrt':
-            self.question = random.randrange(1, 256)
-        elif self.type == 'angle':
-            self.question = self.create_angle(self.param2)
-        else:
-            raise Exception("unknow type in CreateMath: %s" % (self.type))
-        
+       
     def get_context_data(self, **kwargs):
-        ctx,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
-        self.init()
+        ctx,self.question,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
+#         self.init()
         ctx['question'] = self.question
         return ctx
 
-class CreateGraphical(AjaxableResponseMixin):
+class CreateGraphical(AjaxableResponseMixin, QuestionFunctions):
     template_name = "learning/grap.html"
-    def create_angle(self,size):
-        if size == "0":
-            return random.randrange(1,46)
-        elif size == "1":
-            return random.randrange(46,91)
-        elif size == "2":
-            return random.randrange(91,136)
-        elif size == "3":
-            return random.randrange(136,181)
-        else:
-            raise Exception("Wrong size")
-
-    def create_water(self,param):
-        return random.randrange(int(param)*10+1, int(param)*10+11)
-        
-    def init(self):
-        if self.type == 'angle':
-            self.question = self.create_angle(self.p2)
-        elif self.type == 'water':
-            self.question = self.create_water(self.p1)
-        else:
-            raise Exception("wrong type: %s"%type)
-        
-
     def get_context_data(self, **kwargs):
-        ctx,self.p1,self.p2 = super(CreateGraphical,self).get_context_data(**kwargs)
-        self.init()
-        print self.question
-        ctx['question']=self.question
+        ctx,self.question,self.p1,self.p2 = super(CreateGraphical,self).get_context_data(**kwargs)
+#         self.init()
+#         print self.question
+        ctx['question']=int(self.question)
         return ctx
+
+class NextQuestion(TemplateView,QuestionFunctions):
+    template_name = ""
+    
+    def get_context_data(self,**kwargs):
+        return HttpResponse("success")
+
+def finish(request):
+    print "I AM IN"
+    if request.is_ajax() and request.method == "POST":
+        t = Type.objects.get(type = request.POST.get("type"))
+        if request.user.is_authenticated():
+            f = FloatModel.objects.filter(user = get_user(request).id,type = t).order_by('date')[:10]
+        else:
+            f = FloatModel.objects.filter(user = None, type = t).order_by('date')[:10]
+        if len(f) != 0:
+            s = sum([x.label for x in f])/len(f);
+        else:
+            raise Exception("p is 0")
+        try: uS = UserSkill.objects.get(user = get_user(request).id)
+        except UserSkill.DoesNotExist: return HttpResponse(s)
+        return HttpResponse("%s//%s"%(s,uS))
+    
         
 def random_redirect(request):
     cat = {'phys':'conv', 'math':'math', 'curr':'conv'}

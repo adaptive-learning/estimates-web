@@ -42,10 +42,19 @@ function home(a){
 		$('#back').hide();
 	} else {
 		for (var v in nameTypes[a]){
-			createHrefButton('a',typeReal[nameTypes[a][v]],'/learning/'+nameUrls[a]+'/'+nameTypes[a][v],choice,false);
+			var h = "/learning/"+nameUrls[a]+'/'+nameTypes[a][v];
+			createButton('a',typeReal[nameTypes[a][v]],function(j) {return function() {chooseType(j);};}(h),choice,false);
 		}
 		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/',choice,true);
 		$('#back').show();
 	}
 	document.getElementById("header").innerHTML = nameReal[a][1];
+}
+function chooseType(href){
+	var choice = document.getElementById('choice');
+	while(choice.firstChild){
+		choice.removeChild(choice.firstChild);
+	}
+	createHrefButton('a',"test",href+"/test",choice,false);
+	createHrefButton('a',"time",href+"/time",choice,false);
 }

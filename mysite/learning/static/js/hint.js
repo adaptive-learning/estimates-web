@@ -1,5 +1,3 @@
-var used_hint=0;
-
 function hint(data) {
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
@@ -29,18 +27,19 @@ function hint(data) {
 };
 
 function tempHint(fr,to){
+	alert("ok");
 	if (fr == "degF" && to == "degC"){
-		message = "(T(°F) - 32) × 5/9";		
+		message = "((T(°F) - 32) × 5/9)";		
 	} else if(fr == "degC" && to == "degF"){
-		message = "T(°C) × 9/5 + 32";
+		message = "(T(°C) × 9/5 + 32)";
 	} else if(fr == "degF" && to == "kelvin"){
-		message = "(T(°F) + 459.67) × 5/9";	
+		message = "((T(°F) + 459.67) × 5/9)";	
 	} else if(fr == "kelvin" && to == "degF"){
-		message = "(T(°F) + 459.67) × 5/9";
+		message = "((T(°F) + 459.67) × 5/9)";
 	} else if(fr == "degC" && to == "kelvin"){
-		message = "T(°C) + 273.15";
+		message = "(T(°C) + 273.15)";
 	} else if(fr == "kelvin" && to == "degC"){
-		message = "T(K) - 273.15";
+		message = "(T(K) - 273.15)";
 	}
 	$('#after').text(message);
 	$('#myModal').foundation('reveal','open');

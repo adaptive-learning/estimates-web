@@ -9,76 +9,64 @@ function draw(type,question,p1,p2){
 
 	switch(type){
 		case 'angle':
-			drawAngle(question,p1,90);
+			var A = new Point(160,60);
+			var B = new Point(80,60);
+			var C = drawAngle(A,B,question,90);
+			drawAngleSymbol(p1,ctx,A,B,C);
 			break;
 		case 'water':
-			drawGlass(question,p1,p2);
+			drawGlass(ctx,parseInt(question),parseInt(p1),parseInt(p2),null);
 			break;
 	}
-
 }
-function drawAngle(angle,type,size){
-	xs = 160;
-	ys = 60;
-	x1 = 80;
-	y1 = 60;
-	xe = x1 + size * Math.cos(Math.PI * angle / 180.0);
-	ye = y1 + size * Math.sin(Math.PI * angle / 180.0);
-	ctx.moveTo(xs,ys);
-	ctx.lineTo(x1,y1);
-	ctx.moveTo(x1, y1);
-	ctx.lineTo(xe,ye);
+function drawAngle(A,B,angle,size){
+	var C = new Point(
+					B.x + size * Math.cos(Math.PI * angle / 180.0),
+					B.y + size * Math.sin(Math.PI * angle / 180.0)
+					);
+	ctx.moveTo(A.x,A.y);
+	ctx.lineTo(B.x,B.y);
+	ctx.lineTo(C.x,C.y);
 	ctx.stroke();
-	drawAngleSymbol(type,ctx,xs,ys,x1,y1,xe,ye);
+	return C;
 }
-function drawAngleSymbol(type,ctx,xs,ys, x1,y1, xe,xy) {
 
-    var dx1 = xe - x1;
-    var dy1 = ye - y1;
-    var dx2 = xs - x1;
-    var dy2 = ys - y1;
-    var a1 = Math.atan2(dy1, dx1);
-    var a2 = Math.atan2(dy2, dx2);
+function drawAngleSymbol(type,ctx,A, B, C) {
+	var M = new Point(C.x-B.x,C.y-B.y);
+	var E = new Point(A.x-B.x,A.y-B.y);
+	var A1 = new Point(Math.atan2(E.y,E.x),Math.atan2(M.y,M.x));
     ctx.save();
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
+    ctx.moveTo(B.x, B.y);	
     if ( type == "out"){
-    	ctx.arc(x1, y1, 20, a1, a2);
+    	ctx.arc(B.x, B.y, 20, A1.y, A1.x);
     } else {
-    	ctx.arc(x1, y1, 50, a2, a1);
+    	ctx.arc(B.x, B.y, 50, A1.x, A1.y);
     }
     ctx.closePath();
-    ctx.fillStyle = "red";
+	ctx.fillStyle = "red";
     ctx.globalAlpha = 0.25;
     ctx.fill();
     ctx.restore();
     ctx.fillStyle = "black";
 }
 
-function drawGlass(v,top,height){
-	v=50;
-	var top = base + 20;
-	var h = 10;
-	var tx = (ctx.canvas.width - top)/2;
+function drawGlass(ctx,v,base,angle,origV){
+	if (origV == null){
+		origV=(ctx.canvas.height - 10);
+	}else {
+		origV += 10;
+	}
+	v = (v/100)*(origV);
 	var bx = (ctx.canvas.width - base)/2;
-	var hy = (ctx.canvas.height - h);
-	v = (v/100)*(hy-h);
-	var A = new Point(bx,hy);
-	var B = new Point(bx+base,hy);
-	var C = new Point(tx+top,h);
-	var D = new Point(tx,h);
-	ctx.moveTo(A.x,A.y);
-	ctx.lineTo(B.x,B.y);
-	ctx.lineTo(C.x,C.y);
-	ctx.moveTo(A.x,A.y);	
-	ctx.lineTo(D.x,D.y);
-	var angle = (find_angle(D,A,B) - 90) * (Math.PI/180);
+	var A = new Point(bx,origV);
+	var B = new Point(bx+base,origV);
+	var C = drawAngle(B,A,angle+168,origV);
+	var D = drawAngle(A,B,angle-180,origV);
+	var angle = (angle-90) * (Math.PI/180);
 	var missing = Math.abs(Math.tan(angle)*v);
-	var m1 = new Point(A.x-missing,hy-v);
-	var m2 = new Point(B.x+missing,hy-v);
-	ctx.moveTo(m1.x,m1.y);
-	ctx.lineTo(m2.x,m2.y);
-	ctx.stroke();
+	var m1 = new Point(A.x-missing,origV-v);
+	var m2 = new Point(B.x+missing,origV-v);
 	ctx.fillStyle = "blue";
 	ctx.beginPath();
 		ctx.moveTo(A.x-1,A.y-1);

@@ -1,5 +1,4 @@
 include ('time.js');
-
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -39,7 +38,8 @@ function create_post(data,t) {
 		
         // handle a successful response
         success : function(response) {
-            answer(response);
+        	response = response.split("//");
+            answer(response[0],response[1]);
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -50,61 +50,74 @@ function create_post(data,t) {
     });
 };
 
-function answer(diff){
-	
-	var img = document.createElement('img');
-	resize(img);
+function answer(diff,result){
 	var div = document.getElementById("assigment");
 	delet(div);
 	delet(document.getElementById("hint"));
-	div.appendChild(img);
+	var img = [];
+	for(var i=0;i<5;i++){	
+		var x = document.createElement('img');
+		img.push(x);
+		resize(img[i]);
+		div.appendChild(img[i]);
+	}
 	var d = document.getElementById("next");
 	delet(d);
 	onclick = function(){
+		window.onbeforeunload=null;
 		window.location.href = $('#assigForm').attr('action');
 	};
-	// if(type == "e" || type == "c"){ 
-	if (diff < 0.05){
-		txt_message = "vas odhad je presny ";
-		img.src = "/static/img/true.png";
-	} else if (diff < 0.1){
-		txt_message = "vas odhad je takmer presny ";
-		img.src = "/static/img/true.png";	
+	if (diff < 0.03){
+		// txt_message = "vas odhad je presny ";
+		setStars(img,5);	
+	} else if (diff < 0.06){
+		// txt_message = "vas odhad je takmer presny ";
+		setStars(img,4);	
+	} else if (diff < 0.09){
+		setStars(img,3);	
+	} else if (diff < 0.13){
+		setStars(img,2);	
 	} else if (diff < 0.15){
-		txt_message = "vas odhad je priblizne správne ";
-		img.src = "/static/img/true.png";
-	} else if (diff < 0.2){
-		txt_message = "vas odhad nie je správny ";
-		img.src = "/static/img/false.png";
-	} else {
-		txt_message = "vas odhad je mimo ";
-		img.src = "/static/img/false.png";
+		// txt_message = "vas odhad je priblizne správne ";		
+		setStars(img,1);	
+	// } else if (diff < 0.2){
+		// // txt_message = "vas odhad nie je správny ";		
+		// setStars(img,0);	
+	} else{
+		// txt_message = "vas odhad je mimo ";
+		setStars(img,0);	
 	}
-	time = minutes*60 + c;
-	if(time < 10){
-		txt_message += "a velmi rychly";
-	} else  if (time < 20){
-		txt_message += "a rychly";
-	} else if (time < 35){
-		txt_message += "a priemerne rychly";
+	var txt_message = "spravna odpoved bola: "+result;
+	$("#answer").append(document.createTextNode(txt_message));
+	if (diff < 0.15){
+		setTimeout(function alertFunc() {
+    				window.onbeforeunload=null;	
+    				window.location.href = $('#assigForm').attr('action');
+					},3000);
 	} else {
-		txt_message += "a pomaly";
+		var next = document.createElement('input');
+		next.value = "Ďalej";		
+		next.setAttribute('type','button');
+		next.setAttribute('class','button');
+		hidden = document.createElement('input');
+		if (next.addEventListener) 
+				next.addEventListener('click',onclick,false); //everything else    
+			else if (choice.attachEvent)
+		    	next.attachEvent('onclick',onclick); //IE only
+		d.appendChild(next);
+		delet(a);
 	}
-	var next = document.createElement('input');
-	next.value = "Ďalej";		
-	next.setAttribute('type','button');
-	next.setAttribute('class','button');
-	hidden = document.createElement('input');
-	if (next.addEventListener) 
-			next.addEventListener('click',onclick,false); //everything else    
-		else if (choice.attachEvent)
-	    	next.attachEvent('onclick',onclick); //IE only
-	
-	d.appendChild(next);
-	var a = document.getElementById("answer");
-	delet(a);
-	a.appendChild(document.createTextNode(txt_message));
 	return false;
+}
+function setStars(im,x){
+	for (var p=0;p<im.length;p++){
+		if (p<x){
+			im[p].src="/static/img/star.png";
+		} else {
+			im[p].src="/static/img/star-outline.png";
+		}
+	}
+	return null;
 }
 
 function delet(div){

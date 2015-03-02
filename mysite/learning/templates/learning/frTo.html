@@ -3,7 +3,6 @@
 <head>
 	
 	
-	
 </head>
 <html>
 
@@ -22,24 +21,23 @@
 			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
 				<script src="{% static "js/frTo.js" %}"></script>
-				{{question}}<script>decider("{{p1}}");</script> = ? <script>decider("{{p2}}");</script>
+				{{question}}<script>
+				decider("{{p1}}");</script> = ? <script>decider("{{p2}}");</script>
 			</label>
-			
 			<br>
 			<div class="large-3 collumns" id="userPart">
 				<div class="row collapse">
-					<div class="small-9 columns" >
 						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>
-					</div>
-					<div id="assigment"></div>
 				</div>
+				<div id="assigment" align="center"></div>
 			</div>
 			<div class="large-6 rows" id="answer"></div>
 		</div>
-		<br>
+		<div class="progress" id="testCounter"></div>
 	  	<div class="large-1 columns" id="next">
-			<input type="submit" class="button" value="Odpovedat" />
+			<input id="sub" type="submit" class="button" value="Odpovedat" />
 		</div>
+
   		<div class="large-1 large-offset-5 columns" id="hint">
   			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
   		</div>
@@ -49,43 +47,48 @@
 		1 {{p1}} -> <span id="after"></span> {{p2}}		
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
-	
-	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
-	<script src="{% static "js/answerForm.js" %}"></script>
-	<script>
-		var csrftoken = getCookie('csrftoken');
-		$('#assigForm').on('submit', function(event){
-			var doc = document.getElementById("assigForm");
-	    	event.preventDefault();
-	    	create_post(JSON.stringify({
-   				fr:"{{p1}}",
-   				to:"{{p2}}",
-   				question:"{{question}}",
-   				used_hint:used_hint,
-   			}),"{{type}}");
-		});
-	</script>
 </form>
-<script src="{% static "js/hint.js"%}"></script>
+<script src="{% static "js/nextQuestion.js" %}"></script>
+<script src="{% static "js/pieTimer.js" %}"></script>
+<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+<script src="{% static "js/answerForm.js" %}"></script>
+<script src="{% static "js/finish.js" %}"></script>
+<p id="timeTest" style="height: 150px;">d</p>
 <script>
-		if ("{{type}}" == "temp"){
-			function useTempHint(){
-				tempHint("{{p1}}","{{p2}}");
-			}
-		} else {
-		    function useHint(){
-		        hint(JSON.stringify({
-				type:"{{type}}",
-				fr:"{{p1}}",
-				to:"{{p2}}"}));
-		    };
-	    }
+ 	window.onload = function() {
+ 		hanleNextQuestion("{{type}}","{{test}}");
+		drawTimer("timeTest",5,100,100);
+	};
+	var csrftoken = getCookie('csrftoken');
+	$('#assigForm').on('submit', function(event){
+		var doc = document.getElementById("assigForm");
+    	event.preventDefault();
+    	create_post(JSON.stringify({
+			p1:"{{p1}}",
+			p2:"{{p2}}",
+			question:"{{question}}",
+			used_hint:used_hint,
+		}),"{{type}}");
+	});
+	var used_hint=0;
+	if ("{{type}}" == "temp"){
+		function useHint(){
+		alert("{{type}}");
+			tempHint("{{p1}}","{{p2}}");
+		}
+	} else {
+	    function useHint(){
+	        hint(JSON.stringify({
+			type:"{{type}}",
+			p1:"{{p1}}",
+			p2:"{{p2}}"}));
+		};
+	}
 </script>
-
-<form>
+<div id="timer"></div>
+<script src="{% static "js/hint.js"%}"></script>
 	<input type="text" id="txt">
  	<script src="{% static "js/time.js"%}"></script>
-</form>
 
 <style>
 	#imgFyz{  
@@ -114,12 +117,12 @@
 	    color:white;
 	    border: none;
 	    outline:none;
-	    height:35px;
-	    transition:height 1s;
-	    -webkit-transition:height 1s;
+	    /*height:35px;*/
+	    /*transition:height 1s;*/
+	    /*-webkit-transition:height 1s;*/
 	}
 	#userPart{
-		margin-left: 35px;
+		/*margin-left: 35px;*/
 	}
 </style>
 <script>
