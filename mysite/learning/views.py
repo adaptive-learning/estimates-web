@@ -116,6 +116,7 @@ class QuestionFunctions():
     def get_question(self,types):
         score = []
         for type in types:
+            print type
             t = Type.objects.get(type = type)
             query = Concept.objects.filter(type = t)
     
@@ -156,7 +157,6 @@ class QuestionFunctions():
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
-        print score
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question,toReturn.param1,toReturn.param2)
@@ -196,6 +196,7 @@ class CreateQuestion(CreateView):
         else :
             self.model.user = None
         try:
+            print(t.type,p1.param,p2.param,q.question)
             self.model.concept = Concept.objects.get(type=t, param1 = p1,param2=p2,question=q)
         except Concept.DoesNotExit:
             raise Exception("wrong params for Concept when parsing to model")

@@ -6,7 +6,6 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
-{{question}}
 <br>
 <div>
 <form id="assigForm" action={{action}}>{% csrf_token %}

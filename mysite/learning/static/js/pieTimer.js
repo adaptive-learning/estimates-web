@@ -1,4 +1,4 @@
-function drawTimer(ele,width,height){
+function drawTimer(ele,sec,width,height){
 	$('<canvas>').attr({
 	    id: "timer"
 	}).css({
@@ -6,11 +6,11 @@ function drawTimer(ele,width,height){
 	    height: height + 'px'
 	}).appendTo('#'+ele);
 
-	var canvas = $("#timer");
+	var canvas = $("#timer").get(0);
 	var ctx=canvas.getContext("2d");
-	alert("okeej");
+	
 	ctx.beginPath();
-	ctx.arc(100,75,50,0,2*Math.PI);
+	ctx.arc(width/2,height/2,50,0,2*Math.PI,true);
 	ctx.stroke();
 	alert("all ok");
 		
