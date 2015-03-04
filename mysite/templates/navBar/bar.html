@@ -42,7 +42,9 @@
                 .addClass('has-dropdown')
                 .appendTo(cList);
             var aaa = $('<a/>')
-                .attr("href", "/learning/"+nameUrls[value]+"/"+value+'-all')
+                .attr("href", "/learning/"+nameUrls[value]+"/"+value+'-all/test')
+               	// .click(function(){
+                	// chooseType("/learning/"+nameUrls[value]+"/"+value+'-all');})
                 .text(nameReal[value][0])
                 .appendTo(li);
             var ul = $('<ul/>')
@@ -53,7 +55,9 @@
                 var inLi = $('<li/>')
                     .appendTo(ul);
                 var a = $('<a/>')
-                    .attr("href","/learning/"+nameUrls[value]+"/"+type)
+                    .attr("href","/learning/"+nameUrls[value]+"/"+type+"/test")
+                   	// .click(function(){
+                   		// chooseType( "/learning/"+nameUrls[value]+"/"+type);})
                     .text(typeReal[type])
                     .appendTo(inLi);
             }

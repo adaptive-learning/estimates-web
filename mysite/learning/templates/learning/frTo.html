@@ -5,10 +5,6 @@
 	
 </head>
 <html>
-
-{% if assig %}
-
-
 {% block base_body %}
 {%include "navBar/bar.html" %}
 
@@ -20,7 +16,7 @@
 
 			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
-				<script src="{% static "js/frTo.js" %}"></script>
+				<script src="{% static "js/decider.js" %}"></script>
 				{{question}}<script>
 				decider("{{p1}}");</script> = ? <script>decider("{{p2}}");</script>
 			</label>
@@ -34,11 +30,12 @@
 			<div class="large-6 rows" id="answer"></div>
 		</div>
 		<div class="progress" id="testCounter"></div>
+		
+		<div id="timeCounter" align="center"></div>
 	  	<div class="large-1 columns" id="next">
 			<input id="sub" type="submit" class="button" value="Odpovedat" />
 		</div>
-
-  		<div class="large-1 large-offset-5 columns" id="hint">
+  		<div align="right" id="hint">
   			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
   		</div>
 	</div>
@@ -53,11 +50,10 @@
 <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
 <script src="{% static "js/answerForm.js" %}"></script>
 <script src="{% static "js/finish.js" %}"></script>
-<p id="timeTest" style="height: 150px;">d</p>
+
 <script>
  	window.onload = function() {
- 		hanleNextQuestion("{{type}}","{{test}}");
-		drawTimer("timeTest",5,200,110);
+ 		handleNextQuestion("{{type}}","{{test}}");
 	};
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
@@ -85,10 +81,9 @@
 		};
 	}
 </script>
-<div id="timer"></div>
 <script src="{% static "js/hint.js"%}"></script>
 	<input type="text" id="txt">
- 	<script src="{% static "js/time.js"%}"></script>
+<script src="{% static "js/time.js"%}"></script>
 
 <style>
 	#imgFyz{  
@@ -139,10 +134,5 @@
 	}
 </script>
 {% endblock base_body %}
-
-{% else %}
-	<p>No assigment is available</p>
-{% endif %}
-
 </html>
  

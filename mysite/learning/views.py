@@ -163,6 +163,7 @@ class QuestionFunctions():
 
 class CreateQuestion(CreateView):
     model = FloatModel
+    template_name = "learning/non-frTo.html"
     fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
@@ -221,14 +222,24 @@ class CreateQuestion(CreateView):
         q, param1, param2 = self.get_question(types)
         try:
             print q.id,param1.id,param2.id
+            
             self.type = Concept.objects.get(question = q,param1=param1, param2=param2).type.type
+            
         except Concept.DoesNotExist:
             raise Exception("wrong params for concept in get_context_data");
-        ctx['test'] = self.kwargs.get('test',None)
+        testType = self.kwargs.get("test",None)
+        if testType == None:
+            raise Exception("wrong testType")
+        if testType == "time":
+            ctx['test'] = timezone.localtime(timezone.now())
+            print ctx['test']
+        else:
+            ctx['test'] = "test"    
         ctx['type'] = self.type
         ctx['p1'] = param1.param if param1 != None else None
         ctx['p2'] = param2.param if param2 != None else None
-        return (ctx,q.question, param1, param2)
+        ctx['question']=q.question
+        return ctx
     
 class AjaxableResponseMixin(CreateQuestion):
     def form_invalid(self, form):
@@ -276,34 +287,28 @@ class AjaxableResponseMixin(CreateQuestion):
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
 class CreateFrTo(AjaxableResponseMixin, QuestionFunctions):
-    default = None
-    array = None
-    range = None
     template_name = 'learning/frTo.html'
     def get_context_data(self, **kwargs):
-        ctx,self.question,self.fr, self.to = super(CreateFrTo, self).get_context_data(**kwargs)
+        ctx = super(CreateFrTo, self).get_context_data(**kwargs)
 #         self.init()
-        ctx['question'] = self.question
         return ctx
     
 
         
 class CreateMath(AjaxableResponseMixin, QuestionFunctions):
-    template_name = 'learning/math/math.html'
+    template_name = 'learning/non-frTo.html'
        
     def get_context_data(self, **kwargs):
-        ctx,self.question,self.param1,self.param2 = super(CreateMath, self).get_context_data(**kwargs)
+        ctx = super(CreateMath, self).get_context_data(**kwargs)
 #         self.init()
-        ctx['question'] = self.question
         return ctx
 
 class CreateGraphical(AjaxableResponseMixin, QuestionFunctions):
-    template_name = "learning/grap.html"
+    template_name = "learning/non-frTo.html"
     def get_context_data(self, **kwargs):
-        ctx,self.question,self.p1,self.p2 = super(CreateGraphical,self).get_context_data(**kwargs)
-#         self.init()
+        ctx = super(CreateGraphical,self).get_context_data(**kwargs)
 #         print self.question
-        ctx['question']=int(self.question)
+        ctx['question']=int(ctx['question'])
         return ctx
 
 class NextQuestion(TemplateView,QuestionFunctions):
@@ -313,13 +318,23 @@ class NextQuestion(TemplateView,QuestionFunctions):
         return HttpResponse("success")
 
 def finish(request):
-    print "I AM IN"
     if request.is_ajax() and request.method == "POST":
         t = Type.objects.get(type = request.POST.get("type"))
-        if request.user.is_authenticated():
-            f = FloatModel.objects.filter(user = get_user(request).id,type = t).order_by('date')[:10]
+        date = request.POST.get("data")
+        print date
+        if date != None:
+            now = timezone.localtime(timezone.now())
+            print (now)
+            if request.user.is_authenticated():
+                
+                f = FloatModel.objects.filter(user = get_user(request).id, type = t, date__range=(date,now))
+            else :
+                f = FloatModel.objects.filter(user = None, type = t, date__range=(date,now))
         else:
-            f = FloatModel.objects.filter(user = None, type = t).order_by('date')[:10]
+            if request.user.is_authenticated():
+                f = FloatModel.objects.filter(user = get_user(request).id,type = t).order_by('date')[:10]
+            else:
+                f = FloatModel.objects.filter(user = None, type = t).order_by('date')[:10]
         if len(f) != 0:
             s = sum([x.label for x in f])/len(f);
         else:

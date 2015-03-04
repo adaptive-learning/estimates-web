@@ -68,45 +68,24 @@ function answer(diff,result){
 		window.location.href = $('#assigForm').attr('action');
 	};
 	if (diff < 0.03){
-		// txt_message = "vas odhad je presny ";
 		setStars(img,5);	
 	} else if (diff < 0.06){
-		// txt_message = "vas odhad je takmer presny ";
 		setStars(img,4);	
 	} else if (diff < 0.09){
 		setStars(img,3);	
 	} else if (diff < 0.13){
 		setStars(img,2);	
 	} else if (diff < 0.15){
-		// txt_message = "vas odhad je priblizne správne ";		
 		setStars(img,1);	
-	// } else if (diff < 0.2){
-		// // txt_message = "vas odhad nie je správny ";		
-		// setStars(img,0);	
 	} else{
-		// txt_message = "vas odhad je mimo ";
 		setStars(img,0);	
 	}
 	var txt_message = "spravna odpoved bola: "+result;
 	$("#answer").append(document.createTextNode(txt_message));
-	if (diff < 0.15){
-		setTimeout(function alertFunc() {
-    				window.onbeforeunload=null;	
-    				window.location.href = $('#assigForm').attr('action');
-					},3000);
-	} else {
-		var next = document.createElement('input');
-		next.value = "Ďalej";		
-		next.setAttribute('type','button');
-		next.setAttribute('class','button');
-		hidden = document.createElement('input');
-		if (next.addEventListener) 
-				next.addEventListener('click',onclick,false); //everything else    
-			else if (choice.attachEvent)
-		    	next.attachEvent('onclick',onclick); //IE only
-		d.appendChild(next);
-		delet(a);
-	}
+	setTimeout(function alertFunc() {
+		window.onbeforeunload=null;	
+		window.location.href = $('#assigForm').attr('action');
+		},3000);
 	return false;
 }
 function setStars(im,x){

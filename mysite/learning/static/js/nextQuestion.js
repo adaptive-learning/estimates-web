@@ -1,5 +1,7 @@
 
-function hanleNextQuestion(t,test){
+
+function handleNextQuestion(t,test){
+	window.onbeforeunload=goodbye;
 	// window.sessionStorage.clear();
 	var tType = window.sessionStorage.getItem("testType");
 	if (tType == null){
@@ -17,14 +19,13 @@ function hanleNextQuestion(t,test){
 			n = parseInt(qNumber) + 1;
 			if (n >10){
 				qNumber=10;
-				window.sessionStorage.clear();
-				window.onbeforeunload=null;
 				get_result(t);
 			}
 			 else {
 				window.sessionStorage.setItem("numberQuestion", n.toString());
 			}
 		}
+		$("#timeCounter").hide();
 		$("#testCounter").show();
 		$("#testCounter").append("<span style=\"width: "+(parseInt(qNumber))*10+"%;\" class=\"meter custom\"></span>");
 		var v=parseInt(window.sessionStorage.getItem("numberQuestion"));
@@ -33,10 +34,16 @@ function hanleNextQuestion(t,test){
 	 	}
 	 	v*=10;
 		$(".custom").animate({width:v.toString()+"%"});
-	} else if(tType == "time"){
-
+	} else {
+		if (window.sessionStorage.getItem("date") == null){
+			window.sessionStorage.setItem("date",new Date().getTime());
+		}
+		$("#testCounter").hide();
+		if (window.sessionStorage.getItem("time") == null){
+			window.sessionStorage.setItem("time",1.5 * Math.PI);
+		}
+		drawTimer("timeCounter",5,250,130,50,t);
 	}
-	window.onbeforeunload=goodbye;
 
 
 }

@@ -1,8 +1,4 @@
 include('answerForm.js');
-
-
-
-
 function decider(curr){
 	var symbol_dict = {
 					   'EUR': '€ (EUR)',
@@ -28,6 +24,17 @@ function decider(curr){
 		} else {
 	    	document.write(curr);
 		}
+}
+
+
+function deciderType(type,question, p1,p2){
+var type_messages = {
+	"water":"Koľko percent vody je v pohari?",
+	"angle": "Koľko ° má uhol?",
+	"equa": question + " = ?",
+	"sqrt": "\u221A" + question + " = ?"
+}; 
+	$("#label").append(type_messages[type]);
 }
 
 function roundToTwo(num) {    

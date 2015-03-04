@@ -1,4 +1,6 @@
-function get_result(t) {
+function get_result(t,data) {
+	window.sessionStorage.clear();
+	window.onbeforeunload=null;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -9,7 +11,7 @@ function get_result(t) {
     $.ajax({
     	url : "/learning/finish", // the endpoint
         type : "POST", // http method
-        data : { type: t}, // data sent with the post request
+        data : { type: t, data:data}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {

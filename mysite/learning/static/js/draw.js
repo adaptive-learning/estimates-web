@@ -1,29 +1,37 @@
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
 function Point(x,y){
 	this.x = x;
 	this.y = y;
 }
 
 function draw(type,question,p1,p2){
-
+	var c = $("#myCanvas")[0];
+	var ctx = c.getContext("2d");
 	switch(type){
 		case 'angle':
 			var A = new Point(160,60);
 			var B = new Point(80,60);
-			var C = drawAngle(A,B,question,90);
+			var C = drawAngle(ctx,A,B,question,90);
+
 			drawAngleSymbol(p1,ctx,A,B,C);
+
 			break;
 		case 'water':
 			drawGlass(ctx,parseInt(question),parseInt(p1),parseInt(p2),null);
 			break;
+		default:
+			$("#canvasDiv").insertAfter("<br/>");
+			
+			$("#canvasDiv").hide();
+			break;
 	}
 }
-function drawAngle(A,B,angle,size){
+function drawAngle(ctx,A,B,angle,size){
+
 	var C = new Point(
 					B.x + size * Math.cos(Math.PI * angle / 180.0),
 					B.y + size * Math.sin(Math.PI * angle / 180.0)
 					);
+				
 	ctx.moveTo(A.x,A.y);
 	ctx.lineTo(B.x,B.y);
 	ctx.lineTo(C.x,C.y);
@@ -61,8 +69,8 @@ function drawGlass(ctx,v,base,angle,origV){
 	var bx = (ctx.canvas.width - base)/2;
 	var A = new Point(bx,origV);
 	var B = new Point(bx+base,origV);
-	var C = drawAngle(B,A,angle+168,origV);
-	var D = drawAngle(A,B,angle-180,origV);
+	var C = drawAngle(ctx,B,A,angle+168,origV);
+	var D = drawAngle(ctx,A,B,angle-180,origV);
 	var angle = (angle-90) * (Math.PI/180);
 	var missing = Math.abs(Math.tan(angle)*v);
 	var m1 = new Point(A.x-missing,origV-v);
