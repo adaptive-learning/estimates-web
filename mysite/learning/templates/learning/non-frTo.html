@@ -21,7 +21,7 @@
 					</script>
 				</label>
 				<div id="canvasDiv">
-				<canvas id="myCanvas" width="250" height="130"></canvas>
+				<canvas id="myCanvas" width="250" height="150"></canvas>
 				</div>
 				<script>draw("{{type}}","{{question}}","{{p1}}","{{p2}}")</script>
 				<br>
@@ -31,16 +31,15 @@
 				</div>
 				<div class="large-6 rows" id="answer" style="color:#FFFFFF"></div>
 			</div>
-					<div class="progress" id="testCounter"></div>
-		
-		<div id="timeCounter" align="center"></div>
-	  	<div class="large-1 columns" id="next">
-			<input id="sub" type="submit" class="button" value="Odpovedat" />
-		</div>
-			<div id = "next">
+			<div class="progress" id="testCounter"></div>
+			<div id="timeCounter" align="center"></div>
+            <div id = "next">
 				<input id="sub" type="submit" class="button" value="Odpovedat" />
 			</div>
 	</div>
+
+</form>
+
 
 <script src="{% static "js/nextQuestion.js" %}"></script>
 <script src="{% static "js/pieTimer.js" %}"></script>
@@ -60,13 +59,12 @@
 			p1:"{{p1}}",
 			p2:"{{p2}}",
 			question:"{{question}}",
-			used_hint:used_hint,
 		}),"{{type}}");
 	});
 </script>
+<script src="{% static "js/hint.js"%}"></script>
 	<input type="text" id="txt">
 <script src="{% static "js/time.js"%}"></script>
-
 <style>
 	#imgDiv{  
 	 background: url(/static/img/MathBoard.png) no-repeat;

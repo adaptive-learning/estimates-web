@@ -12,8 +12,7 @@ TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
 allParams = ["EUR","USD","PLN","HUF","CHF","GBP","RUB","CZK","kelvin", "degF", "degC", "cm",
               "dm", "m", "km", "mile", "inch","ft", "cm**2", "dm**2", "m**2", "km**2", 'ft**2', "mile**2", "inch**2","pint",
               "yard","yard**2","inch**3","ft**3","yard**3","cup","tbsp", "quart", "inn","out",
-               "are", "acre","cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl",
-               
+               "are", "acre","cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl","50","96",
            ]
     
 

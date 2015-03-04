@@ -1,3 +1,4 @@
+import math
 from learning.models import *
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
@@ -69,7 +70,18 @@ def decider(type, question, src, dst,f = 2):
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
     elif type == "water":
-        raise Exception("NOT IMPLEMENTED YET")
+        print float(question)
+        angle = math.tan(math.radians(float(dst)-90))
+        print "angle",angle
+        top = ((angle*100)*2)+float(src)
+        print "top",top
+        right = ((angle*float(question))*2)+float(src)
+        print "right",right
+        Vwhole = ((top + float(src))*100)/2
+        print "whole",Vwhole
+        Vright = ((right + float(src))*float(question))/2
+        print "Vright",Vright
+        return (Vright / Vwhole)*100
     elif type == "angle":
         if src == "inn":
             return question

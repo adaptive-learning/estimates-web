@@ -16,7 +16,7 @@ function draw(type,question,p1,p2){
 
 			break;
 		case 'water':
-			drawGlass(ctx,parseInt(question),parseInt(p1),parseInt(p2),null);
+			drawGlass(ctx,parseInt(question),parseInt(p1),parseInt(p2),120);
 			break;
 		default:
 			$("#canvasDiv").insertAfter("<br/>");
@@ -59,22 +59,38 @@ function drawAngleSymbol(type,ctx,A, B, C) {
     ctx.fillStyle = "black";
 }
 
-function drawGlass(ctx,v,base,angle,origV){
-	if (origV == null){
-		origV=(ctx.canvas.height - 10);
-	}else {
-		origV += 10;
+function drawGlass(ctx,v,base,angle,origD){
+	// v = 80;
+	// alert("v% "+v);
+	angle -= 90;
+	if (origD == null){
+		origD=(ctx.canvas.height - 10);
 	}
-	v = (v/100)*(origV);
 	var bx = (ctx.canvas.width - base)/2;
-	var A = new Point(bx,origV);
-	var B = new Point(bx+base,origV);
-	var C = drawAngle(ctx,B,A,angle+168,origV);
-	var D = drawAngle(ctx,A,B,angle-180,origV);
-	var angle = (angle-90) * (Math.PI/180);
+	var by = origD+20;
+	var A = new Point(bx,by);
+	var B = new Point(bx+base,by);
+	var C = drawAngle(ctx,B,A,angle-102,origD);
+	var D = drawAngle(ctx,A,B,angle-90,origD);
+	var origV = Math.abs(C.y-A.y);
+	v = (v/100)*(origV);
+	
+	// alert("origD "+origD);
+	// alert("origV "+origV);
+	// alert("v: "+v);
+	// alert("C.y "+C.y);
+	// alert("pot x"+(by-v));
+// 	
+// 	
+	// alert("distance "+Math.sqrt(Math.pow(A.y-C.y,2)+Math.pow(A.x-C.x,2)));
+	
+	angle *= (Math.PI/180);
 	var missing = Math.abs(Math.tan(angle)*v);
-	var m1 = new Point(A.x-missing,origV-v);
-	var m2 = new Point(B.x+missing,origV-v);
+	// alert("missing "+missing);
+	// var newX = ctx.canvas.height-(10 + Math.sqrt(Math.pow(v,2)-Math.pow(missing,2)));
+	// alert("by "+by);
+	var m1 = new Point(A.x-missing,by-v);
+	var m2 = new Point(B.x+missing,by-v);
 	ctx.fillStyle = "blue";
 	ctx.beginPath();
 		ctx.moveTo(A.x-1,A.y-1);
