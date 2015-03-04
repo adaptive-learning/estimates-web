@@ -96,10 +96,7 @@ def decider(type, question, src, dst,f = 2):
         return round(float(rate) * float(question), f)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
         array = arrayToType(type)
-#         if src in array and dst in array:
         return (round(converter(question, src, dst),f))
-#         else:
-#             raise Exception("error unknow value of %s or %s" % (src, dst))
     else :
         raise Exception('type is unknow command %s' % (type))      
     

@@ -9,6 +9,7 @@
 {%include "navBar/bar.html" %}
 
 {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row">
@@ -39,17 +40,14 @@
   			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
   		</div>
 	</div>
-	
+	<p id="timer" align="left"></p>	
 	<div id="myModal" class="reveal-modal small" data-reveal>
 		1 {{p1}} -> <span id="after"></span> {{p2}}		
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
+
 </form>
-<script src="{% static "js/nextQuestion.js" %}"></script>
-<script src="{% static "js/pieTimer.js" %}"></script>
-<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
-<script src="{% static "js/answerForm.js" %}"></script>
-<script src="{% static "js/finish.js" %}"></script>
+
 
 <script>
  	window.onload = function() {
@@ -81,45 +79,6 @@
 		};
 	}
 </script>
-<script src="{% static "js/hint.js"%}"></script>
-	<input type="text" id="txt">
-<script src="{% static "js/time.js"%}"></script>
-
-<style>
-	#imgFyz{  
-		background: url({% static "img/MathBoard.png" %}) no-repeat;
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#imgEu{  
-		background: url({% static "img/euro.png" %}) no-repeat;
-		background-color: transparent;
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#imgCz{  
-		background: url({% static "img/cz.png" %}) no-repeat;
-		background-color: transparent;
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#label{
-		color: white;
-		font: normal 25px courier !important;
-	}
-	#input{
-	    background-color:rgba(0, 0, 0, 0);
-	    color:white;
-	    border: none;
-	    outline:none;
-	    /*height:35px;*/
-	    /*transition:height 1s;*/
-	    /*-webkit-transition:height 1s;*/
-	}
-	#userPart{
-		/*margin-left: 35px;*/
-	}
-</style>
 <script>
 	var from = "{{p1}}";
 	if(from == 'CZK'){

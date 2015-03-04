@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'compressor',
     'learning',
     'users',
+#     'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,6 +96,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
     'django.core.context_processors.static',
+#     'djangobower.finders.BowerFinder',
 )
 
 COMPRESS_PRECOMPILERS = (
@@ -105,7 +107,9 @@ COMPRESS_ROOT = (
     'static'
 )
 ## https://docs.djangoproject.com/en/1.6/howto/static-files/
-
+# BOWER_INSTALLED_APPS = (
+#      'jquery#1.9',                   
+# )
 STATIC_URL = '/static/'
-
+# BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
 LOGIN_REDIRECT_URL = '/learning'
