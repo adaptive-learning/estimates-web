@@ -20,7 +20,7 @@ function handleNextQuestion(t,test,testParam){
 	} else if (test == "time"){
 		$("#testCounter").hide();
 		$("#timeCounter").show();
-		drawTimer("timeCounter",180,250,130,50,t,testParam);
+		drawTimer("timeCounter",25,250,130,50,t,testParam);
 	}
 
 

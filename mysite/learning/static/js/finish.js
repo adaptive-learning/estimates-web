@@ -1,5 +1,4 @@
-function get_result(t,data) {
-	window.sessionStorage.clear();
+function get_result(data) {
 	window.onbeforeunload=null;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
@@ -11,15 +10,15 @@ function get_result(t,data) {
     $.ajax({
     	url : "/learning/finish", // the endpoint
         type : "POST", // http method
-        data : { type: t, data:data}, // data sent with the post request
+        data : { data:data}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {
         	var r = response.split("//");
            	$("#label").text("");
-        	$("#label").append("vas priemerny odhad je: "+((1-parseFloat(r[0]).toFixed(2))*100).toString()+"%");
+        	$("#label").append("vas priemerny odhad je: "+((1-parseFloat(r[0]).toFixed(2))*100).toString()+" %\n");
             if (r.length == 2 ){
- 				$("#label").append("vase score v danej oblasi je: "+(r[1]*100).toString()+"%");
+ 				$("#label").append("vase score v danej oblasi je: "+(r[1]*100).toString()+" %");
        		} 
          	$("#userPart").remove();
         },

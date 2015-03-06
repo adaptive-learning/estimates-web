@@ -35,10 +35,10 @@ function drawTimer(ele,sec,width,height,r,t,fr){
 
 	    context.stroke();
 	    if(diff >= 1){
-			clearInterval(interval);
+	    	context.clearRect(0, 0, canvas.width, canvas.height);;
+	    	clearInterval(interval);
+			get_result(t);
 	    } 
-	    // else {
-	    	// testP = increase_end_angle;
-	    // }
+
 	}
 }

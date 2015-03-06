@@ -1,22 +1,24 @@
-from django.template import RequestContext
-import math
-from django.shortcuts import render, render_to_response
-from learning.models import *
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.urlresolvers import reverse
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from math import sqrt
-import random, json, urllib2
-from django.contrib.auth import get_user
-from pint import UnitRegistry
-from django.template.response import TemplateResponse
-from django.shortcuts import redirect
-from model import model
-
-from django.utils import timezone
 from datetime import datetime
+import json
+from math import sqrt
+import math
+import random
+
+from django.contrib.auth import get_user
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import redirect, render, render_to_response
+from django.template import RequestContext
+from django.template.response import TemplateResponse
+from django.utils import timezone
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView 
+from django.views.generic.edit import CreateView
+from learning.models import *
+from model import model
+from pint import UnitRegistry
+import urllib2
+
 
 TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
               'c': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "EUR"],
@@ -216,9 +218,10 @@ class AjaxableResponseMixin():
             self.model.label = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
+            print self.model.id
             print "diff to send",self.model.label
-            if 'testParam' in self.request.session and self.request.session['test'] == "time": 
-                self.request.session['frTime'] = self.post.get('frTime')
+            if "frTimeId" not in self.request.session and self.request.session["test"] == "time":
+                self.request.session["frTimeId"] = self.model.id
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
 class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
@@ -315,7 +318,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             if ctx['test'] == "set":
                 self.request.session['testParam'] = 1;
             elif ctx['test'] == "time":
-                self.request.session['frTime'] = json.dumps(timezone.localtime(timezone.now()),default = date_handler)
                 self.request.session['testParam'] = -1 
             else: return HttpResponse(status = 401)
         self.ctx = ctx
@@ -334,7 +336,7 @@ class CreateFrTo(CreateQuestion):
         
 class CreateMath(CreateQuestion):
     template_name = 'learning/non-frTo.html'
-    def get(self,*args, **kwargs):
+    def get_(self,*args, **kwargs):
         super(CreateMath, self).get(*args, **kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
@@ -355,47 +357,42 @@ class NextQuestion(TemplateView,QuestionFunctions):
 
 def finish(request):
     if request.is_ajax() and request.method == "POST":
-
-        t = Type.objects.get(type = request.POST.get("type"))
-        date = request.POST.get("data")
-        print date
-        if date != None:
-            now = timezone.localtime(timezone.now())
-            print (now)
-            if request.user.is_authenticated():
-                f = FloatModel.objects.filter(user = get_user(request).id, type = t, date__range=(date,now))
-            else :
-                f = FloatModel.objects.filter(user = None, type = t, date__range=(date,now))
-        else:
-            if request.user.is_authenticated():
-                f = FloatModel.objects.filter(user = get_user(request).id,type = t).order_by('date')[:10]
+        t = Type.objects.get(type = request.session["type"])
+        if request.user.is_authenticated():
+            loggUser = get_user(request).id
+        else: 
+            loggUser = None
+        if request.session["test"] == "time":
+            if 'frTimeId' in request.session:
+                date = FloatModel.objects.get(id = request.session["frTimeId"]).date
+                now = timezone.localtime(timezone.now())
+                if date is None:
+                    date = now;
+                f = FloatModel.objects.filter(user = loggUser, type = t, date__range=(date,now))
+            else : s = 1
+        elif request.session["test"] == "set":
+            f = FloatModel.objects.filter(user = loggUser,type = t).order_by('date')[:10]
+        if s != 1:    
+            if len(f) != 0:
+                s = sum([x.label for x in f])/len(f);
             else:
-                f = FloatModel.objects.filter(user = None, type = t).order_by('date')[:10]
-        if len(f) != 0:
-            s = sum([x.label for x in f])/len(f);
-        else:
-            raise Exception("p is 0")
-        print "EEEEEH"
-        del request.session["testParam"]
-        del request.session["type"]
-        del request.session["test"]
-        try: uS = UserSkill.objects.get(user = get_user(request).id)
+                raise Exception("p is 0")
+        clear_session_params(request)
+        try: uS = UserSkill.objects.get(user = loggUser, type = t)
         except UserSkill.DoesNotExist: return HttpResponse(s)
-        return HttpResponse("%s//%s"%(s,uS))
+        return HttpResponse("%s//%s"%(s,uS.skill))
     
 def clearSession(request):
     if request.method == "POST" and request.is_ajax():
         clear_session_params(request)
         return HttpResponse("ok")
 
-def clear_session_params(request):
-    if "testParam" in request.session:
-        del request.session["testParam"]
-        print "NOOOOO"
-    if "test" in request.session:
-        del request.session['test']
-    if "type" in request.session:
-        del request.session['type']
+def clear_session_params(request,params = ["testParam","test","type","frTimeId"]):
+    for param in params:
+        if param in request.session:
+            del request.session[param]
+        else :
+            print "no %s param in session" % param
 
 
 def clearSessionPara(params,request):

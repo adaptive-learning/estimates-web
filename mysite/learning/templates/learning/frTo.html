@@ -55,6 +55,7 @@
 {% else %}
 	<script>
 		var testParam = "{{request.session.testParam}}";
+		testParam = parseInt(testParm) +1000;
 	</script>
 {% endif %}
 <script>
