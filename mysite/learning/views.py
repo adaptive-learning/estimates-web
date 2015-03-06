@@ -346,7 +346,7 @@ class CreateGraphical(CreateQuestion):
     def get(self,*args, **kwargs):
         super(CreateGraphical,self).get(*args,**kwargs)
 #         print self.question
-        self.ctx['question']=int(ctx['question'])
+        self.ctx['question']=int(self.ctx['question'])
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class NextQuestion(TemplateView,QuestionFunctions):
