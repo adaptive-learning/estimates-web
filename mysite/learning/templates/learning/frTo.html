@@ -2,12 +2,13 @@
 {% extends "foundation/base.html" %}
 <head>
 	
-	
+
 </head>
 <html>
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
+{{request.session.testParam}}	
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
 <form id="assigForm" action={{action}}>{% csrf_token %}
@@ -85,15 +86,12 @@ $(document).ready(function(){
  		clearInterval(t);
 		var doc = document.getElementById("assigForm");
     	event.preventDefault();
-    	// alert("testP"+testP);
-    	// alert("end"+increase_end_angle);
-		// alert("diff"+diff);
-    	// alert("fr"+fr)	;
+
     	create_post(JSON.stringify({
 			p1:"{{p1}}",
 			p2:"{{p2}}",
 			question:"{{question}}",
-			testP:testP,
+			testP:testParam,
 			used_hint:used_hint,
 		}),"{{type}}");
 	});

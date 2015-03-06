@@ -217,7 +217,7 @@ class AjaxableResponseMixin():
             self.model.save()
             self.update_skill()
             print "diff to send",self.model.label
-            if 'testParam' in self.request.session and self.request.session['testType'] == "time": 
+            if 'testParam' in self.request.session and self.request.session['test'] == "time": 
                 self.request.session['frTime'] = self.post.get('frTime')
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
@@ -227,10 +227,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
-        if self.request.session['testType'] == "time":
+        if self.request.session['test'] == "time":
             self.request.session['testParam'] = js['testP']
-        elif self.request.session['testType'] == "set":
+        elif self.request.session['test'] == "set":
+            print "counting + 1"
             self.request.session['testParam'] += 1
+
         try: 
             p = js['p1'] if js['p1'] is not None else "-1"
             p1 = Params.objects.get(param=p)
@@ -290,14 +292,26 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         except Concept.DoesNotExist:
             raise Exception("wrong params for concept in get_context_data");
         ctx["test"] = self.kwargs.get("test",None)
+
         if ctx['test'] is None : return HttpResponse(status=410)
         ctx['type'] = self.type
         ctx['p1'] = param1.param if param1 != None else None
         ctx['p2'] = param2.param if param2 != None else None
         ctx['question']=q.question
-#         print "param",self.request.session['testParam']
+        if 'type' in self.request.session:
+            if self.request.session['type'] != ctx['type']:
+                clear_session_params(self.request)
+        else:
+            self.request.session['type'] = ctx['type']
+             
+        if 'test' in self.request.session:
+            if self.request.session['test']!= ctx['test']:
+                print"i am here"
+                clear_session_params(self.request)
+        else:
+            self.request.session['test'] = ctx['test']
+
         if 'testParam' not in self.request.session:
-            self.request.session['testType'] = ctx['test']
             if ctx['test'] == "set":
                 self.request.session['testParam'] = 1;
             elif ctx['test'] == "time":
@@ -315,24 +329,23 @@ class CreateFrTo(CreateQuestion):
     template_name = 'learning/frTo.html'
     def get(self,*args, **kwargs):
         super(CreateFrTo,self).get(*args,**kwargs)
-#         self.request.session['testParam']="eh"
-        print "p",self.request.session['testParam']
+        print "t",self.request.session["testParam"]
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
         
 class CreateMath(CreateQuestion):
     template_name = 'learning/non-frTo.html'
-    def get_context_data(self,*args, **kwargs):
-        ctx = super(CreateMath, self).get_context_data(*args **kwargs)
-        return ctx
+    def get(self,*args, **kwargs):
+        super(CreateMath, self).get(*args, **kwargs)
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 
 class CreateGraphical(CreateQuestion):
     template_name = "learning/non-frTo.html"
-    def get_context_data(self, **kwargs):
-        ctx = super(CreateGraphical,self).get_context_data(**kwargs)
+    def get(self,*args, **kwargs):
+        super(CreateGraphical,self).get(*args,**kwargs)
 #         print self.question
-        ctx['question']=int(ctx['question'])
-        return ctx
+        self.ctx['question']=int(ctx['question'])
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class NextQuestion(TemplateView,QuestionFunctions):
     template_name = ""
@@ -364,21 +377,32 @@ def finish(request):
             raise Exception("p is 0")
         print "EEEEEH"
         del request.session["testParam"]
-        del request.session["testType"]
+        del request.session["type"]
+        del request.session["test"]
         try: uS = UserSkill.objects.get(user = get_user(request).id)
         except UserSkill.DoesNotExist: return HttpResponse(s)
         return HttpResponse("%s//%s"%(s,uS))
     
 def clearSession(request):
-
     if request.method == "POST" and request.is_ajax():
-        if "testParam" in request.session:
-            del request.session["testParam"]
-            print "NOOOOO"
-        if "test" in request:
-            del request.session['test'] 
+        clear_session_params(request)
         return HttpResponse("ok")
-        
+
+def clear_session_params(request):
+    if "testParam" in request.session:
+        del request.session["testParam"]
+        print "NOOOOO"
+    if "test" in request.session:
+        del request.session['test']
+    if "type" in request.session:
+        del request.session['type']
+
+
+def clearSessionPara(params,request):
+    for param in params:
+        if param in request.session:
+            del request.session[param]
+#     [(del request.session[param]) for param in params if param in request.session]
         
 def random_redirect(request):
     cat = {'phys':'conv', 'math':'math', 'curr':'conv'}

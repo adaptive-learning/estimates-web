@@ -24,7 +24,6 @@ var csrftoken = getCookie('csrftoken');
 // function create_post(mId,urlPath) {
 function create_post(data,t) {
 	timer_is_on = 0;
-
     $.ajax({
 		beforeSend: function(xhr, settings) {
     	    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -81,10 +80,10 @@ function answer(diff,result){
 	}
 	var txt_message = "spravna odpoved bola: "+result;
 	$("#answer").append(document.createTextNode(txt_message));
-	// setTimeout(function alertFunc() {
-		// window.onbeforeunload=null;	
-		// window.location.href = $('#assigForm').attr('action');
-		// },3000);
+	setTimeout(function alertFunc() {
+		window.onbeforeunload=null;	
+		window.location.href = $('#assigForm').attr('action');
+		},3000);
 	return false;
 }
 function setStars(im,x){

@@ -39,7 +39,6 @@
 			<p id="timer" align="left"></p>
 	</div>
 
-</form>
 
 {% if request.session.testParam == -1%}
 	<script>
@@ -54,17 +53,55 @@
 $(document).ready(function(){
 	handleNextQuestion("{{type}}","{{test}}",testParam);
 });
-	
+			
+
+
+	function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+	}
+
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
+		clearInterval(interval);
+ 		clearInterval(t);
 		var doc = document.getElementById("assigForm");
     	event.preventDefault();
+
     	create_post(JSON.stringify({
 			p1:"{{p1}}",
 			p2:"{{p2}}",
 			question:"{{question}}",
+			testP:testParam,
+			used_hint:used_hint,
 		}),"{{type}}");
 	});
+
+	var used_hint=0;	
+	if ("{{type}}" == "temp"){
+		function useHint(){
+			tempHint("{{p1}}","{{p2}}");
+		}
+	} else {
+
+	    function useHint(){
+	        hint(JSON.stringify({
+			type:"{{type}}",
+			p1:"{{p1}}",
+			p2:"{{p2}}"}));
+		};
+	}
 </script>
 
 {% endblock base_body %}
