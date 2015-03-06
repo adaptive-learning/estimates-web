@@ -55,6 +55,6 @@ function chooseType(href){
 	while(choice.firstChild){
 		choice.removeChild(choice.firstChild);
 	}
-	createHrefButton('a',"test",href+"/test",choice,false);
+	createHrefButton('a',"test",href+"/set",choice,false);
 	createHrefButton('a',"time",href+"/time",choice,false);
 }

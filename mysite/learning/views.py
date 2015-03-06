@@ -1,4 +1,6 @@
+from django.template import RequestContext
 import math
+from django.shortcuts import render, render_to_response
 from learning.models import *
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
@@ -101,6 +103,8 @@ def decider(type, question, src, dst,f = 2):
         raise Exception('type is unknow command %s' % (type))      
     
 def get_hint(request):
+    print "eh"
+    
     if request.method == "POST" and request.is_ajax():
         j = json.loads(request.POST.get('data'))
         res = decider(j['type'], 1, j['p1'], j['p2'],5)
@@ -170,12 +174,63 @@ class QuestionFunctions():
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question,toReturn.param1,toReturn.param2)
 
-class CreateQuestion(CreateView):
+class AjaxableResponseMixin():
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            return HttpResponseBadRequest(json.dumps(form.errors))
+    def update_skill(self):
+        pass
+#         if self.request.user.is_authenticated():
+#             user = get_user(self.request)
+#             userSkill = UserSkill.objects.get(user = user, type = self.model.type)
+#             try:
+#                 p = FloatModel.objects.filter(user = user.id, params = self.model.params)
+#             except FloatModel.DoesNotExist:
+#                 print "something is wrong"
+#                 p = FloatModel.objects.filter(params = self.model.params)
+#             aver = sum([i.label for i in p])/float(len(p))
+#             userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
+#             if userSkill.skill < 0: userSkill.skill = 0
+#             userSkill.save()
+
+    def get_proximation_error(self, model):
+        if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
+            model.result = converter(model.result,model.concept.param2.param,"degC")
+            model.answer = converter(model.answer,model.concept.param2.param,"degC")
+        if model.type.type == "equa": model.concept.question.question = None
+        if abs(float(model.result)) < 0.000001 : model.result = 0.000001
+        diff = float(model.result) - float(model.answer)
+        diff = abs(diff)/abs(float(model.result))
+        if diff > 1: diff = 1.0
+        return diff
+
+    def form_valid(self, form):
+        if self.request.is_ajax():
+            self.model = FloatModel()
+            self.post = self.request.POST
+            self.parseToModel()
+            self.model.result = decider(self.model.type.type,
+                                         self.model.concept.question.question, 
+                                         self.model.concept.param1.param, 
+                                         self.model.concept.param2.param)
+            self.model.label = self.get_proximation_error(self.model)
+            self.model.save()
+            self.update_skill()
+            print "diff to send",self.model.label
+            if 'testParam' in self.request.session and self.request.session['testType'] == "time": 
+                self.request.session['frTime'] = self.post.get('frTime')
+            return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
+        
+class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     model = FloatModel
     template_name = "learning/non-frTo.html"
     fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
+        if self.request.session['testType'] == "time":
+            self.request.session['testParam'] = js['testP']
+        elif self.request.session['testType'] == "set":
+            self.request.session['testParam'] += 1
         try: 
             p = js['p1'] if js['p1'] is not None else "-1"
             p1 = Params.objects.get(param=p)
@@ -231,88 +286,47 @@ class CreateQuestion(CreateView):
         q, param1, param2 = self.get_question(types)
         try:
             print q.id,param1.id,param2.id
-            
             self.type = Concept.objects.get(question = q,param1=param1, param2=param2).type.type
-            
         except Concept.DoesNotExist:
             raise Exception("wrong params for concept in get_context_data");
-        testType = self.kwargs.get("test",None)
-        if testType == None:
-            raise Exception("wrong testType")
-        if testType == "time":
-            ctx['test'] = timezone.localtime(timezone.now())
-            print ctx['test']
-        else:
-            ctx['test'] = "test"    
+        ctx["test"] = self.kwargs.get("test",None)
+        if ctx['test'] is None : return HttpResponse(status=410)
         ctx['type'] = self.type
         ctx['p1'] = param1.param if param1 != None else None
         ctx['p2'] = param2.param if param2 != None else None
         ctx['question']=q.question
+#         print "param",self.request.session['testParam']
+        if 'testParam' not in self.request.session:
+            self.request.session['testType'] = ctx['test']
+            if ctx['test'] == "set":
+                self.request.session['testParam'] = 1;
+            elif ctx['test'] == "time":
+                self.request.session['frTime'] = json.dumps(timezone.localtime(timezone.now()),default = date_handler)
+                self.request.session['testParam'] = -1 
+            else: return HttpResponse(status = 401)
+        self.ctx = ctx
         return ctx
     
-class AjaxableResponseMixin(CreateQuestion):
-    def form_invalid(self, form):
-        if self.request.is_ajax():
-            return HttpResponseBadRequest(json.dumps(form.errors))
-    def update_skill(self):
-        if self.request.user.is_authenticated():
-            user = get_user(self.request)
-            userSkill = UserSkill.objects.get(user = user, type = self.model.type)
-            try:
-                p = FloatModel.objects.filter(user = user.id, params = self.model.params)
-            except FloatModel.DoesNotExist:
-                print "something is wrong"
-                p = FloatModel.objects.filter(params = self.model.params)
-            aver = sum([i.label for i in p])/float(len(p))
-            userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
-            if userSkill.skill < 0: userSkill.skill = 0
-            userSkill.save()
+def date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
-    def get_proximation_error(self, model):
-        if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
-            model.result = converter(model.result,model.concept.param2.param,"degC")
-            model.answer = converter(model.answer,model.concept.param2.param,"degC")
-        if model.type.type == "equa": model.concept.question.question = None
-        if abs(float(model.result)) < 0.000001 : model.result = 0.000001
-        diff = float(model.result) - float(model.answer)
-        diff = abs(diff)/abs(float(model.result))
-        if diff > 1: diff = 1.0
-        return diff
-
-    def form_valid(self, form):
-        if self.request.is_ajax():
-            self.model = FloatModel()
-            self.post = self.request.POST
-            self.parseToModel()
-            self.model.result = decider(self.model.type.type,
-                                         self.model.concept.question.question, 
-                                         self.model.concept.param1.param, 
-                                         self.model.concept.param2.param)
-            self.model.label = self.get_proximation_error(self.model)
-            self.model.save()
-            self.update_skill()
-            print "diff to send",self.model.label
-                
-            return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
-class CreateFrTo(AjaxableResponseMixin, QuestionFunctions):
+class CreateFrTo(CreateQuestion):
     template_name = 'learning/frTo.html'
-    def get_context_data(self, **kwargs):
-        ctx = super(CreateFrTo, self).get_context_data(**kwargs)
-#         self.init()
-        return ctx
-    
-
+    def get(self,*args, **kwargs):
+        super(CreateFrTo,self).get(*args,**kwargs)
+#         self.request.session['testParam']="eh"
+        print "p",self.request.session['testParam']
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
         
-class CreateMath(AjaxableResponseMixin, QuestionFunctions):
+class CreateMath(CreateQuestion):
     template_name = 'learning/non-frTo.html'
-       
-    def get_context_data(self, **kwargs):
-        ctx = super(CreateMath, self).get_context_data(**kwargs)
-#         self.init()
+    def get_context_data(self,*args, **kwargs):
+        ctx = super(CreateMath, self).get_context_data(*args **kwargs)
         return ctx
 
-class CreateGraphical(AjaxableResponseMixin, QuestionFunctions):
+
+class CreateGraphical(CreateQuestion):
     template_name = "learning/non-frTo.html"
     def get_context_data(self, **kwargs):
         ctx = super(CreateGraphical,self).get_context_data(**kwargs)
@@ -328,6 +342,7 @@ class NextQuestion(TemplateView,QuestionFunctions):
 
 def finish(request):
     if request.is_ajax() and request.method == "POST":
+
         t = Type.objects.get(type = request.POST.get("type"))
         date = request.POST.get("data")
         print date
@@ -335,7 +350,6 @@ def finish(request):
             now = timezone.localtime(timezone.now())
             print (now)
             if request.user.is_authenticated():
-                
                 f = FloatModel.objects.filter(user = get_user(request).id, type = t, date__range=(date,now))
             else :
                 f = FloatModel.objects.filter(user = None, type = t, date__range=(date,now))
@@ -348,10 +362,23 @@ def finish(request):
             s = sum([x.label for x in f])/len(f);
         else:
             raise Exception("p is 0")
+        print "EEEEEH"
+        del request.session["testParam"]
+        del request.session["testType"]
         try: uS = UserSkill.objects.get(user = get_user(request).id)
         except UserSkill.DoesNotExist: return HttpResponse(s)
         return HttpResponse("%s//%s"%(s,uS))
     
+def clearSession(request):
+
+    if request.method == "POST" and request.is_ajax():
+        if "testParam" in request.session:
+            del request.session["testParam"]
+            print "NOOOOO"
+        if "test" in request:
+            del request.session['test'] 
+        return HttpResponse("ok")
+        
         
 def random_redirect(request):
     cat = {'phys':'conv', 'math':'math', 'curr':'conv'}

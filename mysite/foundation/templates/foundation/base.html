@@ -35,15 +35,7 @@
     <script src="{% static "foundation/js/vendor/jquery.js" %}"></script>
     {% endblock foundation_jquery %}
 
-    {# Custom JS #}
-    <script src="{% static "js/time.js"%}"></script>
-    <script src="{% static "js/hint.js"%}"></script>
-    <script src="{% static "js/nextQuestion.js" %}"></script>
-	<script src="{% static "js/pieTimer.js" %}"></script>
-	<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
-	<script src="{% static "js/answerForm.js" %}"></script>
-	<script src="{% static "js/finish.js" %}"></script>
-    {% block body_js %}{% endblock body_js %}
+
 
     {# Foundation JS #}
     {% block foundation_js %}
@@ -51,7 +43,15 @@
     <script src="{% static "foundation/js/foundation/foundation.dropdown.js" %}"></script>
 	<script src="{% static "foundation/js/foundation/foundation.topbar.js" %}"></script>
     {% endblock foundation_js %}
-
+    {# Custom JS #}
+    <script src="{% static "js/time.js"%}"></script>
+    <script src="{static "js/pietimer-master/jquery.pietimer.js" }"></script>
+    <script src="{% static "js/hint.js"%}"></script>
+    <script src="{% static "js/nextQuestion.js" %}"></script>
+	<script src="{% static "js/pieTimer.js" %}"></script>
+	<script src="{% static "js/answerForm.js" %}"></script>
+	<script src="{% static "js/finish.js" %}"></script>
+    {% block body_js %}{% endblock body_js %}
 
 
     {# Init Foundation #}

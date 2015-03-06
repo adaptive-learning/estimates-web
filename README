@@ -10,3 +10,4 @@
     libpq-dev
     python-dev
     pint
+    south

@@ -41,10 +41,20 @@
 
 </form>
 
+{% if request.session.testParam == -1%}
+	<script>
+		var testParam = (new Date()).getTime();
+	</script>
+{% else %}
+	<script>
+		var testParam = "{{request.session.testParam}}";
+	</script>
+{% endif %}
 <script>
- 	window.onload = function() {
- 		handleNextQuestion("{{type}}","{{test}}");
-	};
+$(document).ready(function(){
+	handleNextQuestion("{{type}}","{{test}}",testParam);
+});
+	
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
 		var doc = document.getElementById("assigForm");

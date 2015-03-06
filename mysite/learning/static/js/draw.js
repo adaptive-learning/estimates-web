@@ -60,8 +60,6 @@ function drawAngleSymbol(type,ctx,A, B, C) {
 }
 
 function drawGlass(ctx,v,base,angle,origD){
-	// v = 80;
-	// alert("v% "+v);
 	angle -= 90;
 	if (origD == null){
 		origD=(ctx.canvas.height - 10);
@@ -75,20 +73,8 @@ function drawGlass(ctx,v,base,angle,origD){
 	var origV = Math.abs(C.y-A.y);
 	v = (v/100)*(origV);
 	
-	// alert("origD "+origD);
-	// alert("origV "+origV);
-	// alert("v: "+v);
-	// alert("C.y "+C.y);
-	// alert("pot x"+(by-v));
-// 	
-// 	
-	// alert("distance "+Math.sqrt(Math.pow(A.y-C.y,2)+Math.pow(A.x-C.x,2)));
-	
 	angle *= (Math.PI/180);
 	var missing = Math.abs(Math.tan(angle)*v);
-	// alert("missing "+missing);
-	// var newX = ctx.canvas.height-(10 + Math.sqrt(Math.pow(v,2)-Math.pow(missing,2)));
-	// alert("by "+by);
 	var m1 = new Point(A.x-missing,by-v);
 	var m2 = new Point(B.x+missing,by-v);
 	ctx.fillStyle = "blue";

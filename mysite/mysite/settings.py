@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'compressor',
     'learning',
     'users',
-#     'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,21 +94,27 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-    'django.core.context_processors.static',
-#     'djangobower.finders.BowerFinder',
 )
 
 COMPRESS_PRECOMPILERS = (
     ('text/coffeescript', 'coffee --compile --stdio'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+   'django.core.context_processors.static',
+    'django.core.context_processors.request',
+   "django.contrib.auth.context_processors.auth",
+   "django.core.context_processors.debug",
+   "django.core.context_processors.i18n",
+   "django.core.context_processors.media",
+   "django.core.context_processors.static",
+   "django.core.context_processors.tz",
+   "django.contrib.messages.context_processors.messages",
+)
+
 COMPRESS_ROOT = (
     'static'
 )
 ## https://docs.djangoproject.com/en/1.6/howto/static-files/
-# BOWER_INSTALLED_APPS = (
-#      'jquery#1.9',                   
-# )
 STATIC_URL = '/static/'
-# BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
 LOGIN_REDIRECT_URL = '/learning'
