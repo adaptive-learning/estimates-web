@@ -1,6 +1,12 @@
  to run server cd into mysite and run: 
     python manage.py runserver
-
+    
+Create your own mysql:
+    mysql -u root -p
+    CREATE database estimation_db
+    USE estimation_db
+    SOURCE path/to/mysite/estimation_db_dump1.sql
+    GRANT ALL ON estimation_db.* TO 'admin'@'localhost' IDENTIFIED BY 'estimate';
  
  dependencies: 
     django 1.6 and higher
