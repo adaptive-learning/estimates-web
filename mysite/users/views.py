@@ -21,7 +21,7 @@ class CreateUser(CreateView):
 #         return HttpResponseRedirect('/learning',reque)
     def form_valid(self,form):
         ret = super(CreateView,self).form_valid(form)
-        return HttpResponseRedirect('/learning',ret)
+        return HttpResponseRedirect('/users/login',ret)
         
 class UserInfo(View):
     pass

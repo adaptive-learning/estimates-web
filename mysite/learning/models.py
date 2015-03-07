@@ -20,12 +20,14 @@ class FloatModel(models.Model):
     
 class Concept(models.Model):
     question = models.ForeignKey('Questions');
-    param1 = models.ForeignKey('Params', null = True)
-    param2 = models.ForeignKey('Params', null = True,related_name = "param2")
+    params = models.ForeignKey('Params', related_name ="params")
     type = models.ForeignKey('Type')
+    label = models.FloatField(null=True)
 
 class Params(models.Model):
-    param = models.CharField(max_length = 20, unique = True)
+    p1 = models.CharField(max_length = 20)
+    p2 = models.CharField(max_length = 20)
+    type= models.ForeignKey("Type")
 
 class Questions(models.Model):
     question = models.FloatField(unique = True)
@@ -36,7 +38,9 @@ class Type(models.Model):
 class UserSkill(models.Model):
     user = models.ForeignKey(User)
     skill = models.FloatField()
-    type = models.ForeignKey('Type')
+    concept = models.ForeignKey('Params')
+    number = models.IntegerField()
+    date = models.DateTimeField(default=timezone.localtime(timezone.now()), null = True)
     
     
 

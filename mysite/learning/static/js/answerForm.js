@@ -71,7 +71,7 @@ function answer(diff,result){
 		setStars(img,4);	
 	} else if (diff < 0.09){
 		setStars(img,3);	
-	} else if (diff < 0.13){
+	} else if (diff < 0.12){
 		setStars(img,2);	
 	} else if (diff < 0.15){
 		setStars(img,1);	

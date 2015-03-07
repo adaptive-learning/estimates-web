@@ -8,14 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Params.p2'
+        db.add_column(u'learning_params', 'p2',
+                      self.gf('django.db.models.fields.CharField')(default=-1, max_length=20),
+                      keep_default=False)
 
-        # Changing field 'Concept.param1'
-        db.alter_column(u'learning_concept', 'param1_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Params'], null=True))
 
     def backwards(self, orm):
+        # Deleting field 'Params.p2'
+        db.delete_column(u'learning_params', 'p2')
 
-        # Changing field 'Concept.param1'
-        db.alter_column(u'learning_concept', 'param1_id', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['learning.Params']))
 
     models = {
         u'auth.group': {
@@ -59,17 +61,17 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'param1': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Params']", 'null': 'True'}),
             'param2': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'param2'", 'null': 'True', 'to': u"orm['learning.Params']"}),
+            'params': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'params'", 'to': u"orm['learning.Params']"}),
             'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Questions']"}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"})
         },
         u'learning.floatmodel': {
             'Meta': {'object_name': 'FloatModel'},
             'answer': ('django.db.models.fields.FloatField', [], {}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 2, 27, 0, 0)', 'null': 'True'}),
+            'concept': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Concept']"}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 3, 7, 0, 0)', 'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
-            'params': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Params']"}),
-            'question': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'result': ('django.db.models.fields.FloatField', [], {}),
             'time': ('django.db.models.fields.IntegerField', [], {}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"}),
@@ -79,7 +81,10 @@ class Migration(SchemaMigration):
         u'learning.params': {
             'Meta': {'object_name': 'Params'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'param': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'})
+            'p1': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'p2': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'param': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
+            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"})
         },
         u'learning.questions': {
             'Meta': {'object_name': 'Questions'},

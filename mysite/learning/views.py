@@ -3,6 +3,7 @@ import json
 from math import sqrt
 import math
 import random
+# import actualDB
 
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
@@ -133,67 +134,65 @@ class QuestionFunctions():
         for type in types:
             print type
             t = Type.objects.get(type = type)
-            query = Concept.objects.filter(type = t)
-    
+            query = Params.objects.filter(type = t)
+        for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
                 try:
-                    userSkill = UserSkill.objects.get(user = user,type = t)
+                    userSkill = UserSkill.objects.get(user = user,concept = q)
                 except UserSkill.DoesNotExist:
-                    userSkill = UserSkill(user = user, type = t,skill = 0.5)
+                    userSkill = UserSkill(user = user, concept = q,skill = 0,number = 0)
                     userSkill.save()
-                userSkill = userSkill.skill
             else :
-                p = UserSkill.objects.filter(type = t)
+#                 TO DO // Anonymous session
+                raise Exception("you must be logged in :) anonymous session is under maintenance")
+                p = UserSkill.objects.filter(concept = q)
                 if len(p) == 0:
-                    userSkill = 0.5
+                    userSkill = 0
                 else:
                     userSkill = sum(float(x.skill) for x in p) / float(len(p))
-    
-            for i in query:
-                if self.request.user.is_authenticated():
-                    floatmodels = FloatModel.objects.filter(concept = i, user = get_user(self.request).id)
-                else:
-                    floatmodels = FloatModel.objects.filter(concept = i)
-                if len(floatmodels) != 0:
-                    hard = sum([x.label for x in floatmodels]) / float(len(floatmodels))
-                else:
-                    hard = 0.5
-                Panswer = model.Pcorrect(userSkill,hard)
+            concepts = Concept.objects.filter(params = q)
+            for i in concepts:
+                floatmodels = FloatModel.objects.filter(concept = i,user = user.id)
+                if i.label == None:
+                    i.label = 0.5;
+                    i.save()
+                Panswer = model.score(userSkill.skill,i.label)
                 if Ptarget >= Panswer:
                     Sprob = Panswer/Ptarget
                 else:
                     Sprob = (1-Panswer)/(1-Ptarget)
-                Scount = 1/sqrt(1+len(floatmodels))
+                Scount = 1/sqrt(1+userSkill.number)
                 try:
-                    Stime = -1/(timezone.localtime(timezone.now()) - floatmodels.latest('date').date).total_seconds()
+                    Stime = -1/(timezone.localtime(timezone.now()) - userSkill.date).total_seconds()
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
+        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
-        return (toReturn.question,toReturn.param1,toReturn.param2)
+        return (toReturn.question,toReturn.params.p1,toReturn.params.p2)
 
 class AjaxableResponseMixin():
     def form_invalid(self, form):
         if self.request.is_ajax():
             return HttpResponseBadRequest(json.dumps(form.errors))
     def update_skill(self):
-        pass
-#         if self.request.user.is_authenticated():
-#             user = get_user(self.request)
-#             userSkill = UserSkill.objects.get(user = user, type = self.model.type)
-#             try:
-#                 p = FloatModel.objects.filter(user = user.id, params = self.model.params)
-#             except FloatModel.DoesNotExist:
-#                 print "something is wrong"
-#                 p = FloatModel.objects.filter(params = self.model.params)
-#             aver = sum([i.label for i in p])/float(len(p))
-#             userSkill.skill = model.elo(self.model.label,userSkill.skill,aver)
-#             if userSkill.skill < 0: userSkill.skill = 0
-#             userSkill.save()
+        if self.request.user.is_authenticated():
+            user = get_user(self.request)
+            userSkill = UserSkill.objects.get_object_or_404(user = user, concept = self.model.concept.params)
+            concept = Concept.get_object_or_404(id = self.model.concept.id)
+            concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,1-concept.label,5,0.03)
+            if concept.label < 0: concept.label = 0
+            userSkill.date = self.model.date
+            userSkill.number += 1
+            concept.save()
+            userSkill.save()
+        else:
+#             TODO // Anonymous session
+            raise Exception("sorry you must be logged in, Anonymous session is under maintenance")
 
     def get_proximation_error(self, model):
         if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
@@ -286,43 +285,44 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             else:
                 ctx['action'] = self.request.path
             types = get_types(splitted[0])
-        if len(splitted) == 1:
+        elif len(splitted) == 1:
             types = [type]
         q, param1, param2 = self.get_question(types)
         try:
-            print q.id,param1.id,param2.id
-            self.type = Concept.objects.get(question = q,param1=param1, param2=param2).type.type
+            self.type = Params.objects.get(p1 = param1, p2=param2).type.type
         except Concept.DoesNotExist:
-            raise Exception("wrong params for concept in get_context_data");
+            raise Exception("wrong params for Params in get_context_data");
         ctx["test"] = self.kwargs.get("test",None)
 
         if ctx['test'] is None : return HttpResponse(status=410)
         ctx['type'] = self.type
-        ctx['p1'] = param1.param if param1 != None else None
-        ctx['p2'] = param2.param if param2 != None else None
+        ctx['p1'] = param1 if param1 != None else None
+        ctx['p2'] = param2 if param2 != None else None
         ctx['question']=q.question
-        if 'type' in self.request.session:
-            if self.request.session['type'] != ctx['type']:
-                clear_session_params(self.request)
-        else:
-            self.request.session['type'] = ctx['type']
-             
-        if 'test' in self.request.session:
-            if self.request.session['test']!= ctx['test']:
-                print"i am here"
-                clear_session_params(self.request)
-        else:
-            self.request.session['test'] = ctx['test']
+        self.set_session(ctx)
+        self.ctx = ctx
+        return ctx
 
+    def set_session(self,ctx):
+        self.set_session_param(["type","test"],ctx)
         if 'testParam' not in self.request.session:
             if ctx['test'] == "set":
                 self.request.session['testParam'] = 1;
             elif ctx['test'] == "time":
                 self.request.session['testParam'] = -1 
-            else: return HttpResponse(status = 401)
-        self.ctx = ctx
-        return ctx
-    
+            else: 
+                return HttpResponse(status = 401)
+                
+    def set_session_param(self,params,ctx):
+       for param in params:
+           if param in self.request.session:
+               if self.request.session[param] != ctx[param]:
+                   clear_session_params(self.request)
+           else:
+               self.request.session[param] = ctx[param]
+
+           
+
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
