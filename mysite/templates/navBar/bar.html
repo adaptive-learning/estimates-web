@@ -3,7 +3,7 @@
 <script src="/static/js/home.js"></script>
 <!-- <div class="sticky"> -->
 	<!-- <div class="contain-to-grid"> -->
-<nav class="top-bar hide-for-large-up" data-topbar role="navigation">
+<nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
     <li class="toggle-topbar menu-icon"><a href="#"><img src="/static/img/menu.png" width="25" height="25"></a></li>
     <li class="name">
@@ -33,19 +33,6 @@
     </ul>
   </section>
     <script>
-		if ($(window).width() < 642){
-			$("#menu").show();
-		} else {
-			$("#menu").hide();
-		}
-	    // $menu();
-		window.onresize = function(event) {
-			if ($(window).width() < 642){
-				$("#menu").show();
-			} else {
-				$("#menu").hide();
-			}
-		};
         var cList = $('<ul/>')
             .addClass("left")
             .appendTo($("#bar"));
