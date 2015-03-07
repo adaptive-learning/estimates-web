@@ -32,7 +32,8 @@ var type_messages = {
 	"water":"Koľko percent vody je v pohari?",
 	"angle": "Koľko ° má uhol?",
 	"equa": question + " = ?",
-	"sqrt": "\u221A" + question + " = ?"
+	"sqrt": "\u221A" + question + " = ?",
+	"line": "koľko percent zaberá vrchná priamka zo spodnej?",
 }; 
 	$("#label").append(type_messages[type]);
 }
