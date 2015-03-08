@@ -15,8 +15,6 @@ allParams = ["EUR","USD","PLN","HUF","CHF","GBP","RUB","CZK","kelvin", "degF", "
                "are", "acre","cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl","50","96",
            ]
     
-
-
 ParamsSET={
         "e":[
              ["1",["EUR","USD","PLN","HUF","CHF","GBP","RUB","CZK"],[10,60,2]]

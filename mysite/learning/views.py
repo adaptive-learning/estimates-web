@@ -8,7 +8,7 @@ import random
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import redirect, render, render_to_response
+from django.shortcuts import redirect, render, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.utils import timezone
@@ -182,8 +182,8 @@ class AjaxableResponseMixin():
     def update_skill(self):
         if self.request.user.is_authenticated():
             user = get_user(self.request)
-            userSkill = UserSkill.objects.get_object_or_404(user = user, concept = self.model.concept.params)
-            concept = Concept.get_object_or_404(id = self.model.concept.id)
+            userSkill = get_object_or_404(UserSkill,user = user, concept = self.model.concept.params)
+            concept = get_object_or_404(Concept,id = self.model.concept.id)
             concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,1-concept.label,5,0.03)
             if concept.label < 0: concept.label = 0
             userSkill.date = self.model.date
@@ -212,8 +212,8 @@ class AjaxableResponseMixin():
             self.parseToModel()
             self.model.result = decider(self.model.type.type,
                                          self.model.concept.question.question, 
-                                         self.model.concept.param1.param, 
-                                         self.model.concept.param2.param)
+                                         self.model.concept.params.p1, 
+                                         self.model.concept.params.p2)
             self.model.label = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
@@ -236,10 +236,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.request.session['testParam'] += 1
 
         try: 
-            p = js['p1'] if js['p1'] is not None else "-1"
-            p1 = Params.objects.get(param=p)
-            p = js['p2'] if js['p2'] is not None else "-1"
-            p2 = Params.objects.get(param = p)
+            p1 = js['p1'] if js['p1'] is not None else "-1"
+
+            p2 = js['p2'] if js['p2'] is not None else "-1"
+            par = Params.objects.get(p1 = p1,p2=p2)
         except Params.DoesNotExist:
             raise Exception("wrong params %s %s" % (js['p1'],js['p2']))
         type = self.post.get('type')
@@ -265,8 +265,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
         try:
-            print(t.type,p1.param,p2.param,q.question)
-            self.model.concept = Concept.objects.get(type=t, param1 = p1,param2=p2,question=q)
+#             print(t.type,p1.param,p2.param,q.question)
+            self.model.concept = Concept.objects.get(type=t, params = par,question=q)
         except Concept.DoesNotExit:
             raise Exception("wrong params for Concept when parsing to model")
         self.model.answer = self.post.get('answer')
@@ -287,13 +287,19 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             types = get_types(splitted[0])
         elif len(splitted) == 1:
             types = [type]
+            
+        if 'types' not in self.request.session:
+            self.request.session['types'] = types
+        elif self.request.session['types'] != types:
+            clear_session_params(self.request)
+            
         q, param1, param2 = self.get_question(types)
         try:
             self.type = Params.objects.get(p1 = param1, p2=param2).type.type
         except Concept.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
         ctx["test"] = self.kwargs.get("test",None)
-
+        self.request.session['eh'] = ["e",'bo']
         if ctx['test'] is None : return HttpResponse(status=410)
         ctx['type'] = self.type
         ctx['p1'] = param1 if param1 != None else None
@@ -312,6 +318,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['testParam'] = -1 
             else: 
                 return HttpResponse(status = 401)
+        
                 
     def set_session_param(self,params,ctx):
        for param in params:
@@ -357,37 +364,41 @@ class NextQuestion(TemplateView,QuestionFunctions):
 
 def finish(request):
     if request.is_ajax() and request.method == "POST":
-        t = Type.objects.get(type = request.session["type"])
+        t = Type.objects.filter(type__in = request.session["types"])
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
-            loggUser = None
+#             TO DO // anonymous session
+            raise Exception("Anonymous session is under maintenance")
+        concepts = Params.objects.filter(type__in = t)
+
         if request.session["test"] == "time":
             if 'frTimeId' in request.session:
                 date = FloatModel.objects.get(id = request.session["frTimeId"]).date
                 now = timezone.localtime(timezone.now())
-                if date is None:
-                    date = now;
-                f = FloatModel.objects.filter(user = loggUser, type = t, date__range=(date,now))
+                if date is None: date = now;
+                f = FloatModel.objects.filter(user = loggUser, type__in = t, date__range=(date,now))
             else : s = 1
         elif request.session["test"] == "set":
-            f = FloatModel.objects.filter(user = loggUser,type = t).order_by('date')[:10]
+            f = FloatModel.objects.filter(user = loggUser,type__in = t).order_by('date')[:10]
         if s != 1:    
             if len(f) != 0:
                 s = sum([x.label for x in f])/len(f);
             else:
                 raise Exception("p is 0")
         clear_session_params(request)
-        try: uS = UserSkill.objects.get(user = loggUser, type = t)
-        except UserSkill.DoesNotExist: return HttpResponse(s)
-        return HttpResponse("%s//%s"%(s,uS.skill))
+        
+        try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
+        except UserSkill.DoesNotExist: return HttpResponse(s) 
+        uS = (sum([x.skill for x in uS]))/float(len(uS))
+        return HttpResponse("%s//%s"%(s,uS))
     
 def clearSession(request):
     if request.method == "POST" and request.is_ajax():
         clear_session_params(request)
         return HttpResponse("ok")
 
-def clear_session_params(request,params = ["testParam","test","type","frTimeId"]):
+def clear_session_params(request,params = ["testParam","test","type","frTimeId","types"]):
     for param in params:
         if param in request.session:
             del request.session[param]
