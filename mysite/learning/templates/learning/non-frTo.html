@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
 <div>
-
+{{request.session.testParam}}
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
@@ -29,7 +29,7 @@
 						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>
 						<div id="assigment"></div><br>
 				</div>
-				<div class="large-6 rows" id="answer" style="color:#FFFFFF"></div>
+				<div class="large-6 rows" id="answer" ></div>
 			</div>
 			<div class="progress" id="testCounter"></div>
 			<div id="timeCounter" align="center"></div>

@@ -20,21 +20,12 @@ function handleNextQuestion(t,test,testParam){
 	} else if (test == "time"){
 		$("#testCounter").hide();
 		$("#timeCounter").show();
-		drawTimer("timeCounter",25,250,130,50,t,testParam);
+		drawTimer("timeCounter",200,250,130,50,t,testParam);
 	}
 
 
 }
 function goodbye(e) {
-    if(!e) e = window.event;
-    //e.cancelBubble is supported by IE - this will kill the bubbling process.
-    e.cancelBubble = true;
-    e.returnValue = 'You sure you want to leave?'; //This is displayed on the dialog
-    //e.stopPropagation works in Firefox.
-    if (e.stopPropagation) {
-        e.stopPropagation();
-        e.preventDefault();
-    }
     timer_is_on = 0;
     
     $.ajax({

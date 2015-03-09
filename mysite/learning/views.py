@@ -75,18 +75,10 @@ def decider(type, question, src, dst,f = 2):
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
     elif type == "water":
-        print float(question)
-        angle = math.tan(math.radians(float(dst)-90))
-        print "angle",angle
-        top = ((angle*100)*2)+float(src)
-        print "top",top
-        right = ((angle*float(question))*2)+float(src)
-        print "right",right
-        Vwhole = ((top + float(src))*100)/2
-        print "whole",Vwhole
-        Vright = ((right + float(src))*float(question))/2
-        print "Vright",Vright
-        return (Vright / Vwhole)*100
+        q = float(question)*float(dst)
+        full = float(src)*float(dst)
+        right = float(q)*float(src)
+        return (right/full)
     elif type == "angle":
         if src == "inn":
             return question
@@ -292,7 +284,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.request.session['types'] = types
         elif self.request.session['types'] != types:
             clear_session_params(self.request)
-            
         q, param1, param2 = self.get_question(types)
         try:
             self.type = Params.objects.get(p1 = param1, p2=param2).type.type
@@ -352,8 +343,6 @@ class CreateGraphical(CreateQuestion):
     template_name = "learning/non-frTo.html"
     def get(self,*args, **kwargs):
         super(CreateGraphical,self).get(*args,**kwargs)
-#         print self.question
-        self.ctx['question']=int(self.ctx['question'])
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class NextQuestion(TemplateView,QuestionFunctions):
