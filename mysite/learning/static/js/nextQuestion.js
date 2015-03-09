@@ -26,6 +26,7 @@ function handleNextQuestion(t,test,testParam){
 
 }
 function goodbye(e) {
+	event.preventDefault();
     timer_is_on = 0;
     
     $.ajax({

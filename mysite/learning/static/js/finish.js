@@ -1,4 +1,5 @@
 function get_result(data) {
+	event.preventDefault();
 	window.onbeforeunload=null;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {

@@ -160,7 +160,6 @@ class QuestionFunctions():
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
-        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
@@ -290,7 +289,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         except Concept.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
         ctx["test"] = self.kwargs.get("test",None)
-        self.request.session['eh'] = ["e",'bo']
         if ctx['test'] is None : return HttpResponse(status=410)
         ctx['type'] = self.type
         ctx['p1'] = param1 if param1 != None else None
@@ -315,9 +313,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
        for param in params:
            if param in self.request.session:
                if self.request.session[param] != ctx[param]:
+                   print "weird i am here"
                    clear_session_params(self.request)
-           else:
-               self.request.session[param] = ctx[param]
+           self.request.session[param] = ctx[param]
+               
 
            
 
@@ -383,11 +382,14 @@ def finish(request):
         return HttpResponse("%s//%s"%(s,uS))
     
 def clearSession(request):
+    print " *********************oks"
     if request.method == "POST" and request.is_ajax():
+        
         clear_session_params(request)
         return HttpResponse("ok")
 
 def clear_session_params(request,params = ["testParam","test","type","frTimeId","types"]):
+    print "***********clearing***********params***********"
     for param in params:
         if param in request.session:
             del request.session[param]
