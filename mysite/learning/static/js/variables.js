@@ -1,7 +1,7 @@
 var nameReal = {
             'math': ['Matematika','Odhady matematickych prikladov'],
-            'curr': ['Mena',"Odhady Fyzikalnych jednotiek"],
-            'phys': ['Fyzika',"Odhady meny"],
+            'curr': ['Mena',"Odhady meny"],
+            'phys': ['Jednotky',"Odhady Fyzikalnych jednotiek"],
             'grap': ['Grafické',"Odhady grafických príkladov"],
            };
    
@@ -10,7 +10,7 @@ var nameTypes = {
 			 'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
-             'grap': ["angle","water"],
+             'grap': ["angle","water","line"],
            	};
 var nameUrls = {
 			 'math': 'math',
@@ -30,4 +30,5 @@ var typeReal = {
 			'len':'Dĺžka',
 			'temp':'Teplota',
 			'water':'Voda v pohári',
+			'line':"dĺžka priamky",
 	       };

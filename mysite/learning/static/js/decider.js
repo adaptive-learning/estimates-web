@@ -33,7 +33,7 @@ var type_messages = {
 	"angle": "Koľko ° má uhol?",
 	"equa": question + " = ?",
 	"sqrt": "\u221A" + question + " = ?",
-	"line": "koľko percent zaberá vrchná priamka zo spodnej?",
+	"line": "koľko krát je spodná priamka väčšia ako vrchná?",
 }; 
 	$("#label").append(type_messages[type]);
 }

@@ -26,7 +26,7 @@ class Concept(models.Model):
 
 class Params(models.Model):
     p1 = models.CharField(max_length = 20)
-    p2 = models.CharField(max_length = 20)
+    p2 = models.CharField(max_length = 20,null = True)
     type= models.ForeignKey("Type")
 
 class Questions(models.Model):

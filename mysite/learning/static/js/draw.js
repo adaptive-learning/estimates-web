@@ -6,15 +6,19 @@ function Point(x,y){
 function draw(type,question,p1,p2){
 	var c = $("#myCanvas")[0];
 	var ctx = c.getContext("2d");
+	question = question.replace(',','.');
 	switch(type){
 		case 'angle':
 			var A = new Point(160,60);
 			var B = new Point(80,60);
-			var C = drawAngle(ctx,A,B,question.replace(',','.'),90);
+			var C = drawAngle(ctx,A,B,question,90);
 			drawAngleSymbol(p1,ctx,A,B,C);
 			break;
 		case 'water':
-			drawGlass(ctx,question.replace(',','.'),parseInt(p1),parseInt(p2));
+			drawGlass(ctx,question,parseInt(p1),parseInt(p2));
+			break;
+		case 'line':
+			drawLines(ctx,parseFloat(question),parseFloat(p1));
 			break;
 		default:
 			$("#canvasDiv").insertAfter("<br/>");
@@ -104,6 +108,7 @@ function drawGlass(ctx,v,base,height){
 		ctx.lineTo(m2.x-1,m2.y-1);
 		ctx.lineTo(m1.x+1,m2.y-1);
 		ctx.lineTo(A.x+1,A.y-1);
+		
 	ctx.closePath();
 // 	
 	ctx.fill();
@@ -117,5 +122,30 @@ function find_angle(A,B,C) {
     return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB)) * 180/Math.PI;
 }
 
+function drawLines(ctx,small, big){
 
+	if (big > ctx.canvas.width){
+		alert("is bigger");
+		newB = ctx.canvas.width - 10;
+		var per = (newB)/big;
+		big = newB;
+		small = per * small;
+	}
+	quaterH = ctx.canvas.height/3;
+	var x = ctx.canvas.width/2 - small/2;
+	var x1 = ctx.canvas.width/2 - big/2;
+	S1 = new Point(x,quaterH);
+	S2 = new Point(x+small,quaterH);
+	B1 = new Point(x1,2*quaterH);
+	B2 = new Point (x1 + big,2*quaterH);
+	
+	ctx.beginPath();
+	ctx.lineWidth = 3;
+		ctx.moveTo(S1.x,S1.y);
+		ctx.lineTo(S2.x,S2.y);
+ctx.moveTo(B1.x,B1.y);
+ctx.lineTo(B2.x,B2.y);
+ctx.stroke();
+	ctx.closePath();
+}
 

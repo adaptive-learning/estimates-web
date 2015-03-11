@@ -21,7 +21,8 @@ from pint import UnitRegistry
 import urllib2
 
 
-TypeParams = {'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
+TypeParams = {
+              'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
               'c': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "EUR"],
               'vol': ["mm**3", "cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl"],
               'surf': ["mm**2", "cm**2", "dm**2", "m**2", "km**2", "are", "acre"],
@@ -79,6 +80,8 @@ def decider(type, question, src, dst,f = 2):
         full = float(src)*float(dst)
         right = float(q)*float(src)
         return (right/full)
+    elif type == "line":
+        return round(float(src)/float(question),f)
     elif type == "angle":
         if src == "inn":
             return question
@@ -165,6 +168,13 @@ class QuestionFunctions():
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question,toReturn.params.p1,toReturn.params.p2)
+    
+    def get(self,*args,**kwargs):
+        main = kwargs.get("nonFr",None)
+        if main not in ["graph","conv","math"]:
+            raise exception("wrong params for mainType")
+        super(CreateQuestion,self).get(*args, ** kwargs)
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class AjaxableResponseMixin():
     def form_invalid(self, form):
@@ -336,10 +346,10 @@ class CreateMath(CreateQuestion):
     def get_(self,*args, **kwargs):
         super(CreateMath, self).get(*args, **kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-
-
+# 
+# 
 class CreateGraphical(CreateQuestion):
-    template_name = "learning/non-frTo.html"
+#     template_name = "learning/non-frTo.html"
     def get(self,*args, **kwargs):
         super(CreateGraphical,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
