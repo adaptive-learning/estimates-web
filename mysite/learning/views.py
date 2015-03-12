@@ -34,7 +34,7 @@ TypeParams = {
 NameTypes = {'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
-             'grap': ["angle","water"],
+             'grap': ["angle","water","line","obh"],
             }
 
 Ptarget = 0.75
@@ -77,6 +77,10 @@ def decider(type, question, src, dst,f = 2):
         return eval(question)
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
+    elif type == "obj":
+        return float(question)+float(src)+float(dst);
+    elif type == "sqr":
+        return math.pow(float(question),float(src))
     elif type == "water":
         q = float(question)*float(dst)
         full = float(src)*float(dst)
@@ -125,16 +129,12 @@ def type_to_range(type):
         return (-40, 40)
     return (1, 100)
 
-
-
-
 class QuestionFunctions():
     def get_question(self,types):
         score = []
-        for type in types:
-            print type
-            t = Type.objects.get(type = type)
-            query = Params.objects.filter(type = t)
+        t = Type.objects.filter(type__in = types)
+        query = Params.objects.filter(type__in = t)
+        now = timezone.localtime(timezone.now())
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
@@ -163,7 +163,7 @@ class QuestionFunctions():
                     Sprob = (1-Panswer)/(1-Ptarget)
                 Scount = 1/sqrt(1+userSkill.number)
                 try:
-                    Stime = -1/(timezone.localtime(timezone.now()) - userSkill.date).total_seconds()
+                    Stime = -1/( now - userSkill.date).total_seconds()
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
@@ -171,7 +171,7 @@ class QuestionFunctions():
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
-        return (toReturn.question,toReturn.params.p1,toReturn.params.p2)
+        return (toReturn.question.question,toReturn.params.p1,toReturn.params.p2)
     
     @method_decorator(allow_lazy_user)
     def get(self,*args,**kwargs):
@@ -241,10 +241,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         elif self.request.session['test'] == "set":
             print "counting + 1"
             self.request.session['testParam'] += 1
-
         try: 
             p1 = js['p1'] if js['p1'] is not None else "-1"
-
             p2 = js['p2'] if js['p2'] is not None else "-1"
             par = Params.objects.get(p1 = p1,p2=p2)
         except Params.DoesNotExist:
@@ -272,7 +270,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
         try:
-#             print(t.type,p1.param,p2.param,q.question)
             self.model.concept = Concept.objects.get(type=t, params = par,question=q)
         except Concept.DoesNotExit:
             raise Exception("wrong params for Concept when parsing to model")
@@ -294,48 +291,47 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             types = get_types(splitted[0])
         elif len(splitted) == 1:
             types = [type]
-            
-        if 'types' not in self.request.session:
-            self.request.session['types'] = types
-        elif self.request.session['types'] != types:
-            clear_session_params(self.request)
-        q, param1, param2 = self.get_question(types)
+        
+        q, pa1, pa2 = self.get_question(types)
         try:
-            self.type = Params.objects.get(p1 = param1, p2=param2).type.type
+            self.type = Params.objects.get(p1 = pa1,
+                                           p2= pa2).type.type
         except Concept.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
-        ctx["test"] = self.kwargs.get("test",None)
-        if ctx['test'] is None : return HttpResponse(status=410)
-        ctx['type'] = self.type
-        ctx['p1'] = param1 if param1 != None else None
-        ctx['p2'] = param2 if param2 != None else None
-        ctx['question']=q.question
-        self.set_session(ctx)
-        self.ctx = ctx
+        test = self.kwargs.get("test",None)
+        if test is None : return HttpResponse(status=410)
+        
+        if self.is_new_test({"types":types,
+                               "test":test,
+                               "type":self.type,
+                               }):
+            self.set_new_session({"types":types,
+                               "test":test,
+                               "type":self.type,
+                               "p1":pa1,
+                              "p2":pa2,
+                              "question":q,})
+        self.ctx = ctx       
         return ctx
 
-    def set_session(self,ctx):
-        self.set_session_param(["type","test"],ctx)
+    def is_new_test(self,dict):
+        for p in dict:
+            if p not in self.request.session or self.request.session[p] != dict[p]:
+                clear_session_params(self.request)
+                return True;
+        return False;
+
+    def set_new_session(self,dict):
+        for p in dict:
+            self.request.session[p] = dict[p]
         if 'testParam' not in self.request.session:
-            if ctx['test'] == "set":
+            if self.request.session["test"] == "set":
                 self.request.session['testParam'] = 1;
-            elif ctx['test'] == "time":
+            elif self.request.session["test"] == "time":
                 self.request.session['testParam'] = -1 
             else: 
                 return HttpResponse(status = 401)
         
-                
-    def set_session_param(self,params,ctx):
-       for param in params:
-           if param in self.request.session:
-               if self.request.session[param] != ctx[param]:
-                   print "weird i am here"
-                   clear_session_params(self.request)
-           self.request.session[param] = ctx[param]
-               
-
-           
-
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
@@ -345,7 +341,6 @@ class CreateFrTo(CreateQuestion):
 
     def get(self,*args, **kwargs):
         super(CreateFrTo,self).get(*args,**kwargs)
-        print "t",self.request.session["testParam"]
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
         
 class CreateMath(CreateQuestion):
@@ -364,7 +359,6 @@ class CreateGraphical(CreateQuestion):
 
 class NextQuestion(TemplateView,QuestionFunctions):
     template_name = ""
-    
     def get_context_data(self,**kwargs):
         return HttpResponse("success")
 
@@ -399,14 +393,11 @@ def finish(request):
         return HttpResponse("%s//%s"%(s,uS))
     
 def clearSession(request):
-    print " *********************oks"
     if request.method == "POST" and request.is_ajax():
-        
         clear_session_params(request)
         return HttpResponse("ok")
 
-def clear_session_params(request,params = ["testParam","test","type","frTimeId","types"]):
-    print "***********clearing***********params***********"
+def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types"]):
     for param in params:
         if param in request.session:
             del request.session[param]

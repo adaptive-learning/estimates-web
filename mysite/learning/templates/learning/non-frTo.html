@@ -17,13 +17,13 @@
 				<script src="{% static "js/draw.js" %}"></script>
 				<label class="small-9 collumns" id="label" for="input">
 					<script>
-						deciderType("{{type}}","{{question}}");
+						deciderType("{{request.session.type}}","{{request.session.question}}","{{request.session.p1}}","{{request.session.p2}}");
 					</script>
 				</label>
 				<div id="canvasDiv">
 				<canvas id="myCanvas" width="250" height="150"></canvas>
 				</div>
-				<script>draw("{{type}}","{{question}}","{{p1}}","{{p2}}")</script>
+				<script>draw("{{request.session.type}}","{{request.session.question}}","{{request.session.p1}}","{{request.session.p2}}")</script>
 				<br>
 				<div class="large-3 collumns" id="userPart">
 						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>
@@ -52,7 +52,7 @@
 {% endif %}
 <script>
 $(document).ready(function(){
-	handleNextQuestion("{{type}}","{{test}}",testParam);
+	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 });
 			
 
@@ -81,26 +81,26 @@ $(document).ready(function(){
     	event.preventDefault();
 
     	create_post(JSON.stringify({
-			p1:"{{p1}}",
-			p2:"{{p2}}",
-			question:"{{question}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}",
+			question:"{{request.session.question}}",
 			testP:testParam,
 			used_hint:used_hint,
-		}),"{{type}}");
+		}),"{{request.session.type}}");
 	});
 
 	var used_hint=0;	
-	if ("{{type}}" == "temp"){
+	if ("{{request.session.type}}" == "temp"){
 		function useHint(){
-			tempHint("{{p1}}","{{p2}}");
+			tempHint("{{request.session.p1}}","{{request.session.p2}}");
 		}
 	} else {
 
 	    function useHint(){
 	        hint(JSON.stringify({
-			type:"{{type}}",
-			p1:"{{p1}}",
-			p2:"{{p2}}"}));
+			type:"{{request.session.type}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}"}));
 		};
 	}
 </script>

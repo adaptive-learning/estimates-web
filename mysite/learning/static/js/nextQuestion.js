@@ -1,7 +1,7 @@
 var testP;
 
 function handleNextQuestion(t,test,testParam){
-	window.onbeforeunload=goodbye;
+	// window.onbeforeunload=goodbye;
 	if(test == "set"){
 		if (testParam > 10){
 			testParam = 10;

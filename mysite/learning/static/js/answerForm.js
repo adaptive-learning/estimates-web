@@ -23,6 +23,7 @@ var csrftoken = getCookie('csrftoken');
 
 // function create_post(mId,urlPath) {
 function create_post(data,t) {
+	$("#sub").attr("disabled", "disabled");
 	timer_is_on = 0;
     $.ajax({
 		beforeSend: function(xhr, settings) {
@@ -62,7 +63,7 @@ function answer(diff,result){
 	var d = document.getElementById("next");
 	delet(d);
 	onclick = function(){
-		window.onbeforeunload=null;
+		// window.onbeforeunload=null;
 		window.location.href = $('#assigForm').attr('action');
 	};
 	if (diff < 0.03){
@@ -81,7 +82,7 @@ function answer(diff,result){
 	var txt_message = "spravna odpoved bola: "+result;
 	$("#answer").append(document.createTextNode(txt_message));
 	setTimeout(function alertFunc() {
-		window.onbeforeunload=null;	
+		// window.onbeforeunload=null;	
 		window.location.href = $('#assigForm').attr('action');
 		},3000);
 	return false;

@@ -149,3 +149,5 @@ ctx.stroke();
 	ctx.closePath();
 }
 
+function drawObjs(ctx,sq,cir,tri){
+}

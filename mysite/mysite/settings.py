@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'foundation',
     'compressor',
     'learning',
-    'lazysignup',
+    'lazysignup', 
+    'social_auth',
     'users',
 )
 
@@ -121,6 +122,11 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/learning'
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuthBackend',
+#     'social_auth.backends.google.GoogleOAuth2Backend',
+#     'social_auth.backends.google.GoogleBackend',
+#     'social_auth.backends.yahoo.YahooBackend',
     'django.contrib.auth.backends.ModelBackend',
     'lazysignup.backends.LazySignupBackend',
 )

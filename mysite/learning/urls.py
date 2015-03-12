@@ -14,4 +14,5 @@ urlpatterns = patterns("",
 #     url(r'^math/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateMath.as_view()),
 #     url(r'^grap/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateGraphical.as_view()),
     url(r'^(?P<main>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
+    url(r'', include('social_auth.urls')),
 )    

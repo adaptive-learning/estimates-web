@@ -1,6 +1,6 @@
 function get_result(data) {
 	event.preventDefault();
-	window.onbeforeunload=null;
+	// window.onbeforeunload=null;
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

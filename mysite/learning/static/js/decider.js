@@ -15,7 +15,7 @@ function decider(curr){
 				       'are': 'a (are)',
 				       'ft': 'ft (foot)',
 				       'inch': '″ (inch)',
-					  };
+					 };	
 	if (/[a-z]+\*\*[2-9]/.test(curr)){
 		str = curr.split("**");
 		document.write(str[0]+str[1].sup());
@@ -33,6 +33,7 @@ var type_messages = {
 	"angle": "Koľko ° má uhol?",
 	"equa": question + " = ?",
 	"sqrt": "\u221A" + question + " = ?",
+	"sqr": parseInt(question)+p1.sup()+" = ?",
 	"line": "koľko krát je spodná priamka väčšia ako vrchná?",
 	"obj" : "koľko je na obrázku objektov?",
 }; 

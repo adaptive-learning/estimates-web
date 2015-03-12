@@ -9,16 +9,17 @@ def myModel(ans, prev, hard, possCorrect,step,time = None):
     elif ans > 1:
         ans = 1
     
-    print "ans",ans
-#     print ans,prev,hard
     sc = score(prev,hard)
     newHard = hard + 0.2*(sc - ans)
     if ans >= hard:
         K=3.4;
-        return (newHard,prev + K*(ans - sc))
+        uS = prev + K*(ans-sc)
     else :
-        K = 0.3
-        return (newHard,prev + K*(sc - ans))
+        K = -0.3
+        uS = prev + K*(sc-ans)
+    if uS > 1: uS = 1
+    elif uS < 0: uS = 0  
+    return (newHard,uS)
 
 def score(prev,hard, time = 0):
     e = -(prev+time-hard)

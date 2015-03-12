@@ -7,10 +7,10 @@ var nameReal = {
    
 var nameTypes = {
 			 'home': ['math','curr','phys','grap'],
-			 'math': ["sqrt", "equa"],
+			 'math': ["sqrt", "equa","sqr"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
-             'grap': ["angle","water","line"],
+             'grap': ["angle","water","line","obj"],
            	};
 var nameUrls = {
 			 'math': 'math',
@@ -30,5 +30,7 @@ var typeReal = {
 			'len':'Dĺžka',
 			'temp':'Teplota',
 			'water':'Voda v pohári',
-			'line':"dĺžka priamky",
+			'line':"Dĺžka priamky",
+			'obj': "Počet objektov",
+			'sqr': "Mocniny",
 	       };

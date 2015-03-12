@@ -1,8 +1,6 @@
 <script src="/static/js/jquery-1.11.1.min.js"></script>
 <script src="/static/js/variables.js"></script>
 <script src="/static/js/home.js"></script>
-<!-- <div class="sticky"> -->
-	<!-- <div class="contain-to-grid"> -->
 {% load i18n lazysignup_tags %}
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
@@ -18,18 +16,19 @@
       <li class="has-dropdown">
         
       {% if not user|is_lazy_user %}
-          <a href="#">{{user}}</a>
-            <ul class="dropdown">
-                <li><a href="/users/logout">Odhlásiť sa</a></li>
-          {% else %}
-
-                
-                
-                        <a href="#">Prihlásenie</a>
+                              <a href="#">Prihlásenie</a>
         <ul class="dropdown">
             
           <li ><a href="/users/login">Prihlásiť sa</a></li>
           <li ><a href="/users/register">Zaregistrovať sa</a></li>
+
+          {% else %}
+
+                
+                          <a href="#">{{user}}</a>
+            <ul class="dropdown">
+                <li><a href="/users/logout">Odhlásiť sa</a></li>
+
           {% endif %}
             </ul>
         </ul>

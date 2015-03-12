@@ -8,9 +8,9 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
-{{request.session.testParam}}	
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
+{{request.session.type}}
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgFyz" align="center">
@@ -18,8 +18,8 @@
 			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
 				<script src="{% static "js/decider.js" %}"></script>
-				{{question}}<script>
-				decider("{{p1}}");</script> = ? <script>decider("{{p2}}");</script>
+				{{request.session.question}}<script>
+				decider("{{request.session.p1}}");</script> = ? <script>decider("{{request.session.p2}}");</script>
 			</label>
 			<br>
 			<div class="large-3 collumns" id="userPart">
@@ -42,7 +42,7 @@
 	</div>
 	<p id="timer" align="left"></p>	
 	<div id="myModal" class="reveal-modal small" data-reveal>
-		1 {{p1}} -> <span id="after"></span> {{p2}}		
+		1 {{request.session.p1}} -> <span id="after"></span> {{request.session.p2}}		
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
 
@@ -60,7 +60,7 @@
 {% endif %}
 <script>
 $(document).ready(function(){
-	handleNextQuestion("{{type}}","{{test}}",testParam);
+	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 });
 			
 
@@ -89,42 +89,30 @@ $(document).ready(function(){
     	event.preventDefault();
 
     	create_post(JSON.stringify({
-			p1:"{{p1}}",
-			p2:"{{p2}}",
-			question:"{{question}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}",
+			question:"{{request.session.question}}",
 			testP:testParam,
 			used_hint:used_hint,
-		}),"{{type}}");
+		}),"{{request.session.type}}");
 	});
 
 	var used_hint=0;	
-	if ("{{type}}" == "temp"){
+	if ("{{request.session.type}}" == "temp"){
 		function useHint(){
-			tempHint("{{p1}}","{{p2}}");
+			tempHint("{{request.session.p1}}","{{request.session.p2}}");
 		}
 	} else {
 
 	    function useHint(){
 	        hint(JSON.stringify({
-			type:"{{type}}",
-			p1:"{{p1}}",
-			p2:"{{p2}}"}));
+			type:"{{request.session.type}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}"}));
 		};
 	}
 </script>
 <script>
-	var from = "{{p1}}";
-	if(from == 'CZK'){
-		$("#imgFyz").attr("id","imgCz");
-		$("#label").css("color","black");
-		$("#input").css("color","black");
-	}
-	if(from == 'EUR'){
-		$("#imgFyz").attr("id","imgEu");
-		$("#label").css("color","black");
-		$("#input").css("color","black");
-	}
-	
 </script>
 {% endblock base_body %}
 </html>
