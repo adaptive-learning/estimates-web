@@ -34,6 +34,7 @@ var type_messages = {
 	"equa": question + " = ?",
 	"sqrt": "\u221A" + question + " = ?",
 	"line": "koľko krát je spodná priamka väčšia ako vrchná?",
+	"obj" : "koľko je na obrázku objektov?",
 }; 
 	$("#label").append(type_messages[type]);
 }

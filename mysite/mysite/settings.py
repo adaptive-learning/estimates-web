@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'foundation',
     'compressor',
     'learning',
+    'lazysignup',
     'users',
 )
 
@@ -118,3 +119,8 @@ COMPRESS_ROOT = (
 ## https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/learning'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'lazysignup.backends.LazySignupBackend',
+)

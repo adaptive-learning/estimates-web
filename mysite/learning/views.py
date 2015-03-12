@@ -1,3 +1,5 @@
+from lazysignup.decorators import allow_lazy_user
+from django.utils.decorators import method_decorator
 from datetime import datetime
 import json
 from math import sqrt
@@ -123,6 +125,9 @@ def type_to_range(type):
         return (-40, 40)
     return (1, 100)
 
+
+
+
 class QuestionFunctions():
     def get_question(self,types):
         score = []
@@ -139,8 +144,7 @@ class QuestionFunctions():
                     userSkill = UserSkill(user = user, concept = q,skill = 0,number = 0)
                     userSkill.save()
             else :
-#                 TO DO // Anonymous session
-                raise Exception("you must be logged in :) anonymous session is under maintenance")
+                raise Exception("please log in")
                 p = UserSkill.objects.filter(concept = q)
                 if len(p) == 0:
                     userSkill = 0
@@ -169,12 +173,14 @@ class QuestionFunctions():
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question,toReturn.params.p1,toReturn.params.p2)
     
+    @method_decorator(allow_lazy_user)
     def get(self,*args,**kwargs):
         main = kwargs.get("nonFr",None)
         if main not in ["graph","conv","math"]:
             raise exception("wrong params for mainType")
         super(CreateQuestion,self).get(*args, ** kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+
 
 class AjaxableResponseMixin():
     def form_invalid(self, form):
@@ -192,8 +198,7 @@ class AjaxableResponseMixin():
             concept.save()
             userSkill.save()
         else:
-#             TODO // Anonymous session
-            raise Exception("sorry you must be logged in, Anonymous session is under maintenance")
+            raise Exception("please log in")
 
     def get_proximation_error(self, model):
         if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
@@ -224,6 +229,7 @@ class AjaxableResponseMixin():
                 self.request.session["frTimeId"] = self.model.id
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
+
 class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     model = FloatModel
     template_name = "learning/non-frTo.html"
@@ -272,7 +278,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             raise Exception("wrong params for Concept when parsing to model")
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
-
+        
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         type = self.kwargs.get('type', None)
@@ -336,6 +342,7 @@ def date_handler(obj):
         
 class CreateFrTo(CreateQuestion):
     template_name = 'learning/frTo.html'
+
     def get(self,*args, **kwargs):
         super(CreateFrTo,self).get(*args,**kwargs)
         print "t",self.request.session["testParam"]
@@ -343,6 +350,7 @@ class CreateFrTo(CreateQuestion):
         
 class CreateMath(CreateQuestion):
     template_name = 'learning/non-frTo.html'
+
     def get_(self,*args, **kwargs):
         super(CreateMath, self).get(*args, **kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
@@ -366,8 +374,7 @@ def finish(request):
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
-#             TO DO // anonymous session
-            raise Exception("Anonymous session is under maintenance")
+            raise Exception("please log in")
         concepts = Params.objects.filter(type__in = t)
 
         if request.session["test"] == "time":

@@ -17,3 +17,5 @@ Create your own mysql:
     python-dev
     pint
     south
+    django-lazysignup
+    django-social-auth
