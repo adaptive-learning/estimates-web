@@ -42,6 +42,7 @@ Wcount = 10
 Wtarget = 10
 
 
+@allow_lazy_user
 def index(request):
     return TemplateResponse(request, 'home/index.html')
 
@@ -430,4 +431,3 @@ def random_redirect(request):
 
     
  
-# {% if user.is_anonymous %}
