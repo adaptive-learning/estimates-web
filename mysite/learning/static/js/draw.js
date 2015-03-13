@@ -1,6 +1,7 @@
-function Point(x,y){
+function Point(x,y,size){
 	this.x = x;
 	this.y = y;
+	this.size = size;
 }
 
 function draw(type,question,p1,p2){
@@ -19,6 +20,9 @@ function draw(type,question,p1,p2){
 			break;
 		case 'line':
 			drawLines(ctx,parseFloat(question),parseFloat(p1));
+			break;
+		case 'obj':
+			drawObjs(ctx,question,parseFloat(p1),parseFloat(p2));
 			break;
 		default:
 			$("#canvasDiv").insertAfter("<br/>");
@@ -148,6 +152,83 @@ ctx.lineTo(B2.x,B2.y);
 ctx.stroke();
 	ctx.closePath();
 }
+function generateObjects(ctx,k,size,points) {
+	var newPoints = [];
+	for (var i=0;i<k;i++){
+		var counter = 0;
+		var ok = true;	
+		do{
+			x = Math.floor((Math.random() * (ctx.canvas.width-size)) );
+			y = Math.floor((Math.random() * (ctx.canvas.height-size)) ); 
+
+
+			for (var l=0;l<points.length;l++){
+				point = points[l];
+
+				bordersX = [point.x,point.x+point.size];
+		
+				bordersY = [point.y,point.y+point.size];
+				
+				bX = [x,x+size];
+				bY = [y,y+size];
+				
+				if ((bX[0] > bordersX[0] && bX[0] < bordersX[1]) ||
+					(bX[1] > bordersX[0] && bX[1] < bordersX[1]) ||
+					 (bY[0] < bordersY[1] && bY[0] > bordersY[0]) ||
+					 (bY[1] < bordersY[1] && bY[1] > bordersY[0])){
+			
+			 	 	ok = false;
+			 		// counter++;
+			 		// if (counter >= 5){
+			 			// ctx.canvas.width += 3*size;
+			 			// // alert("i am here");
+			 			// counter=0;
+			 		// }
+			 		break;
+			 	} else {
+					ok = true;
+			 	}
+			}
+		}while(ok != true );
+		var P = new Point(x,y,size);
+		points.push(P);
+		newPoints.push(P);
+	}	
+
+  	return newPoints;
+}
 
 function drawObjs(ctx,sq,cir,tri){
+// alert(sq);
+var points = [];
+
+
+squares = (generateObjects(ctx,sq,15,points));
+im = get_objImg("square.png");
+points = points.concat(drawObjects(ctx,squares,im));
+
+triangles = (generateObjects(ctx,tri,15,points));
+im = get_objImg("triangle.svg");
+drawObjects(ctx,triangles,im);
+points = points.concat(drawObjects(ctx,triangles,im));
+
+// cir = 1;
+circles = (generateObjects(ctx,cir,15,points));
+im = get_objImg("circle.svg");
+points = points.concat(drawObjects(ctx,circles,im));
+
+	function get_objImg(what){
+		var im = document.createElement("img");
+		im.src="/static/img/"+what;
+		return im;
+	}
+	
+	function drawObjects(ctx,array,img){
+		for (x=0;x<array.length;x++){
+			ctx.beginPath();
+			ctx.drawImage(img,array[x].x,array[x].y,array[x].size,array[x].size);
+			ctx.closePath();
+		}
+		return array;
+	}
 }

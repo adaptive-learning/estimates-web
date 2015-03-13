@@ -6,7 +6,6 @@ function handleNextQuestion(t,test,testParam){
 		if (testParam > 10){
 			testParam = 10;
 			get_result(t);
-
 		}
 		$("#timeCounter").hide();
 		$("#testCounter").show();

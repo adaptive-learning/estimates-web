@@ -227,6 +227,9 @@ class AjaxableResponseMixin():
             print "diff to send",self.model.label
             if "frTimeId" not in self.request.session and self.request.session["test"] == "time":
                 self.request.session["frTimeId"] = self.model.id
+            clear_session_params(self.request,["p1","question","p2"]);
+
+
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
         
 
@@ -311,6 +314,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                "p1":pa1,
                               "p2":pa2,
                               "question":q,})
+        elif self.is_new_question({"p1":pa1,
+                              "p2":pa2,
+                              "question":q,}):
+            self.set_new_session({"p1":pa1,
+                              "p2":pa2,
+                              "question":q,})
         self.ctx = ctx       
         return ctx
 
@@ -318,6 +327,13 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
                 clear_session_params(self.request)
+                return True;
+        return False;
+    
+    def is_new_question(self,dict):
+        for p in dict:
+            if p not in self.request.session or self.request.session[p] != dict[p]:
+                clear_session_params(self.request,dict.keys())
                 return True;
         return False;
 
@@ -404,12 +420,6 @@ def clear_session_params(request,params = ["p1","question","p2","testParam","tes
         else :
             print "no %s param in session" % param
 
-
-def clearSessionPara(params,request):
-    for param in params:
-        if param in request.session:
-            del request.session[param]
-#     [(del request.session[param]) for param in params if param in request.session]
         
 def random_redirect(request):
     cat = {'phys':'conv', 'math':'math', 'curr':'conv'}
@@ -420,3 +430,4 @@ def random_redirect(request):
 
     
  
+# {% if user.is_anonymous %}
