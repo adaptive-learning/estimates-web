@@ -13,6 +13,6 @@ urlpatterns = patterns("",
     url(r'^conv/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateFrTo.as_view(), name = 'learning'),
 #     url(r'^math/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateMath.as_view()),
 #     url(r'^grap/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateGraphical.as_view()),
-    url(r'^(?P<main>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
+    url(r'^(?P<main>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateNonFrTo.as_view()),
     url(r'', include('social_auth.urls')),
 )    

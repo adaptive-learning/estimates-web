@@ -42,7 +42,6 @@ Wcount = 10
 Wtarget = 10
 
 
-@allow_lazy_user
 def index(request):
     return TemplateResponse(request, 'home/index.html')
 
@@ -131,6 +130,7 @@ def type_to_range(type):
     return (1, 100)
 
 class QuestionFunctions():
+    
     def get_question(self,types):
         score = []
         t = Type.objects.filter(type__in = types)
@@ -173,16 +173,16 @@ class QuestionFunctions():
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question.question,toReturn.params.p1,toReturn.params.p2)
-    
-    @method_decorator(allow_lazy_user)
-    def get(self,*args,**kwargs):
-        main = kwargs.get("nonFr",None)
+        
+    def check_main(self,*args,**kwargs):
+        print "eEeeeeeeeeeeeeeeeeeeeeE"
+        main = kwargs.get("main",None)
+        print main
         if main not in ["graph","conv","math"]:
-            raise exception("wrong params for mainType")
+            raise Exception("wrong params for mainType")
         super(CreateQuestion,self).get(*args, ** kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-
-
+    
 class AjaxableResponseMixin():
     def form_invalid(self, form):
         if self.request.is_ajax():
@@ -348,31 +348,37 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['testParam'] = -1 
             else: 
                 return HttpResponse(status = 401)
-        
+            
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
         
 class CreateFrTo(CreateQuestion):
     template_name = 'learning/frTo.html'
-
+    @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
         super(CreateFrTo,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-        
-class CreateMath(CreateQuestion):
-    template_name = 'learning/non-frTo.html'
 
-    def get_(self,*args, **kwargs):
-        super(CreateMath, self).get(*args, **kwargs)
-        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-# 
-# 
-class CreateGraphical(CreateQuestion):
-#     template_name = "learning/non-frTo.html"
+class CreateNonFrTo(CreateQuestion):
+    @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
-        super(CreateGraphical,self).get(*args,**kwargs)
+        super(CreateNonFrTo, self).get(*args, **kwargs)
+        self.check_main(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+        
+# class CreateMath(CreateQuestion):
+#     @method_decorator(allow_lazy_user)
+#     def get_(self,*args, **kwargs):
+#         super(CreateMath, self).get(*args, **kwargs)
+#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+# 
+# 
+# class CreateGraphical(CreateQuestion):
+#     @method_decorator(allow_lazy_user)
+#     def get(self,*args, **kwargs):
+#         super(CreateGraphical,self).get(*args,**kwargs)
+#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class NextQuestion(TemplateView,QuestionFunctions):
     template_name = ""
