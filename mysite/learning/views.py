@@ -107,9 +107,8 @@ def decider(type, question, src, dst,f = 2):
         raise Exception('type is unknow command %s' % (type))      
     
 def get_hint(request):
-    print "eh"
-    
     if request.method == "POST" and request.is_ajax():
+        
         j = json.loads(request.POST.get('data'))
         res = decider(j['type'], 1, j['p1'], j['p2'],5)
         if abs(res) <= 0.001:
@@ -175,10 +174,9 @@ class QuestionFunctions():
         return (toReturn.question.question,toReturn.params.p1,toReturn.params.p2)
         
     def check_main(self,*args,**kwargs):
-        print "eEeeeeeeeeeeeeeeeeeeeeE"
         main = kwargs.get("main",None)
         print main
-        if main not in ["graph","conv","math"]:
+        if main not in ["grap","conv","math"]:
             raise Exception("wrong params for mainType")
         super(CreateQuestion,self).get(*args, ** kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
@@ -333,7 +331,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     
     def is_new_question(self,dict):
         for p in dict:
-            if p not in self.request.session or self.request.session[p] != dict[p]:
+            if p not in self.request.session: #or self.request.session[p] != dict[p]:
                 clear_session_params(self.request,dict.keys())
                 return True;
         return False;

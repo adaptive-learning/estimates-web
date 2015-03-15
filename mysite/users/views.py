@@ -67,7 +67,7 @@ from django.contrib.messages.api import get_messages
   
 class AuthComplete(View):
     def get(self, request, *args, **kwargs):
-         
+        logout(request) 
         backend = kwargs.pop('backend')
 #         try:
         return complete(request, backend, *args, **kwargs)

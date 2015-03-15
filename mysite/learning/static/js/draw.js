@@ -136,7 +136,7 @@ function drawLines(ctx,small, big){
 		small = per * small;
 	}
 	quaterH = ctx.canvas.height/3;
-	var x = ctx.canvas.width/2 - small/2;
+	var x = 10;
 	var x1 = ctx.canvas.width/2 - big/2;
 	S1 = new Point(x,quaterH);
 	S2 = new Point(x+small,quaterH);

@@ -84,7 +84,7 @@ function answer(diff,result){
 	setTimeout(function alertFunc() {
 		// window.onbeforeunload=null;	
 		window.location.href = $('#assigForm').attr('action');
-		},3000);
+		},1500);
 	return false;
 }
 function setStars(im,x){

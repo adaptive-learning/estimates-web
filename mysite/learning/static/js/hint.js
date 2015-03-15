@@ -14,6 +14,7 @@ function hint(data) {
         // handle a successful response
         success : function(response) {
 			$('#after').text(response);
+			
     	    $('#myModal').foundation('reveal', 'open');
     	    used_hint = 1;
         },
@@ -27,7 +28,6 @@ function hint(data) {
 };
 
 function tempHint(fr,to){
-	alert("ok");
 	if (fr == "degF" && to == "degC"){
 		message = "((T(°F) - 32) × 5/9)";		
 	} else if(fr == "degC" && to == "degF"){
