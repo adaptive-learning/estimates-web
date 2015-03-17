@@ -201,9 +201,9 @@ class AjaxableResponseMixin():
             raise Exception("please log in")
 
     def get_proximation_error(self, model):
-        if model.type.type == "temp" and model.concept.param2.param != "degC" and model.concept.param1.param == "degC":
-            model.result = converter(model.result,model.concept.param2.param,"degC")
-            model.answer = converter(model.answer,model.concept.param2.param,"degC")
+        if model.type.type == "temp" and model.concept.params.p2 != "degC" and model.concept.params.p1 == "degC":
+            model.result = converter(model.result,model.concept.params.p1,"degC")
+            model.answer = converter(model.answer,model.concept.params.p2,"degC")
         if model.type.type == "equa": model.concept.question.question = None
         if abs(float(model.result)) < 0.000001 : model.result = 0.000001
         diff = float(model.result) - float(model.answer)
