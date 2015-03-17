@@ -26,7 +26,7 @@
     {# Custom head JS #}
     {% block head_js %}{% endblock head_js %}
 </head>
-<body {% block body_attr %}{% endblock body_attr %}>
+<body {% block body_attr %}{% endblock body_attr %} id="body">
     {# Main content goes here #}
     {% block base_body %}{% endblock base_body %}
 
@@ -42,7 +42,6 @@
     <script src="{% static "foundation/js/foundation.min.js" %}"></script>
     <script src="{% static "foundation/js/foundation/foundation.js" %}"></script>
     <script src="{% static "foundation/js/foundation/foundation.dropdown.js" %}"></script>
-
 	<script src="{% static "foundation/js/foundation/foundation.topbar.js" %}"></script>
     {% endblock foundation_js %}
     {# Custom JS #}
@@ -62,4 +61,15 @@
     </script>
     {% endblock foundation_js_init %}
 </body>
+<div id="eh">
+	
+</div>
+<style>
+	#body{
+		/*background-color: #7D7FFF;*/
+	}
+	#eh {
+		/*background-color: "black";*/
+	}
+</style>
 </html>

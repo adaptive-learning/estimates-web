@@ -10,7 +10,7 @@ def myModel(ans, prev, hard, updateCount, possCorrect,step,time = None):
         ans = 1
     
     sc = score(prev,hard)
-    newHard = hard + uncertian_funtion(updateCount)*(sc - ans)
+    newHard = hard + uncertain_function(updateCount)*(sc - ans)
     if ans >= hard:
         K=3.4;
         uS = prev + K*(ans-sc)

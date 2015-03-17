@@ -34,12 +34,14 @@ function home(a){
 		choice.removeChild(choice.firstChild);
 	}
 	if (a == 'home'){
+
 		for (v in nameTypes[a]){
 			var e = nameTypes[a][v];
 			createButton('a',nameReal[nameTypes[a][v]][0],function(j) {return function() {home(j);};}(e),choice,false);
 		}
 		createHrefButton('a','Všetko','/learning/all-all',choice,true);
 		$('#back').hide();
+		headerTitle = "Odhad prevodu jednotiek";
 	} else {
 		for (var v in nameTypes[a]){
 			var h = "/learning/"+nameUrls[a]+'/'+nameTypes[a][v];
@@ -47,8 +49,9 @@ function home(a){
 		}
 		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/',choice,true);
 		$('#back').show();
+		headerTitle = nameReal[a][1];
 	}
-	document.getElementById("header").innerHTML = nameReal[a][1];
+	document.getElementById("header").innerHTML = headerTitle;
 }
 function chooseType(href){
 	var choice = document.getElementById('choice');

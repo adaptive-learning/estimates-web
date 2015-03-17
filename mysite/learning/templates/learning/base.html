@@ -1,39 +1,67 @@
-<script src="{% static "js/nextQuestion.js" %}"></script>
-<script src="{% static "js/pieTimer.js" %}"></script>
-<script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
-<script src="{% static "js/answerForm.js" %}"></script>
-<script src="{% static "js/finish.js" %}"></script>
 
+{% if request.session.testParam == -1%}
+	<script>
+		var testParam = (new Date()).getTime();
+	</script>
+{% else %}
+	<script>
+		var testParam = "{{request.session.testParam}}";
+		testParam = parseInt(testParm) +1000;
+	</script>
+{% endif %}
+    
 <script>
- 	window.onload = function() {
- 		handleNextQuestion("{{type}}","{{test}}");
-	};
+$(document).ready(function(){
+	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
+});
+			
+
+	function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+	}
+
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
+		clearInterval(interval);
+ 		clearInterval(t);
 		var doc = document.getElementById("assigForm");
     	event.preventDefault();
+
     	create_post(JSON.stringify({
-			p1:"{{p1}}",
-			p2:"{{p2}}",
-			question:"{{question}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}",
+			question:"{{request.session.question}}",
+			testP:testParam,
 			used_hint:used_hint,
-		}),"{{type}}");
+		}),"{{request.session.type}}");
 	});
-	var used_hint=0;
-	if ("{{type}}" == "temp"){
+
+	var used_hint=0;	
+	if ("{{request.session.type}}" == "temp"){
 		function useHint(){
-		alert("{{type}}");
-			tempHint("{{p1}}","{{p2}}");
+			tempHint("{{request.session.p1}}","{{request.session.p2}}");
 		}
 	} else {
+
 	    function useHint(){
 	        hint(JSON.stringify({
-			type:"{{type}}",
-			p1:"{{p1}}",
-			p2:"{{p2}}"}));
+			type:"{{request.session.type}}",
+			p1:"{{request.session.p1}}",
+			p2:"{{request.session.p2}}"}));
 		};
 	}
 </script>
-<script src="{% static "js/hint.js"%}"></script>
-	<input type="text" id="txt">
- 	<script src="{% static "js/time.js"%}"></script>
+<script>
+</script>

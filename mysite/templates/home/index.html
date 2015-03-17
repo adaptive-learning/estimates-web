@@ -14,13 +14,13 @@
 {% block base_body %}
 
 {%include "navBar/bar.html" %}
-<div class="row">
+
+<link rel="stylesheet" type="text/css" href="{% static "style/index.css" %}" />
+<div id="main">
     <div class="large-12 columns">
         <h1 id="header" align="center">Odhad prevodu jednotiek</h1>
     </div>
-</div>
-<div class="collumn" align="center" id="b">
-</div>
+
 <div class="row" align="center" id="choice">
 	<script>
 		home("home");
@@ -28,6 +28,8 @@
 </div>
 <div class="row">
 	<a id="back" style="display:none;"><img onclick="javascript:home('home')" src="/static/img/back.png" alt="back" width="60" height="10"></a>
+</div>
+<br><br><br><br><br><br><br>
 </div>
 {% endblock base_body %}
 

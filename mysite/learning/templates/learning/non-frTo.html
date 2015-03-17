@@ -8,7 +8,6 @@
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
 <div>
-{{request.session.testParam}}
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
@@ -23,7 +22,7 @@
 				<div id="canvasDiv">
 				<canvas id="myCanvas" width="250" height="150"></canvas>
 				</div>
-				<script>draw("{{request.session.type}}","{{request.session.question}}","{{request.session.p1}}","{{request.session.p2}}")</script>
+				<script>draw("{{request.session.type}}","{{request.session.question}}","{{request.session.p1}}","{{request.session.p2}}");</script>
 				<br>
 				<div class="large-3 collumns" id="userPart">
 						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>
@@ -38,73 +37,8 @@
 			</div>
 			<p id="timer" align="left"></p>
 	</div>
-
-
-{% if request.session.testParam == -1%}
-	<script>
-		var testParam = (new Date()).getTime();
-	</script>
-{% else %}
-	<script>
-		var testParam = "{{request.session.testParam}}";
-		testParam = parseInt(testParm) +1000;
-	</script>
-{% endif %}
-<script>
-$(document).ready(function(){
-	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
-});
-			
-
-
-	function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-	}
-
-	var csrftoken = getCookie('csrftoken');
-	$('#assigForm').on('submit', function(event){
-		clearInterval(interval);
- 		clearInterval(t);
-		var doc = document.getElementById("assigForm");
-    	event.preventDefault();
-
-    	create_post(JSON.stringify({
-			p1:"{{request.session.p1}}",
-			p2:"{{request.session.p2}}",
-			question:"{{request.session.question}}",
-			testP:testParam,
-			used_hint:used_hint,
-		}),"{{request.session.type}}");
-	});
-
-	var used_hint=0;	
-	if ("{{request.session.type}}" == "temp"){
-		function useHint(){
-			tempHint("{{request.session.p1}}","{{request.session.p2}}");
-		}
-	} else {
-
-	    function useHint(){
-	        hint(JSON.stringify({
-			type:"{{request.session.type}}",
-			p1:"{{request.session.p1}}",
-			p2:"{{request.session.p2}}"}));
-		};
-	}
-</script>
-
+</form>
+{% include "learning/base.html" %}
 {% endblock base_body %}
 </html>
  

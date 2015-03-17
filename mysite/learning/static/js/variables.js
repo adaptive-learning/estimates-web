@@ -3,6 +3,7 @@ var nameReal = {
             'curr': ['Mena',"Odhady meny"],
             'phys': ['Jednotky',"Odhady Fyzikalnych jednotiek"],
             'grap': ['Grafické',"Odhady grafických príkladov"],
+            // 'home': ['Odhad prevodu jednotiek'],
            };
    
 var nameTypes = {
