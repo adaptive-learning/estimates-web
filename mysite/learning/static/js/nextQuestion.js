@@ -1,5 +1,7 @@
 var testP;
-
+window.onload=function(){
+	$("#input").focus();
+};
 function handleNextQuestion(t,test,testParam){
 	// window.onbeforeunload=goodbye;
 	if(test == "set"){

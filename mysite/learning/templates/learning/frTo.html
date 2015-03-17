@@ -13,7 +13,6 @@
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgFyz" align="center">
-
 			<br><br><br><br><br>
 			<label class="small-9 collumns" id="label">
 				<script src="{% static "js/decider.js" %}"></script>
@@ -57,12 +56,12 @@
 		testParam = parseInt(testParm) +1000;
 	</script>
 {% endif %}
+    
 <script>
 $(document).ready(function(){
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 });
 			
-
 
 	function getCookie(name) {
     var cookieValue = null;
