@@ -14,7 +14,6 @@ function hint(data) {
         // handle a successful response
         success : function(response) {
 			$('#after').text(response);
-			
     	    $('#myModal').foundation('reveal', 'open');
     	    used_hint = 1;
         },
