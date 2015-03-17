@@ -23,6 +23,7 @@ class Concept(models.Model):
     params = models.ForeignKey('Params', related_name ="params")
     type = models.ForeignKey('Type')
     label = models.FloatField(null=True)
+    updatedTimes = models.IntegerField(default = 0)
 
 class Params(models.Model):
     p1 = models.CharField(max_length = 20)

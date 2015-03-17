@@ -190,10 +190,11 @@ class AjaxableResponseMixin():
             user = get_user(self.request)
             userSkill = get_object_or_404(UserSkill,user = user, concept = self.model.concept.params)
             concept = get_object_or_404(Concept,id = self.model.concept.id)
-            concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,1-concept.label,5,0.03)
+            concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,concept.updatedTimes,1-concept.label,5,0.03)
             if concept.label < 0: concept.label = 0
             userSkill.date = self.model.date
             userSkill.number += 1
+            concept.updatedTimes += 1;  
             concept.save()
             userSkill.save()
         else:
