@@ -1,6 +1,6 @@
 function get_result(data) {
-	event.preventDefault();
-	// window.onbeforeunload=null;
+	alert(data);
+	// event.preventDefault();
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -19,7 +19,7 @@ function get_result(data) {
            	$("#label").text("");
         	$("#label").append("vas priemerny odhad je: "+((1-parseFloat(r[0]).toFixed(2))*100).toString()+" %\n");
             if (r.length == 2 ){
- 				$("#label").append("vase score v danej oblasi je: "+(r[1]*100).toString()+" %");
+ 				$("#label").append("vase skóre v danej oblasti je: "+(r[1]*100).toString()+" %");
        		} 
          	$("#userPart").remove();
         },

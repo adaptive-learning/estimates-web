@@ -392,7 +392,7 @@ def finish(request):
         else: 
             raise Exception("please log in")
         concepts = Params.objects.filter(type__in = t)
-
+        s=0;
         if request.session["test"] == "time":
             if 'frTimeId' in request.session:
                 date = FloatModel.objects.get(id = request.session["frTimeId"]).date
