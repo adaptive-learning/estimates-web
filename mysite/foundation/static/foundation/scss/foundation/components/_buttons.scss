@@ -34,9 +34,10 @@ $button-font-align: center !default;
 $button-function-factor: -20% !default;
 
 // We use these to control button border styles.
+//
 $button-border-width: 0px !default;
 $button-border-style: solid !default;
-$button-bg-color: $primary-color !default;
+$button-bg-color: #A1A6CC;
 $button-bg-hover: scale-color($button-bg-color, $lightness: $button-function-factor) !default;
 $button-border-color: $button-bg-hover !default;
 $secondary-button-bg-hover: scale-color($secondary-color, $lightness: $button-function-factor) !default;

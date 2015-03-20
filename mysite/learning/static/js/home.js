@@ -7,7 +7,7 @@ function createButton(tag,name,onclick,parent,last){
 
 	btn.appendChild(t);
 	// btn.addClass("button");
-	btn.setAttribute('class', 'extend button');
+	btn.setAttribute('class', 'secondary radius large button');
 	if(onclick){	
 		if (btn.addEventListener) 
 			btn.addEventListener('click',onclick,false); //everything else    
@@ -23,7 +23,7 @@ function createHrefButton(tag,name,href,parent,last){
 	var btn = document.createElement(tag);
 	var t = document.createTextNode(name);
 	btn.appendChild(t);
-	btn.setAttribute('class', 'extend button');
+	btn.setAttribute('class', 'secondary radius large button');
 	
 	btn.href = href;
 	parent.appendChild(btn);
@@ -44,7 +44,8 @@ function home(a){
 		}
 		createHrefButton('a','Všetko','/learning/all-all/test',choice,true);
 		$('#back').hide();
-		headerTitle = "Odhad prevodu jednotiek";
+		$("#labelAbout").show();
+		headerTitle = "Odhadni to";
 	} else {
 		for (var v in nameTypes[a]){
 			var h = "/learning/"+nameUrls[a]+'/'+nameTypes[a][v];
@@ -52,6 +53,7 @@ function home(a){
 		}
 		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/test',choice,true);
 		$('#back').show();
+		$("#labelAbout").hide();
 		headerTitle = nameReal[a][1];
 	}
 	document.getElementById("header").innerHTML = headerTitle;

@@ -366,19 +366,6 @@ class CreateNonFrTo(CreateQuestion):
         self.check_main(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
         
-# class CreateMath(CreateQuestion):
-#     @method_decorator(allow_lazy_user)
-#     def get_(self,*args, **kwargs):
-#         super(CreateMath, self).get(*args, **kwargs)
-#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-# 
-# 
-# class CreateGraphical(CreateQuestion):
-#     @method_decorator(allow_lazy_user)
-#     def get(self,*args, **kwargs):
-#         super(CreateGraphical,self).get(*args,**kwargs)
-#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-
 class NextQuestion(TemplateView,QuestionFunctions):
     template_name = ""
     def get_context_data(self,**kwargs):

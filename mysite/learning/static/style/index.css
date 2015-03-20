@@ -1,9 +1,23 @@
-#main{
-	/*background-color: #45B1FF;*/
-}
 #header{
-	color:blue;
+	color:#E0E0E0;
 }
 .mainStyle{
-	background-color: #45B1FF;
+	background-color: #6E6D78;
+	height: 350px;
+}
+.menu-size{
+}
+.button-container {
+    width: 620px;
+}
+
+.button-container > a {
+    float: left;
+    width: 200px;
+    margin: 15px;
+}
+
+.descTop{
+	font-size: 130%;
+	color:silver;
 }

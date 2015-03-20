@@ -15,12 +15,15 @@
 
 {%include "navBar/bar.html" %}
 <link rel="stylesheet" type="text/css" href="{% static "style/index.css" %}" />
-<div id="main">
+<div id="main" class="mainStyle">
     <div class="large-12 columns">
-        <h1 id="header" align="center">Odhad prevodu jednotiek</h1>
+        <h1 id="header" align="center"></h1>
     </div>
-
+    <div align="center">
+    	<span style="color:silver; font-size: 120%;">vyber si kategóriu</span>
+    	</div>
 <div class="row collapse" align="center" id="choice">
+
 	<script>
 		home("home");
 	</script>
@@ -28,7 +31,20 @@
 <div class="row">
 	<a id="back" style="display:none;"><img onclick="javascript:home('home')" src="/static/img/back.png" alt="back" width="60" height="10"></a>
 </div>
-<br><br><br><br><br><br><br><br><br><br>
+<div class="descTop" align="center" id="labelAbout">
+	<span>
+		Zábavná aplikácia na testovanie vašich schopností na odhady.
+	</span>
+</div>
+
+</div>
+<div class="row collapse" align="center">
+<div id="about" class="large-6 collumns" align="left">
+	<h4>
+		Otázky na mieru:
+	</h4>
+	<span>Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností</span>
+</div>
 </div>
 {% endblock base_body %}
 
