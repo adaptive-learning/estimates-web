@@ -67,7 +67,6 @@ function answer(diff,result){
 	var d = document.getElementById("next");
 	delet(d);
 	onclick = function(){
-		// window.onbeforeunload=null;
 		window.location.href = $('#assigForm').attr('action');
 	};
 	if (diff < 0.03){

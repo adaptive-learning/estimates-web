@@ -7,7 +7,6 @@
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <br>
-<div>
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
@@ -17,8 +16,10 @@
 				<label class="small-9 collumns" id="label" for="input">
 					<script>
 						deciderType("{{request.session.type}}","{{request.session.question}}","{{request.session.p1}}","{{request.session.p2}}");
-					</script>
+					</script>	
 				</label>
+				
+				<div id="scatterPlot" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto; display:none"></div>
 				<div id="canvasDiv">
 				<canvas id="myCanvas" width="250" height="150"></canvas>
 				</div>
@@ -30,9 +31,9 @@
 				</div>
 				<div class="large-6 rows" id="answer" ></div>
 			</div>
+			<div id="userControl">
 			<div class="progress" id="testCounter"></div>
 			<div id="timeCounter" align="center"></div>
-			<!-- <div class="rows"> -->
 			  	<div class="large-1 columns" id="next">
 					<input id="sub" type="submit" class="button" value="Odpovedat" />
 				</div>
@@ -41,9 +42,8 @@
 			    	Sorry, it doesn't work for you.
 					</canvas>
 				</div>
-			<!-- </div> -->
+			</div>
 			<p id="timer" align="left"></p>
-	</div>
 </form>
 {% include "learning/base.html" %}
 {% endblock base_body %}

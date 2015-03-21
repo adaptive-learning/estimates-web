@@ -15,7 +15,13 @@ class FloatModel(models.Model):
     usedHint = models.BooleanField()
     label = models.FloatField(null = True)
     date = models.DateTimeField(auto_now=True)
-
+    
+    def as_json(self):
+        return dict(
+            time=self.time, 
+            label=self.label,
+            concept = self.concept)
+            
 class Concept(models.Model):
     question = models.ForeignKey('Questions');
     params = models.ForeignKey('Params', related_name ="params")
