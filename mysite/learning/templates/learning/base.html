@@ -49,16 +49,4 @@ $(document).ready(function(){
 	});
 
 	var used_hint=0;	
-	if ("{{request.session.type}}" == "temp"){
-		function useHint(){
-			tempHint("{{request.session.p1}}","{{request.session.p2}}");
-		}
-	} else {
-	    function useHint(){
-	        hint(JSON.stringify({
-			type:"{{request.session.type}}",
-			p1:"{{request.session.p1}}",
-			p2:"{{request.session.p2}}"}));
-		};
-	}
 </script>

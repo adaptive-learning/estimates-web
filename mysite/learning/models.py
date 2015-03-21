@@ -14,10 +14,8 @@ class FloatModel(models.Model):
     user = models.ForeignKey(User, null = True)
     usedHint = models.BooleanField()
     label = models.FloatField(null = True)
-    date = models.DateTimeField(default=timezone.localtime(timezone.now()), null = True)
+    date = models.DateTimeField(auto_now=True)
 
-
-    
 class Concept(models.Model):
     question = models.ForeignKey('Questions');
     params = models.ForeignKey('Params', related_name ="params")
@@ -41,7 +39,7 @@ class UserSkill(models.Model):
     skill = models.FloatField()
     concept = models.ForeignKey('Params')
     number = models.IntegerField()
-    date = models.DateTimeField(default=timezone.localtime(timezone.now()), null = True)
+    date = models.DateTimeField(auto_now=True)
     
     
 

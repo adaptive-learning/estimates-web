@@ -1,5 +1,6 @@
 var interval;
 function drawTimer(ele,sec,width,height,r,t,fr){
+	alert("ok");
 	$('<canvas>').attr({
 	    id: "testTimer"
 	}).css({
@@ -42,3 +43,5 @@ function drawTimer(ele,sec,width,height,r,t,fr){
 
 	}
 }
+		
+

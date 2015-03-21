@@ -10,8 +10,15 @@
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "style/timer.css" %}" />
 <br>
-<script src="{% static "js/finish.js" %}"></script>
+
+
+
+
+
+
+
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="row">
 		<div class="row collapse" id="imgFyz" align="center">
@@ -33,11 +40,17 @@
 		<div class="progress" id="testCounter"></div>
 		
 		<div id="timeCounter" align="center"></div>
-	  	<div class="large-1 columns" id="next">
-			<input id="sub" type="submit" class="button" value="Odpovedat" />
+		<div class="rows">
+		  	<div class="large-1 columns" id="next">
+				<input id="sub" type="submit" class="button" value="Odpovedat" />
+			</div>
+			<div class="large-1 large-centered columns">
+				<canvas id="pie-countdown" width="150" height="150" style="width:70px;height:70px;">
+	        	Sorry, it doesn't work for you.
+	    		</canvas>
+			</div>
 		</div>
   		<div align="right" id="hint">
-  			<a><img onclick="javascript:useHint()" src="{% static "img/hint.png"%}" alt="click for help" width="50" height="50"></a>
   		</div>
 	</div>
 	<p id="timer" align="left"></p>	
@@ -45,7 +58,6 @@
 		1 {{request.session.p1}} -> <span id="after"></span> {{request.session.p2}}		
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
-
 </form>
 {% include "learning/base.html" %}
 {% endblock base_body %}

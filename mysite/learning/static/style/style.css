@@ -23,3 +23,13 @@
 	    outline:none;
 	}
 
+svg {
+  display: block;
+  margin: 50px auto;
+}
+
+#loader 
+{ fill: #0088cc }
+
+#border 
+{ fill: #00517a }

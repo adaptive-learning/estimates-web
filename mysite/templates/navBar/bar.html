@@ -16,17 +16,22 @@
     <ul class="right">
       <li class="has-dropdown">
 
-<!-- {{ user.lazy_user }} -->
       {% if user|is_lazy_user or user.is_anonymous%}
               <a href="#">Prihlásenie</a>
         <ul class="dropdown">
      	<li><a href="{% url 'socialauth_begin' 'google-oauth2' %}"><img src="/static/img/gmail.png" width="20" height="20">  Login with Google</a></li>
      	<li><a href="{% url 'socialauth_begin' 'facebook'  %}"><img src="/static/img/fb.png" width="20" height="20">  Login with Facebook</a></li> 
-      	
+
           {% else %}
 
       <a href="#">{{ user.get_full_name }}</a>
       <ul class="dropdown">
+		<li>
+			<div class="switch round">
+  			<input id="exampleCheckboxSwitch" type="checkbox">
+  			<label for="exampleCheckboxSwitch"></label>
+			</div> 
+		</li>	
        <li><a href="/users/logout">Odhlásiť sa</a></li> 
 	</ul>
      

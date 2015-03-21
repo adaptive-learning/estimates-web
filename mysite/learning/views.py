@@ -135,6 +135,7 @@ class QuestionFunctions():
         t = Type.objects.filter(type__in = types)
         query = Params.objects.filter(type__in = t)
         now = timezone.localtime(timezone.now())
+        print "now",now;
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
@@ -145,11 +146,6 @@ class QuestionFunctions():
                     userSkill.save()
             else :
                 raise Exception("please log in")
-                p = UserSkill.objects.filter(concept = q)
-                if len(p) == 0:
-                    userSkill = 0
-                else:
-                    userSkill = sum(float(x.skill) for x in p) / float(len(p))
             concepts = Concept.objects.filter(params = q)
             for i in concepts:
                 floatmodels = FloatModel.objects.filter(concept = i,user = user.id)
@@ -164,9 +160,11 @@ class QuestionFunctions():
                 Scount = 1/sqrt(1+userSkill.number)
                 try:
                     Stime = -1/( now - userSkill.date).total_seconds()
-                except FloatModel.DoesNotExist:
+                except userSkill.DoesNotExist:
                     Stime = 0
+                print  "time",( now - userSkill.date).total_seconds()
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
+        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
@@ -278,6 +276,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             raise Exception("wrong params for Concept when parsing to model")
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
+        self.model.date = timezone.localtime(timezone.now()) 
         
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)

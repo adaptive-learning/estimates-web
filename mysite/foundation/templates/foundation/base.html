@@ -16,7 +16,12 @@
     {% endblock foundation_css %}  
     
     {# Custom CSS #}
-    {% block css %}{% endblock css %}
+
+    {% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
+	<link rel="stylesheet" type="text/css" href="{% static "style/main.css" %}" />
+	{% endblock css %}
+
 
     {# Override if you need another version of modernizr #}
     {% block foundation_modernizer %}
@@ -38,20 +43,23 @@
 
 
     {# Foundation JS #}
-    {% block foundation_js %}
+	{% block foundation_js %}
     <!-- <script src="{% static "foundation/js/foundation/foundation.js" %}"></script> -->
     <!-- <script src="{% static "foundation/js/foundation/foundation.dropdown.js" %}"></script> -->
 	<!-- <script src="{% static "foundation/js/foundation/foundation.topbar.js" %}"></script> -->
 	<script src="{% static "foundation/js/foundation.min.js" %}"></script>  
     {% endblock foundation_js %}
     {# Custom JS #}
+
     <script src="{% static "js/time.js"%}"></script>
     <script src="{% static "js/hint.js"%}"></script>
     <script src="{% static "js/nextQuestion.js" %}"></script>
 	<script src="{% static "js/pieTimer.js" %}"></script>
 	<script src="{% static "js/answerForm.js" %}"></script>
 	<script src="{% static "js/finish.js" %}"></script>
-    {% block body_js %}{% endblock body_js %}
+    {% block body_js %}
+
+    {% endblock body_js %}
 
 
     {# Init Foundation #}
