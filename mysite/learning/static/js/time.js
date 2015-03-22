@@ -76,7 +76,6 @@ function draw_next(step,color,anti,stay) { // step between 0 and 1
 		}
     }
 }
-timer(20,"black",true,false);
 
 
 $(document).ready(function() {

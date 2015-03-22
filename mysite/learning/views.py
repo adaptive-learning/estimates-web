@@ -129,6 +129,15 @@ def type_to_range(type):
         return (-40, 40)
     return (1, 100)
 
+def median(lst):
+    lst = sorted(lst)
+    if len(lst) < 1:
+            return None
+    if len(lst) %2 == 1:
+            return lst[((len(lst)+1)/2)-1]
+    if len(lst) %2 == 0:
+            return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
+
 class QuestionFunctions():
     
     def get_question(self,types):
@@ -163,9 +172,7 @@ class QuestionFunctions():
                     Stime = -1/( now - userSkill.date).total_seconds()
                 except userSkill.DoesNotExist:
                     Stime = 0
-                print  "time",( now - userSkill.date).total_seconds()
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
-        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
@@ -297,10 +304,11 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         
         q, pa1, pa2 = self.get_question(types)
         try:
-            self.type = Params.objects.get(p1 = pa1,
-                                           p2= pa2).type.type
-        except Concept.DoesNotExist:
+            par = Params.objects.get(p1 = pa1,
+                                           p2= pa2)
+        except Params.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
+        self.type = par.type.type
         test = self.kwargs.get("test",None)
         if test is None : return HttpResponse(status=410)
         
@@ -321,6 +329,15 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                               "p2":pa2,
                               "question":q,})
         self.ctx = ctx       
+        if 'medTime' not in self.request.session:
+            quest = get_object_or_404(Questions, question = q)
+            c = get_object_or_404(Concept, params = par,question = quest) 
+            list = [x.time for x in FloatModel.objects.filter(concept = c)]
+            print "list",list
+            if len(list) == 0:
+                self.request.session['medTime']=15
+            else:
+                self.request.session['medTime']=median(list) 
         return ctx
 
     def is_new_test(self,dict):
@@ -412,6 +429,11 @@ def clear_session_params(request,params = ["p1","question","p2","testParam","tes
             del request.session[param]
         else :
             print "no %s param in session" % param
+            
+    
+    if "medTime" in request.session:
+        print "clearing"
+        del request.session["medTime"]
 
         
 def random_redirect(request):

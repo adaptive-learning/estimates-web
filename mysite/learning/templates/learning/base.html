@@ -1,5 +1,4 @@
 
-
 {% if request.session.testParam == -1%}
 	<script>
 		var testParam = (new Date()).getTime();
@@ -13,6 +12,7 @@
 <script>
 $(document).ready(function(){
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
+	timer("{{request.session.medTime|stringformat:'2.f'}}","black",true,false);
 });
 			
 
@@ -47,7 +47,8 @@ $(document).ready(function(){
 			used_hint:used_hint,
 		}),"{{request.session.type}}");
 	});
-
+	
+	
 	var used_hint=0;
 
 </script>
