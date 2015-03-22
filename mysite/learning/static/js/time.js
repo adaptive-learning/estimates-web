@@ -72,7 +72,7 @@ function draw_next(step,color,anti,stay) { // step between 0 and 1
     	if (stay == true){
 			draw_circ(1,true);
       } else {
-    	timer(30,"red",false,true);
+    	timer(30,"#750000",false,true);
 		}
     }
 }

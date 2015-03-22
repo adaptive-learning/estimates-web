@@ -1,31 +1,22 @@
-	#imgfyz{  
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#imgeu{  
-		background-color: transparent;
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#imgcz{  
-		background-color: transparent;
-		background-size: 100% 100%;
-		height: 500px;
-	}
-	#label{
-		color: black;
-		font: normal 25px courier !important;
-	}
-	#input{
-	    background-color:rgba(0, 0, 0, 0);
-	    color:black;
-	    border: none;
-	    outline:none;
-	}
-
-svg {
-  display: block;
-  margin: 50px auto;
+#imgfyz{  
+	background-size: 100% 100%;
+	height: 500px;
+}
+#label{
+	color: #E0E0E0;
+	font: normal 25px courier !important;
+}
+#input{
+    background-color:rgba(0, 0, 0, 0);
+    color:#E0E0E0;
+    border: none;
+    outline:none;
+}
+#sub{
+	background-color: #333333;
+}
+#testCounter{
+	color: #333333;
 }
 
 #loader 
