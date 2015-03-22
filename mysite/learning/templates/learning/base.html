@@ -11,7 +11,7 @@
 {% endif %}
 <script>
 $(document).ready(function(){
-
+	createQuestion("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	timer("{{request.session.medTime|stringformat:'2.f'}}","black",true,false);
 });

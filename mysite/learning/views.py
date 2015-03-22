@@ -24,14 +24,6 @@ from pint import UnitRegistry
 import urllib2
 
 
-TypeParams = {
-              'e': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "CZK"],
-              'c': ["USD", "PLN", "HUF", "CHF", "GBP", "RUB", "EUR"],
-              'vol': ["mm**3", "cm**3", "dm**3", "m**3", "km**3", "ml", "l", "dl", "hl"],
-              'surf': ["mm**2", "cm**2", "dm**2", "m**2", "km**2", "are", "acre"],
-              'len': ["mm", "cm", "dm", "m", "km", "mile", "inch", "ft"],
-              'temp':["kelvin", "degF", "degC"],
-             }
 NameTypes = {'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
              'phys': ["vol", "surf", "len", "temp"],
@@ -139,7 +131,6 @@ def median(lst):
             return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
 
 class QuestionFunctions():
-    
     def get_question(self,types):
         score = []
         t = Type.objects.filter(type__in = types)
@@ -179,9 +170,14 @@ class QuestionFunctions():
         toReturn = Concept.objects.get(id = maximum[0])
         return (toReturn.question.question,toReturn.params.p1,toReturn.params.p2)
         
+    def check_type(self,*args,**kwargs):
+        type = kwargs.get("type",None)
+        if type not in [x.type for x in Type.objects.all()]:
+            raise Exception("wrong params for type") 
+        self.type = type
+        
     def check_main(self,*args,**kwargs):
         main = kwargs.get("main",None)
-        print main
         if main not in ["grap","conv","math"]:
             raise Exception("wrong params for mainType")
         super(CreateQuestion,self).get(*args, ** kwargs)
@@ -308,7 +304,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                            p2= pa2)
         except Params.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
-        self.type = par.type.type
         test = self.kwargs.get("test",None)
         if test is None : return HttpResponse(status=410)
         
@@ -365,28 +360,29 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             else: 
                 return HttpResponse(status = 401)
             
+    @method_decorator(allow_lazy_user)
+    def get(self,*args, **kwargs):
+        self.check_type(*args,**kwargs)
+        super(CreateQuestion,self).get(*args,**kwargs)
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+            
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
         
-class CreateFrTo(CreateQuestion):
-    template_name = 'learning/frTo.html'
-    @method_decorator(allow_lazy_user)
-    def get(self,*args, **kwargs):
-        super(CreateFrTo,self).get(*args,**kwargs)
-        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-
-class CreateNonFrTo(CreateQuestion):
-    @method_decorator(allow_lazy_user)
-    def get(self,*args, **kwargs):
-        super(CreateNonFrTo, self).get(*args, **kwargs)
-        self.check_main(*args,**kwargs)
-        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-        
-class NextQuestion(TemplateView,QuestionFunctions):
-    template_name = ""
-    def get_context_data(self,**kwargs):
-        return HttpResponse("success")
+# class CreateFrTo(CreateQuestion):
+#     template_name = 'learning/frTo.html'
+#     @method_decorator(allow_lazy_user)
+#     def get(self,*args, **kwargs):
+#         super(CreateFrTo,self).get(*args,**kwargs)
+#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+# 
+# class CreateNonFrTo(CreateQuestion):
+#     @method_decorator(allow_lazy_user)
+#     def get(self,*args, **kwargs):
+#         super(CreateNonFrTo, self).get(*args, **kwargs)
+#         self.check_main(*args,**kwargs)
+#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 def finish(request):
     if request.is_ajax() and request.method == "POST":

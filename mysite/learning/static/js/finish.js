@@ -60,10 +60,10 @@ function scatterPlot(data){
 	}
 	for (var e=0; e < dat.length;e++){
 		var d = dat[e];
-		if (d.type == "e" || d.type == "c"){
-			var name = d.q + d.p1 +" = "+ d.a + d.p2;
-		} else if (d.type == "sqrt"){
-			var name = "√" + d.q + " = " + d.a;
+		if (d.type in type_pictures_question){
+			var name = d.a;
+		} else {
+			var name = deciderType(d.type,d.q,d.p1,d.p2,d.a);
 		}
 		if (m.indexOf(e) != -1 || e==mF){
 			series.push({name:name, color: 'rgba(255, 10, 10, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
