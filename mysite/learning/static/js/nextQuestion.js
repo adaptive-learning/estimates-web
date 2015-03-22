@@ -5,7 +5,7 @@ window.onload=function(){
 function handleNextQuestion(t,test,testParam){
 	// window.onbeforeunload=goodbye;
 	if(test == "set"){
-		if (testParam > 10){
+		if (testParam > 1){
 			testParam = 10;
 			get_result(t);
 		}
@@ -36,7 +36,7 @@ function goodbye(e) {
         	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
         	}
     	},    
-    	url : "/learning/clear_session", // the endpoint
+    	url : "/learning/set_fr", // the endpoint
         type : "POST", // http method
         data : { }, // data sent with the post request
         // handle a non-successful response

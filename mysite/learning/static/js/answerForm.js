@@ -27,6 +27,11 @@ var csrftoken = getCookie('csrftoken');
 
 // function create_post(mId,urlPath) {
 function create_post(data,t) {
+	if (sessionStorage.getItem("sended") == "true") {
+    	return ;
+	} else {
+    	sessionStorage.setItem("sended", true);
+	}
 	$("#sub").attr("disabled", "disabled");
 	timer_is_on = 0;
     $.ajax({
@@ -54,6 +59,7 @@ function create_post(data,t) {
 };
 
 function answer(diff,result){
+
 	var div = document.getElementById("assigment");
 	delet(div);
 	delet(document.getElementById("hint"));

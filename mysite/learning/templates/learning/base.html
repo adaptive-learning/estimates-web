@@ -11,11 +11,12 @@
 {% endif %}
 <script>
 $(document).ready(function(){
+
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	timer("{{request.session.medTime|stringformat:'2.f'}}","black",true,false);
 });
 			
-
+	sessionStorage.setItem("sended",false); 
 	function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -47,7 +48,6 @@ $(document).ready(function(){
 			used_hint:used_hint,
 		}),"{{request.session.type}}");
 	});
-	
 	
 	var used_hint=0;
 

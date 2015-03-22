@@ -23,8 +23,9 @@ function get_result(data) {
 	         	$("#scatterPlot").show();
          		scatterPlot(r[2]);
        		} 
-         	$("#userPart").remove();
-         	$("#userControl").remove();
+       		sessionStorage.clear();
+         	$("#userPart").empty();
+         	$("#userControl").empty();
 
         },
         // handle a non-successful response
@@ -44,25 +45,30 @@ function scatterPlot(data){
 	m = [];
 	mF = 0;
 	for (var e=1;e<dat.length;e++){
-		var cur = (1-dat[e].fields.label)*100;
-		var maxL = (1-dat[mF].fields.label)*100;
+		var cur = (1-dat[e].label)*100;
+		var maxL = (1-dat[mF].label)*100;
 
 		if(cur > maxL){
 			mF = e;
 		} else if(cur == maxL ){
-			if (dat[mF].fields.time == dat[e].fields.time){
+			if (dat[mF].time == dat[e].time){
 				m.push(e);
-			} else if (dat[mF].fields.time > dat[e].fields.time){
+			} else if (dat[mF].time > dat[e].time){
 				mF = e;
 			}
 		}
 	}
-	alert(m.indexOf(2));
 	for (var e=0; e < dat.length;e++){
+		var d = dat[e];
+		if (d.type == "e" || d.type == "c"){
+			var name = d.q + d.p1 +" = "+ d.a + d.p2;
+		} else if (d.type == "sqrt"){
+			var name = "√" + d.q + " = " + d.a;
+		}
 		if (m.indexOf(e) != -1 || e==mF){
-			series.push({name:dat[e].fields.concept,color: 'rgba(255, 10, 10, .9)',data:[[dat[e].fields.time,(1-dat[e].fields.label)*100]]});
+			series.push({name:name, color: 'rgba(255, 10, 10, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
 		} else {
-			series.push({name:dat[e].fields.concept,color: 'rgba(51, 51, 51, .9)',data:[[dat[e].fields.time,(1-dat[e].fields.label)*100]]});
+			series.push({name:name, color: 'rgba(51, 51, 51, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
 		}
 	}
 $(function () {

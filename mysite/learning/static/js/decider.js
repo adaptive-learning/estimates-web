@@ -18,15 +18,13 @@ function decider(curr){
 					 };	
 	if (/[a-z]+\*\*[2-9]/.test(curr)){
 		str = curr.split("**");
-		document.write(str[0]+str[1].sup());
+		return str[0]+str[1].sup();
 	} else if (curr in symbol_dict) {
-			document.write(symbol_dict[curr]);
+			return symbol_dict[curr];
 		} else {
-	    	document.write(curr);
+	    	return curr;
 		}
 }
-
-
 function deciderType(type,question, p1,p2){
 var type_messages = {
 	"water":"Koľko percent vody je v pohari?",
@@ -37,7 +35,11 @@ var type_messages = {
 	"line": "koľko krát je spodná priamka väčšia ako vrchná?",
 	"obj" : "koľko je na obrázku objektov?",
 }; 
-	$("#label").append(type_messages[type]);
+	if(type in type_messages){
+		$("#label").append(type_messages[type]);
+	}else {
+		$("#label").append(question + " "+ decider(p1)+ " = ? " + decider(p2) );
+	}
 }
 
 function roundToTwo(num) {    

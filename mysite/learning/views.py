@@ -7,7 +7,7 @@ import math
 import random
 # import actualDB
 from django.core import serializers
-    
+# from forms import *
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -415,7 +415,8 @@ def finish(request):
         try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
         except UserSkill.DoesNotExist: return HttpResponse(s) 
         uS = (sum([x.skill for x in uS]))/float(len(uS))
-        out = serializers.serialize('json', f)
+        results = [ob.as_json() for ob in f]
+        out = json.dumps(results)
         return HttpResponse("%s//%s//%s"%(s,uS,out))
     
 def clearSession(request):
