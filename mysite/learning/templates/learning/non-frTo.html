@@ -11,12 +11,12 @@
 	<div class="row center">
 			<div class="row collapse" id="imgDiv" align="center">
 				<br><br><br><br>
+				<!-- <script src="{% static "js/draw.js" %}"></script> -->
 				<label class="small-9 collumns" id="label" for="input"></label>
 				<div id="scatterPlot" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto; display:none"></div>
 				<div id="canvasDiv">
-				<canvas id="myCanvas" width="250" height="150"></canvas>
+					<canvas id="myCanvas" width="250" height="150"></canvas>
 				</div>
-				<script>draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");</script>
 				<br>
 				<div class="large-3 collumns" id="userPart">
 						<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>

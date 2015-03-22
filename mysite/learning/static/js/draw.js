@@ -114,7 +114,6 @@ function drawGlass(ctx,v,base,height){
 		ctx.lineTo(A.x+1,A.y-1);
 		
 	ctx.closePath();
-// 	
 	ctx.fill();
 }
 
