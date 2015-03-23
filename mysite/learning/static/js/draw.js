@@ -159,8 +159,6 @@ function generateObjects(ctx,k,size,points) {
 		do{
 			x = Math.floor((Math.random() * (ctx.canvas.width-size)) );
 			y = Math.floor((Math.random() * (ctx.canvas.height-size)) ); 
-
-
 			for (var l=0;l<points.length;l++){
 				point = points[l];
 
@@ -174,7 +172,8 @@ function generateObjects(ctx,k,size,points) {
 				if ((bX[0] > bordersX[0] && bX[0] < bordersX[1]) ||
 					(bX[1] > bordersX[0] && bX[1] < bordersX[1]) ||
 					 (bY[0] < bordersY[1] && bY[0] > bordersY[0]) ||
-					 (bY[1] < bordersY[1] && bY[1] > bordersY[0])){
+					 (bY[1] < bordersY[1] && bY[1] > bordersY[0]) ||
+					 bX[0] == bordersX[0] && bY[0] == bordersY[0]){
 			
 			 	 	ok = false;
 			 		// counter++;
@@ -198,12 +197,12 @@ function generateObjects(ctx,k,size,points) {
 }
 
 function drawObjs(ctx,sq,cir,tri){
-// alert(sq);
-var points = [];
 
+var points = [];
 
 squares = (generateObjects(ctx,sq,15,points));
 im = get_objImg("square.png");
+drawObjects(ctx,squares,im);
 points = points.concat(drawObjects(ctx,squares,im));
 
 triangles = (generateObjects(ctx,tri,15,points));
@@ -211,17 +210,15 @@ im = get_objImg("triangle.svg");
 drawObjects(ctx,triangles,im);
 points = points.concat(drawObjects(ctx,triangles,im));
 
-// cir = 1;
 circles = (generateObjects(ctx,cir,15,points));
 im = get_objImg("circle.svg");
+drawObjects(ctx,circles,im);
 points = points.concat(drawObjects(ctx,circles,im));
-
 	function get_objImg(what){
 		var im = document.createElement("img");
 		im.src="/static/img/"+what;
 		return im;
 	}
-	
 	function drawObjects(ctx,array,img){
 		for (x=0;x<array.length;x++){
 			ctx.beginPath();
