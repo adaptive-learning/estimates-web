@@ -11,10 +11,6 @@ function changeOption(list,actual,span){
     var x = actual.value;
     var Gparent = actual.parentNode.parentNode;
     if (x!="all" && x!="---"){
-    	if (Gparent.children.length > 1 
-    		&& Gparent.children[Gparent.children.length-1].tagName == "A"){
-    		Gparent.children[Gparent.children.length-1].remove();
-    	}
 		$(span).empty();
 
     	for (i in j){
@@ -49,7 +45,11 @@ function changeOption(list,actual,span){
    			}}).appendTo(span);
     	
     	
-    	if(Gparent.lastElementChild.isEqualNode(actual.parentNode)){
+		if(Gparent.lastElementChild.isEqualNode(actual.parentNode)){
+	    	if (Gparent.children.length > 1 
+    			&& Gparent.children[Gparent.children.length-1].tagName == "A"){
+    			Gparent.children[Gparent.children.length-1].remove();
+    		}
 	    	$('<a/>', {
 	        text: "Nový", //set text 1 to 10
 	        id:"new",
@@ -61,11 +61,13 @@ function changeOption(list,actual,span){
     } else {
     	$(span).empty();
     	$('#all'+x).remove();
-    	$("#new").remove();
     	if (x == "all"){
     		for (var i=1; i< Gparent.children.length; i++){
     			Gparent.children[i].remove();
     		}
+    	}
+    	if (x == "---" && Gparent.children[Gparent.children.length-2].isEqualNode(actual.parentNode)){
+    		Gparent.children[Gparent.children.length-1].remove();
     	}
     }
 }
