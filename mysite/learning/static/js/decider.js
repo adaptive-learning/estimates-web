@@ -22,7 +22,6 @@ var type_pictures_question = {
 };
 
 function decider(curr){
-
 	if (/[a-z]+\*\*[2-9]/.test(curr)){
 		str = curr.split("**");
 		return str[0]+str[1].sup();
@@ -33,8 +32,12 @@ function decider(curr){
 		}
 }
 
-function createQuestion(type,question, p1,p2){
-	$("#label").append(deciderType(type,question, p1,p2,"?"));
+function appendToThis(p1){
+	
+}
+
+function createQuestion(element,type,question, p1,p2){
+	$("#"+element).append(deciderType(type,question, p1,p2,"?"));
 }
 
 function deciderType(type,question, p1,p2,answer){

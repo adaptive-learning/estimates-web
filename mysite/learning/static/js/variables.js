@@ -9,10 +9,15 @@ var nameReal = {
 var nameTypes = {
 			 'home': ['math','curr','phys','grap'],
 			 'math': ["sqrt", "equa","sqr"],
-             'curr': ["e", "c"],
+             'curr': ["e/curr", "c/curr"],
              'phys': ["vol", "surf", "len", "temp"],
              'grap': ["angle","water","line","obj"],
            	};
+           	
+var nameChoose = {
+			'curr': ["own-curr"],
+		};
+          
 var nameUrls = {
 			 'math': 'math',
 	         'curr': 'conv',
@@ -21,13 +26,15 @@ var nameUrls = {
 			};
 
 var typeReal = {
+			'curr':'Mena',
 			'sqrt':'Odmocniny',
 			'equa':'Príklady',
 			'angle':'Uhly',
-			'e':'Euro',
-			'c':'Česká koruna',
+			'e/curr':'Euro',
+			'c/curr':'Česká koruna',
 			'vol':'Objem',
 			'surf':'Povrch',
+			"own-curr":"Vlastný výber",
 			'len':'Dĺžka',
 			'temp':'Teplota',
 			'water':'Voda v pohári',

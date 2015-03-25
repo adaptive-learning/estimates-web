@@ -30,6 +30,7 @@ function create_post(data,t) {
 	} else {
     	sessionStorage.setItem("sended", true);
 	}
+	// $("#pie-countdown").hide();
 	$("#sub").attr("disabled", "disabled");
 	timer_is_on = 0;
     $.ajax({

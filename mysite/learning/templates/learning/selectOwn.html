@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+{% extends "foundation/base.html" %}
+<head>
+	
+
+</head>
+<html>
+{% block base_body %}
+{%include "navBar/bar.html" %}
+{% load staticfiles %}
+{% load learning_filters %}
+
+
+<script src="{% static "js/options.js" %}"></script>
+<script src="{% static "js/decider.js" %}"></script>
+<form id="assigForm" action={{action}}>{% csrf_token %}
+<div class="row center">
+  	<h3 align="center">Vyber si vlastný typ</h3>
+  	
+</div>
+<div class="row" id = "mainDiv">
+	
+  	<label id="mainLabel">
+  		{% for t in object_list|get_types%}
+  		{{t.type|get_from_dict}}
+  		  <div class="large-12 columns" id="typeDiv">
+  		  	<div>
+        	<select id="mainSelectBox" class="small-2"  onchange="changeOption('{{object_list|in_json}}',this,$('#first'))" autocomplete="off">
+        		{% for param in object_list|get_set_params:t %}
+					<script>createOptions("{{param}}",$("#mainSelectBox"),false);</script>	
+				{% endfor %}
+				<option value="all" selected>Všetko</option>
+   			</select>
+        	<span id="first"></span>
+        	</div>
+	      </div>
+        {% endfor %}
+  	</label>
+
+</div>
+</form>
+<script>
+</script>
+{% endblock base_body %}
+</html>

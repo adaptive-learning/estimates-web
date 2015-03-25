@@ -5,6 +5,7 @@ import json
 from math import sqrt
 import math
 import random
+from static.python import variables
 # import actualDB
 from django.core import serializers
 # from forms import *
@@ -17,7 +18,8 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, FormView
 from learning.models import *
 from model import model
 from pint import UnitRegistry
@@ -131,12 +133,14 @@ def median(lst):
             return float(sum(lst[(len(lst)/2)-1:(len(lst)/2)+1]))/2.0
 
 class QuestionFunctions():
-    def get_question(self,types):
+    def get_question(self,types,preffered=None):
         score = []
         t = Type.objects.filter(type__in = types)
-        query = Params.objects.filter(type__in = t)
+        q = Params.objects.filter(type__in = t)
+        if preffered != None:
+            query = q.extra(where=["p1='%s' or p2='%s'"%(preffered,preffered)])
+        else: query = q
         now = timezone.localtime(timezone.now())
-        print "now",now;
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
@@ -192,7 +196,7 @@ class AjaxableResponseMixin():
             user = get_user(self.request)
             userSkill = get_object_or_404(UserSkill,user = user, concept = self.model.concept.params)
             concept = get_object_or_404(Concept,id = self.model.concept.id)
-            concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,concept.updatedTimes,1-concept.label,5,0.03)
+            concept.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,concept.updatedTimes,1-concept.label,5,0.03,self.model.time)
             if concept.label < 0: concept.label = 0
             userSkill.date = self.model.date
             userSkill.number += 1
@@ -225,7 +229,6 @@ class AjaxableResponseMixin():
             self.model.label = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
-            print self.model.id
             print "diff to send",self.model.label
             if "frTimeId" not in self.request.session and self.request.session["test"] == "time":
                 self.request.session["frTimeId"] = self.model.id
@@ -237,14 +240,13 @@ class AjaxableResponseMixin():
 
 class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     model = FloatModel
-    template_name = "learning/non-frTo.html"
+    template_name = "learning/question.html"
     fields = ['answer']            
     def parseToModel(self):
         js = json.loads(self.post.get('data'))
         if self.request.session['test'] == "time":
             self.request.session['testParam'] = js['testP']
         elif self.request.session['test'] == "set":
-            print "counting + 1"
             self.request.session['testParam'] += 1
         try: 
             p1 = js['p1'] if js['p1'] is not None else "-1"
@@ -258,7 +260,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         except Type.DoesNotExist:
             raise Exception("wrong params %s"%(type)) 
         try:
-            print js['question'];
             q = Questions.objects.get(question=float(js['question'].replace(',','.')))
         except Questions.DoesNotExist:
             raise Exception("wrong params %s"%(js['question']));
@@ -285,6 +286,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         type = self.kwargs.get('type', None)
+        
         if type == None:
             raise Exception("type in CreateQuestion is None")
         splitted = type.split('-')
@@ -298,12 +300,18 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         elif len(splitted) == 1:
             types = [type]
         
-        q, pa1, pa2 = self.get_question(types)
+        if kwargs.get("pref",None): 
+            q, pa1, pa2 = self.get_question(types,self.pref)
+        else:
+            q, pa1, pa2 = self.get_question(types)
+            
+        
         try:
             par = Params.objects.get(p1 = pa1,
                                            p2= pa2)
         except Params.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
+        self.type = par.type.type
         test = self.kwargs.get("test",None)
         if test is None : return HttpResponse(status=410)
         
@@ -328,7 +336,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             quest = get_object_or_404(Questions, question = q)
             c = get_object_or_404(Concept, params = par,question = quest) 
             list = [x.time for x in FloatModel.objects.filter(concept = c)]
-            print "list",list
             if len(list) == 0:
                 self.request.session['medTime']=15
             else:
@@ -362,7 +369,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
-        self.check_type(*args,**kwargs)
         super(CreateQuestion,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
             
@@ -370,13 +376,17 @@ def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
         
-# class CreateFrTo(CreateQuestion):
-#     template_name = 'learning/frTo.html'
-#     @method_decorator(allow_lazy_user)
-#     def get(self,*args, **kwargs):
-#         super(CreateFrTo,self).get(*args,**kwargs)
-#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-# 
+class CreateCurr(CreateQuestion):
+    @method_decorator(allow_lazy_user)
+    def get(self,*args, **kwargs):
+        preffered = kwargs.get("pref",None)
+        if preffered == "c":
+            self.preffered = "CZK"
+        elif preffered == "e":
+            self.preffered = "EUR"
+        super(CreateCurr,self).get(*args,**kwargs)
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+ 
 # class CreateNonFrTo(CreateQuestion):
 #     @method_decorator(allow_lazy_user)
 #     def get(self,*args, **kwargs):
@@ -438,7 +448,36 @@ def random_redirect(request):
     name = random.choice(cat.keys())
     url = '/learning/%s/%s-a' % (cat.get(name), name)
     return redirect(url)
-    ############################################################################
 
+class OwnChoice(ListView):
+    model = Params
+    template_name = "learning/selectOwn.html"
+    def get_queryset(self,*args,**kwargs):
+        q = super(OwnChoice,self).get_queryset(*args,**kwargs)
+        typesString = variables.mainDict["nameTypes"][self.t]
+        types = Type.objects.filter(type__in = typesString)
+        print types
+        q = q.filter(type__in = types)
+
+        return q
     
- 
+    def get(self,*args,**kwargs):
+        self.t =  kwargs.get("type",None)
+        if self.t == None: raise Exception
+        print self.t
+        return super(OwnChoice,self).get(*args,**kwargs)
+        
+        
+    
+    
+def getFromDict(request):
+    if request.method == "POST" and not request.is_ajax():
+        
+        t = request.POST.get("type",None)
+        if t == None: raise Exception 
+        q = request.POST.get("question",None)
+        if q == None: return HttpResponse(variables.mainDict[t])
+        else: return HttpResponse( variables.mainDict[t][q])
+        
+
+    ############################################################################

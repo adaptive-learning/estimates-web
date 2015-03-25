@@ -1,6 +1,7 @@
 <script src="/static/js/jquery-2.1.3.min.js"></script>
-<script src="/static/js/variables.js"></script>
+<!-- <script src="/static/js/getType.js"></script> -->
 <script src="/static/js/home.js"></script>
+<script src="/static/js/variables.js"></script>
 
 {% load i18n lazysignup_tags %}
 <div class="contain-to-grid fixed">
@@ -40,11 +41,16 @@
         </ul>
   </section>
     <script>
+       	// var nameTypes = getType("nameTypes");  
+       	// alert(nameTypes);
+       	// var nameChoose = getType("nameChoose");
+       	// var nameUrls = getType("nameUrls");
+
         var cList = $('<ul/>')
             .addClass("left")
             .appendTo($("#bar"));
-        eh = nameTypes['home'];
-        for (var i in eh){
+        names = nameTypes['home'];
+        for (var i in names){
             value = nameTypes['home'][i];
             var li = $('<li/>')
          		.addClass('has-dropdown')
@@ -79,6 +85,16 @@
                 	.attr("href","/learning/"+nameUrls[value]+"/"+type+"/time")
                     .text("na čas")
                     .appendTo(li21);
+            }
+        	if (value in nameChoose){
+            	var liC = $("<li/>")
+            		.appendTo(ul);
+       	 		for (var x in nameChoose[value]){
+					$('<a/>')
+                	.attr("href", "/learning/"+nameChoose[value][x])
+                	.text(typeReal[nameChoose[value][x]])
+           		 	.appendTo(liC);
+            	}
             }
         }
     </script>

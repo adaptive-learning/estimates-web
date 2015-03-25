@@ -108,5 +108,4 @@ function createMenu(){
                     .appendTo(li21);
             }
         }
-        alert("ok");
 }

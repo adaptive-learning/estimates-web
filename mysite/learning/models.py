@@ -41,7 +41,11 @@ class Params(models.Model):
     p1 = models.CharField(max_length = 20)
     p2 = models.CharField(max_length = 20,null = True)
     type= models.ForeignKey("Type")
-
+    def as_json(self):
+        return dict(
+                    p1 = self.p1,
+                    p2 = self.p2,
+                    )
 class Questions(models.Model):
     question = models.FloatField(unique = True)
 
