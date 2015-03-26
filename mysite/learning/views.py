@@ -485,7 +485,7 @@ class OwnChoice(ListView):
                     self.request.session["pref"] += p
                 except Params.DoesNotExist:
                     continue
-        return redirect("/learning/ownSettings/test")           
+        return redirect("/learning/ownSettings/set")           
                          
 def getFromDict(request):
     if request.method == "POST" and not request.is_ajax():
