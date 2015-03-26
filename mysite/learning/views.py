@@ -277,7 +277,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
         try:
-            print t.type,par.p1,par.p2,q.question
             self.model.concept = Concept.objects.get(type=t, params = par,question=q)
         except Concept.DoesNotExist:
             raise Exception("wrong params for Concept when parsing to model")
@@ -290,8 +289,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         ctx['action'] = self.request.path
 
         if "pref" in self.request.session:
-            allTypes = [x.type for x in self.request.session["pref"]]
-            types = Type.objects.filter(type__in = allTypes)
+            types = [x.type for x in self.request.session["pref"]]
             preffered = self.request.session["pref"]
         else:
             types = [self.kwargs.get("type",None)]
@@ -318,42 +316,45 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                "type":self.type,
                                "p1":pa1,
                               "p2":pa2,
-                              "question":q,})
+                              "question":q,
+                              "pref":preffered})
         elif self.is_new_question({"p1":pa1,
                               "p2":pa2,
                               "question":q,}):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
-        
-        print "before"
         self.ctx = ctx       
-        print "after"
-        if 'medTime' not in self.request.session:
-            quest = get_object_or_404(Questions, question = q)
-            c = get_object_or_404(Concept, params = par,question = quest) 
-            list = [x.time for x in FloatModel.objects.filter(concept = c)]
-            if len(list) == 0:
-                self.request.session['medTime']=15
-            else:
-                self.request.session['medTime']=median(list) 
         return ctx
 
     def is_new_test(self,dict):
+        print dict
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
+                print "E",p
+                print "NEW TEEEEEEEEEEEEEEEST"
                 clear_session_params(self.request)
                 return True;
         return False;
     
     def is_new_question(self,dict):
         for p in dict:
-            if p not in self.request.session: #or self.request.session[p] != dict[p]:
+            if p not in self.request.session:
                 clear_session_params(self.request,dict.keys())
                 return True;
         return False;
 
     def set_new_session(self,dict):
+        if 'medTime' not in self.request.session:
+            quest = get_object_or_404(Questions, question = dict["question"])
+            par = Params.objects.get(p1 = dict["p1"], p2 = dict["p2"])
+            c = get_object_or_404(Concept, params = par,question = quest) 
+            list = [x.time for x in FloatModel.objects.filter(concept = c)]
+            if len(list) == 0:
+                self.request.session['medTime']=15
+            else:
+                self.request.session['medTime']=median(list) 
+            
         for p in dict:
             self.request.session[p] = dict[p]
         if 'testParam' not in self.request.session:
@@ -366,13 +367,11 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
-        print self.request.path
         pref = kwargs.get("pref",None)
         if pref: 
             type = kwargs.get("type",None)
             t = Type.objects.get(type = type)
             self.request.session["pref"] = Params.objects.filter(type = t, p1 = pref)
-            print self.request.session["pref"]
         super(CreateQuestion,self).get(*args,**kwargs)
 
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
@@ -461,14 +460,12 @@ class OwnChoice(ListView):
     
     def get(self,*args,**kwargs):
         clear_session_params(self.request)
-        print("here again")
         self.t =  kwargs.get("type",None)
         if self.t == None: raise Exception
         return super(OwnChoice,self).get(*args,**kwargs)
 
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
-        print self.request.POST
         self.request.session["pref"] = []
         typesString = variables.mainDict["nameTypes"][kwargs.get("type",None)]
         types = Type.objects.filter(type__in = typesString)
