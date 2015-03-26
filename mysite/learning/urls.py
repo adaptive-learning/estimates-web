@@ -12,9 +12,9 @@ urlpatterns = patterns("",
     url(r'^clear_session',views.clearSession, name="clear"),
     url(r'^all-all',views.random_redirect),
     
-    url(r'^conv/(?P<pref>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateCurr.as_view(), name = 'learning'),
-    url(r'^conv/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(), name = 'learning'),
-    
+    url(r'^conv/(?P<pref>[A-Z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(), name = 'learning'),
+    url(r'^conv/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(), name = 'learn'),
+    url(r'^ownSettings/(?P<test>[a-z]+)',views.CreateQuestion.as_view(),name="own"),
     url(r'^math/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^grap/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^own-(?P<type>([a-z])+)',views.OwnChoice.as_view()),

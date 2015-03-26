@@ -42,7 +42,7 @@ function home(a){
 			var e = nameTypes[a][v];
 			createButton('a',nameReal[nameTypes[a][v]][0],function(j) {return function() {home(j);};}(e),choice,false);
 		}
-		createHrefButton('a','Všetko','/learning/all-all/test',choice,true);
+		// createHrefButton('a','Všetko','/learning/all-all/test',choice,true);		
 		$('#back').hide();
 		$("#labelAbout").show();
 		headerTitle = "Odhadni to";
@@ -51,7 +51,7 @@ function home(a){
 			var h = "/learning/"+nameUrls[a]+'/'+nameTypes[a][v];
 			createButton('a',typeReal[nameTypes[a][v]],function(j) {return function() {chooseType(j);};}(h),choice,false);
 		}
-		createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/test',choice,true);
+		// createHrefButton('a','Všetko','/learning/'+a+'/'+a+'-all/test',choice,true);		
 		$('#back').show();
 		$("#labelAbout").hide();
 		headerTitle = nameReal[a][1];

@@ -9,7 +9,7 @@ var nameReal = {
 var nameTypes = {
 			 'home': ['math','curr','phys','grap'],
 			 'math': ["sqrt", "equa","sqr"],
-             'curr': ["e/curr", "c/curr"],
+             'curr': ["EUR/curr", "CZK/curr"],
              'phys': ["vol", "surf", "len", "temp"],
              'grap': ["angle","water","line","obj"],
            	};
@@ -30,8 +30,8 @@ var typeReal = {
 			'sqrt':'Odmocniny',
 			'equa':'Príklady',
 			'angle':'Uhly',
-			'e/curr':'Euro',
-			'c/curr':'Česká koruna',
+			'EUR/curr':'Euro',
+			'CZK/curr':'Česká koruna',
 			'vol':'Objem',
 			'surf':'Povrch',
 			"own-curr":"Vlastný výber",

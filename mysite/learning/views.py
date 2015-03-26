@@ -90,7 +90,7 @@ def decider(type, question, src, dst,f = 2):
             return 360-float(question)
         else: raise Exception("wrong params") 
             
-    elif type == 'e' or type == 'c' :
+    elif type == 'curr':
         raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22" + src + dst + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
         rate = json.loads(raw.read())['query']['results']['rate']['Rate']
         range = type_to_range(type)        
@@ -136,10 +136,11 @@ class QuestionFunctions():
     def get_question(self,types,preffered=None):
         score = []
         t = Type.objects.filter(type__in = types)
-        q = Params.objects.filter(type__in = t)
         if preffered != None:
-            query = q.extra(where=["p1='%s' or p2='%s'"%(preffered,preffered)])
-        else: query = q
+            print "preffered",preffered
+            query = preffered
+        else:
+            query = Params.objects.filter(type__in = t)
         now = timezone.localtime(timezone.now())
         for q in query:
             if self.request.user.is_authenticated():
@@ -276,8 +277,9 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
         try:
+            print t.type,par.p1,par.p2,q.question
             self.model.concept = Concept.objects.get(type=t, params = par,question=q)
-        except Concept.DoesNotExit:
+        except Concept.DoesNotExist:
             raise Exception("wrong params for Concept when parsing to model")
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
@@ -285,35 +287,27 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
-        type = self.kwargs.get('type', None)
-        
-        if type == None:
-            raise Exception("type in CreateQuestion is None")
-        splitted = type.split('-')
-        
-        if len(splitted) == 2 and (splitted[1] == 'all' or splitted[1] == 'a'):
-            if splitted[1] == 'a':
-                ctx['action'] = '/learning/all-all'
-            else:
-                ctx['action'] = self.request.path
-            types = get_types(splitted[0])
-        elif len(splitted) == 1:
-            types = [type]
-        
-        if kwargs.get("pref",None): 
-            q, pa1, pa2 = self.get_question(types,self.pref)
+        ctx['action'] = self.request.path
+
+        if "pref" in self.request.session:
+            allTypes = [x.type for x in self.request.session["pref"]]
+            types = Type.objects.filter(type__in = allTypes)
+            preffered = self.request.session["pref"]
         else:
-            q, pa1, pa2 = self.get_question(types)
-            
-        
+            types = [self.kwargs.get("type",None)]
+            if types == None:
+                raise Exception("type is None in CreateQuestion")
+            preffered = None
+        q, pa1, pa2 = self.get_question(types,preffered)
         try:
             par = Params.objects.get(p1 = pa1,
                                            p2= pa2)
         except Params.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
+
         self.type = par.type.type
         test = self.kwargs.get("test",None)
-        if test is None : return HttpResponse(status=410)
+        if test is None : raise Exception("no test param in url")
         
         if self.is_new_test({"types":types,
                                "test":test,
@@ -331,7 +325,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
+        
+        print "before"
         self.ctx = ctx       
+        print "after"
         if 'medTime' not in self.request.session:
             quest = get_object_or_404(Questions, question = q)
             c = get_object_or_404(Concept, params = par,question = quest) 
@@ -369,7 +366,15 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
+        print self.request.path
+        pref = kwargs.get("pref",None)
+        if pref: 
+            type = kwargs.get("type",None)
+            t = Type.objects.get(type = type)
+            self.request.session["pref"] = Params.objects.filter(type = t, p1 = pref)
+            print self.request.session["pref"]
         super(CreateQuestion,self).get(*args,**kwargs)
+
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
             
 def date_handler(obj):
@@ -387,13 +392,6 @@ class CreateCurr(CreateQuestion):
         super(CreateCurr,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
  
-# class CreateNonFrTo(CreateQuestion):
-#     @method_decorator(allow_lazy_user)
-#     def get(self,*args, **kwargs):
-#         super(CreateNonFrTo, self).get(*args, **kwargs)
-#         self.check_main(*args,**kwargs)
-#         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
-
 def finish(request):
     if request.is_ajax() and request.method == "POST":
         t = Type.objects.filter(type__in = request.session["types"])
@@ -430,7 +428,7 @@ def clearSession(request):
         clear_session_params(request)
         return HttpResponse("ok")
 
-def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types"]):
+def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
     for param in params:
         if param in request.session:
             del request.session[param]
@@ -453,23 +451,42 @@ class OwnChoice(ListView):
     model = Params
     template_name = "learning/selectOwn.html"
     def get_queryset(self,*args,**kwargs):
+
         q = super(OwnChoice,self).get_queryset(*args,**kwargs)
         typesString = variables.mainDict["nameTypes"][self.t]
         types = Type.objects.filter(type__in = typesString)
-        print types
         q = q.filter(type__in = types)
 
         return q
     
     def get(self,*args,**kwargs):
+        clear_session_params(self.request)
+        print("here again")
         self.t =  kwargs.get("type",None)
         if self.t == None: raise Exception
-        print self.t
         return super(OwnChoice,self).get(*args,**kwargs)
-        
-        
-    
-    
+
+    @method_decorator(allow_lazy_user)
+    def post(self,*args,**kwargs):
+        print self.request.POST
+        self.request.session["pref"] = []
+        typesString = variables.mainDict["nameTypes"][kwargs.get("type",None)]
+        types = Type.objects.filter(type__in = typesString)
+        params = Params.objects.filter(type__in = types)
+        for x in types:
+            val = self.request.POST.get(x.type,None)
+            if val == "all":
+                self.request.session["pref"] += params.filter(type = x)
+        for x in list(set([k.p1 for k in params])):
+            l = self.request.POST.getlist(x,None)
+            if l:
+                try:
+                    p = Params.objects.filter(p1=x, p2__in = l)
+                    self.request.session["pref"] += p
+                except Params.DoesNotExist:
+                    continue
+        return redirect("/learning/ownSettings/test")           
+                         
 def getFromDict(request):
     if request.method == "POST" and not request.is_ajax():
         

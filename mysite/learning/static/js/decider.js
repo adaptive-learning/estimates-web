@@ -13,6 +13,7 @@ var symbol_dict = {
    'are': 'a (are)',
    'ft': 'ft (foot)',
    'inch': '″ (inch)',
+   'all': 'Všetko',
 };	
 var type_pictures_question = {
 	"water":"Koľko percent vody je v pohari?",

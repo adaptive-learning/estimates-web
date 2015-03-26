@@ -17,6 +17,8 @@ function changeOption(list,actual,span){
     		if (j[i].p1 == x){
 				$("<input/>")
     			.attr("type","checkbox")
+    			.attr("name",x)
+    			.attr("value",j[i].p2)
     			.attr("id","check"+j[i].p1+i)
     			.appendTo(span)
     			.change(function(){
@@ -58,6 +60,9 @@ function changeOption(list,actual,span){
 	        	newSelect(j,this);
 	    	}}).appendTo(Gparent);
     	}
+
+    	newChangedSelects(Gparent,actual,j);
+
     } else {
     	$(span).empty();
     	$('#all'+x).remove();
@@ -66,11 +71,40 @@ function changeOption(list,actual,span){
     			Gparent.children[i].remove();
     		}
     	}
-    	if (x == "---" && Gparent.children[Gparent.children.length-2].isEqualNode(actual.parentNode)){
-    		Gparent.children[Gparent.children.length-1].remove();
+    	if (x == "---") {
+    		if(Gparent.children[Gparent.children.length-2].isEqualNode(actual.parentNode)){
+	    		alert("her");
+    			Gparent.children[Gparent.children.length-1].remove();
+			} else {
+				actual.parentNode.remove();
+			} 
+    		newChangedSelects(Gparent,actual,j);
     	}
     }
 }
+function createSelect(j, span){
+	return $("<select/>")
+	.addClass("small-2")
+	.on("change",function(){
+		changeOption(JSON.stringify(j),this,span);
+	})
+	.attr("autocomplete","off");
+}
+
+
+function getAllOptionValues(children){
+	var values = [];
+	for (var i in children){
+		var d = children[i].children;
+		for (var k in d){
+			if (d[k].tagName == "SELECT"){
+				values.push(d[k].value);
+			}
+		}
+	}
+	return values;
+}
+
 function newSelect(j,actual){
 		parent = actual.parentNode;
 		actual.remove();
@@ -78,35 +112,21 @@ function newSelect(j,actual){
 		.appendTo(parent);
 
 		
-		var chs = parent.children;
-
-		var values = [];
-		for (var i in chs){
-			var d = chs[i].children;
-			for (var k in d){
-				if (d[k].tagName == "SELECT"){
-					values.push(d[k].value);
-				}
-			}
-		}
+		var values = getAllOptionValues(parent.children);
 		var span = $("<span/>");
 
-		var select = $("<select/>")
-		.addClass("small-2")
-		.on("change",function(){
-			changeOption(JSON.stringify(j),this,span);
-		})
-		.attr("autocomplete","off")
-		.appendTo(div);
+
+		select = createSelect(j,span);
+		select.appendTo(div);
 		
 		span.appendTo(div);
 		
 		jsonList = [];
+
 		for (var i=0;i<j.length;i++){
 			jsonList.push(j[i].p1);	
 		}
 		jsonList = eliminateDuplicates(jsonList) ;
-
 		for (var i=0;i<jsonList.length;i++){
 			if (values.indexOf(jsonList[i])<0){
 				createOptions(jsonList[i],select);
@@ -130,4 +150,53 @@ function eliminateDuplicates(arr) {
     out.push(i);
   }
   return out;
+}
+
+function newChangedSelects(Gparent,noChange,j){
+	for (var i in Gparent.children){
+		if (!Gparent.children[i].isEqualNode(noChange.parentNode)
+		&& Gparent.children[i].tagName == "DIV"){
+			var parent = Gparent.children[i];
+
+			var prevValue = parent.firstElementChild.value;
+			var prevName = parent.firstElementChild.name;
+
+			var span =  parent.lastElementChild;
+			//original select deleted
+			parent.firstElementChild.remove();
+			var select = createSelect(j,span);
+			if (prevName != ""){
+				select.attr("name",prevName);
+			}
+			select.prependTo(parent);
+			
+			jsonList = [];
+			for (var k=0;k<j.length;k++){
+				jsonList.push(j[k].p1);	
+			}
+			jsonList = eliminateDuplicates(jsonList) ;
+			
+			var values = getAllOptionValues(Gparent.children);
+			var def = true;
+			for (var k=0;k<jsonList.length;k++){
+				if (values.indexOf(jsonList[k])<0){
+					if (jsonList[k] == prevValue){
+						createOptions(jsonList[k],select,true);
+						def = false;
+					} else{
+						createOptions(jsonList[k],select,false);
+					}
+				}
+			}
+
+			if (Gparent.firstElementChild.isEqualNode(parent)){
+				createOptions("all",select,false);
+			} else {
+				createOptions("---",select,def);	
+			}
+			if (def && span != undefined){
+				span.empty();
+			}	
+		}
+	}
 }
