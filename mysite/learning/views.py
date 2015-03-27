@@ -331,8 +331,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         print dict
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
-                print "E",p
-                print "NEW TEEEEEEEEEEEEEEEST"
                 clear_session_params(self.request)
                 return True;
         return False;
@@ -393,22 +391,26 @@ class CreateCurr(CreateQuestion):
  
 def finish(request):
     if request.is_ajax() and request.method == "POST":
-        t = Type.objects.filter(type__in = request.session["types"])
+        print request.session["types"]
+        types = request.session["types"]
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
             raise Exception("please log in")
-        concepts = Params.objects.filter(type__in = t)
+        concepts = Params.objects.filter(type__in = types)
         s=0;
         if request.session["test"] == "time":
             if 'frTimeId' in request.session:
                 date = FloatModel.objects.get(id = request.session["frTimeId"]).date
                 now = timezone.localtime(timezone.now())
                 if date is None: date = now;
-                f = FloatModel.objects.filter(user = loggUser, type__in = t, date__range=(date,now))
+                f = FloatModel.objects.filter(user = loggUser, type__in = types, date__range=(date,now))
             else : s = 1
         elif request.session["test"] == "set":
-            f = FloatModel.objects.filter(user = loggUser,type__in = t).order_by('date')[:10]
+            try:
+                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:10]
+            except FloatModel.DoesNotExist:
+                raise Exception("f in finish is empty")
         if s != 1:    
             if len(f) != 0:
                 s = sum([x.label for x in f])/len(f);
@@ -418,9 +420,20 @@ def finish(request):
         try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
         except UserSkill.DoesNotExist: return HttpResponse(s) 
         uS = (sum([x.skill for x in uS]))/float(len(uS))
+
+        scores = [(model.score(1,x.label, x.time),x.id) for x in f]
+        res = max(scores,key=lambda item:item[0])
+        print "res",res
+        res = [x[1] for x in scores if x[0]==res[0]]
+        print "res",res
+        ids = [x.id for x in f]
+        res = [ids.index(x) for x in res]
+
+        
         results = [ob.as_json() for ob in f]
+
         out = json.dumps(results)
-        return HttpResponse("%s//%s//%s"%(s,uS,out))
+        return HttpResponse("%s//%s//%s//%s"%(s,uS,out,res))
     
 def clearSession(request):
     if request.method == "POST" and request.is_ajax():

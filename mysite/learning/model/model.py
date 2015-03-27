@@ -23,9 +23,12 @@ def score(prev,hard, time=None):
     if time == None:
         time = 0
     else : time = float(time) 
-    e = -(prev+time-hard)
+    e = -(prev+ln(time)-hard)
     s = float(pow(math.exp(1),e))
     return 1/(1 + s) 
+
+def ln(x):
+    return math.log1p(x)
 
 def uncertain_function(n,a = 1.0,b=.06):
     return a / (1+b*n)

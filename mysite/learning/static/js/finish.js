@@ -18,10 +18,10 @@ function get_result(data) {
         	var r = response.split("//");
            	$("#label").text("");
         	$("#label").append("vas priemerny odhad je: "+((1-parseFloat(r[0]).toFixed(2))*100).toString()+" %\n");
-            if (r.length == 3){
+            if (r.length == 4){
  				$("#label").append("vase skóre v danej oblasti je: "+(r[1]*100).toString()+" %");
 	         	$("#scatterPlot").show();
-         		scatterPlot(r[2]);
+         		scatterPlot(r[2],r[3]);
        		} 
        		sessionStorage.clear();
          	$("#userPart").empty();
@@ -39,7 +39,7 @@ function get_result(data) {
 
 
 
-function scatterPlot(data){
+function scatterPlot(data,best){
 	dat = JSON.parse(data);
 	var series=[];
 	m = [];
@@ -65,6 +65,9 @@ function scatterPlot(data){
 		} else {
 			var name = deciderType(d.type,d.q,d.p1,d.p2,d.a);
 		}
+		if (best.indexOf(e) != -1){
+			series.push({name:name, color: 'rgba(20, 255, 20, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
+		}else
 		if (m.indexOf(e) != -1 || e==mF){
 			series.push({name:name, color: 'rgba(255, 10, 10, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
 		} else {
