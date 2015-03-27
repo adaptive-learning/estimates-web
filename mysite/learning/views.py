@@ -422,10 +422,9 @@ def finish(request):
         uS = (sum([x.skill for x in uS]))/float(len(uS))
 
         scores = [(model.score(1,x.label, x.time),x.id) for x in f]
+        print "scores",scores
         res = max(scores,key=lambda item:item[0])
-        print "res",res
         res = [x[1] for x in scores if x[0]==res[0]]
-        print "res",res
         ids = [x.id for x in f]
         res = [ids.index(x) for x in res]
 
