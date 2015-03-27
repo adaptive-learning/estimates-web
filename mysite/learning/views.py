@@ -287,11 +287,13 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         ctx['action'] = self.request.path
-
-        if "pref" in self.request.session:
-            types = [x.type for x in self.request.session["pref"]]
-            preffered = self.request.session["pref"]
+        print self.type
+        if "pref" in self.request.session and self.type == "settings":
+                types = [x.type for x in self.request.session["pref"]]
+                preffered = self.request.session["pref"]
         else:
+            print 'HUUUUUUUUUUUUUUUUUPS'
+            clear_session_params(self.request,["pref"]);
             types = [self.kwargs.get("type",None)]
             if types == None:
                 raise Exception("type is None in CreateQuestion")
@@ -324,6 +326,15 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
+        if 'medTime' not in self.request.session:
+            quest = get_object_or_404(Questions, question = q)
+            par = Params.objects.get(p1 = pa1, p2 = pa2)
+            c = get_object_or_404(Concept, params = par,question = quest) 
+            list = [x.time for x in FloatModel.objects.filter(concept = c)]
+            if len(list) == 0:
+                self.request.session['medTime']=15
+            else:
+                self.request.session['medTime']=median(list) 
         self.ctx = ctx       
         return ctx
 
@@ -343,15 +354,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         return False;
 
     def set_new_session(self,dict):
-        if 'medTime' not in self.request.session:
-            quest = get_object_or_404(Questions, question = dict["question"])
-            par = Params.objects.get(p1 = dict["p1"], p2 = dict["p2"])
-            c = get_object_or_404(Concept, params = par,question = quest) 
-            list = [x.time for x in FloatModel.objects.filter(concept = c)]
-            if len(list) == 0:
-                self.request.session['medTime']=15
-            else:
-                self.request.session['medTime']=median(list) 
+
             
         for p in dict:
             self.request.session[p] = dict[p]
@@ -365,6 +368,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
+        self.type = kwargs.get("type")
         pref = kwargs.get("pref",None)
         if pref: 
             type = kwargs.get("type",None)
@@ -422,7 +426,6 @@ def finish(request):
         uS = (sum([x.skill for x in uS]))/float(len(uS))
 
         scores = [(model.score(1,x.label, x.time),x.id) for x in f]
-        print "scores",scores
         res = max(scores,key=lambda item:item[0])
         res = [x[1] for x in scores if x[0]==res[0]]
         ids = [x.id for x in f]
@@ -494,7 +497,7 @@ class OwnChoice(ListView):
                     self.request.session["pref"] += p
                 except Params.DoesNotExist:
                     continue
-        return redirect("/learning/ownSettings/set")           
+        return redirect("/learning/own/settings/set")           
                          
 def getFromDict(request):
     if request.method == "POST" and not request.is_ajax():
