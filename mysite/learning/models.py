@@ -59,6 +59,8 @@ class UserSkill(models.Model):
     number = models.IntegerField()
     date = models.DateTimeField(auto_now=True)
     
-    
+class CurrTable(models.Model):
+    params = models.ForeignKey('Params')
+    rate = models.FloatField()
 
     

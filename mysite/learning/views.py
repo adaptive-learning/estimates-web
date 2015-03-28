@@ -5,6 +5,7 @@ import json
 from math import sqrt
 import math
 import random
+from learning.forms import *
 from static.python import variables
 # import actualDB
 from django.core import serializers
@@ -24,7 +25,6 @@ from learning.models import *
 from model import model
 from pint import UnitRegistry
 import urllib2
-
 
 NameTypes = {'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
@@ -467,6 +467,7 @@ class OwnChoice(ListView):
     def get_queryset(self,*args,**kwargs):
 
         q = super(OwnChoice,self).get_queryset(*args,**kwargs)
+        print q
         typesString = variables.mainDict["nameTypes"][self.t]
         types = Type.objects.filter(type__in = typesString)
         q = q.filter(type__in = types)
@@ -509,4 +510,14 @@ def getFromDict(request):
         else: return HttpResponse( variables.mainDict[t][q])
         
 
+class ShowTable(ListView):
+    model = CurrTable  
+    template_name = "learning/table.html"
+#     def get_queryset(self,*args,**kwargs):
+#         clear_session_params(self.request)
+#         query = [TableView(rate = x.rate,type = Params.objects.get(id = x.params.id).type, p1 = x.params.p1,p2=x.params.p2) for x in CurrTable.objects.all()]
+#         print query
+#         return query
+
+    
     ############################################################################

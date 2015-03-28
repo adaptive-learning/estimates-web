@@ -35,4 +35,3 @@ def get_types(objects):
 @register.filter(name='in_json')
 def in_json(objects):
     return json.dumps([x.as_json() for x in objects])
-        

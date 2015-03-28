@@ -24,4 +24,8 @@ from django.db import models
 #         }
         
         
-   
+class TableView(models.Model):
+    p1 = models.CharField(max_length = 20) 
+    p2 = models.CharField(max_length = 20) 
+    type = models.ForeignKey("Type")
+    rate = models.FloatField()  

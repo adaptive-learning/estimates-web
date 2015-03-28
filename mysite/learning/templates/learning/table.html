@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% extends "foundation/base.html" %}
+</head>
+<html>
+{% block base_body %}
+{%include "navBar/bar.html" %}
+{% load staticfiles %}
+{% load learning_table_filters %}
+{% for type in object_list|get_types %}
+<table>
+	<thead>
+		
+	
+	 	<tr>
+	<th>{{type.type}}</th>
+	{% for p in object_list|get_set_p2:type %}
+	
+			<th width="200">{{p}}</th>
+		
+	{% endfor %}
+	</tr>
+	</thead>
+  <thead>
+   
+		{% for p1 in object_list|get_set_p1:type %}
+	 	<tr>
+			<th width="200">{{p1}}</th>
+			{% for p2 in object_list|get_set_p2:type %}
+			<td>{{ object_list|firstP:p1|secondP:p2 }}</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+
+		
+
+    
+  </thead>
+</table>
+{% endfor %}
+
+
+
+
+
+{% endblock base_body %}
+</html>
