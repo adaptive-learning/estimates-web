@@ -34,7 +34,7 @@ def firstP(objects, first):
     return objects.filter(params__in = Params.objects.filter(p1 = first))
 
 @register.filter(name='secondP')
-def replace(objects, second):
+def secondP(objects, second):
     try:
         params = [e for e in  Params.objects.filter(p2 = second)]
         try:
@@ -45,7 +45,9 @@ def replace(objects, second):
     except CurrTable.DoesNotExist:
         if objects[0].params.p1 == second:
             return "1"
-    
+@register.filter(name='get_from_dict')
+def get_from_dict(type):
+    return variables.mainDict["typeReal"][type]
     
 @register.filter(name='get_types')
 def get_types(objects):

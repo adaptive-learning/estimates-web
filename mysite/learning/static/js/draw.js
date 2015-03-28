@@ -200,20 +200,23 @@ function drawObjs(ctx,sq,cir,tri){
 
 var points = [];
 
-squares = (generateObjects(ctx,sq,15,points));
-im = get_objImg("square.png");
-drawObjects(ctx,squares,im);
-points = points.concat(drawObjects(ctx,squares,im));
+var squares = (generateObjects(ctx,sq,15,points));
+var imSquare = get_objImg("square.png");
+imSquare.onload = function(){
+	points = points.concat(drawObjects(ctx,squares,imSquare));
+	var triangles = (generateObjects(ctx,tri,15,points));
+	var imTriangle = get_objImg("triangle.svg");
+	imTriangle.onload = function(){
+		points = points.concat(drawObjects(ctx,triangles,imTriangle));
+		var circles = (generateObjects(ctx,cir,15,points));
+		var imCircle = get_objImg("circle.svg");
+		imCircle.onload = function(){
+			points = points.concat(drawObjects(ctx,circles,imCircle));
+		};
+	};
+};
 
-triangles = (generateObjects(ctx,tri,15,points));
-im = get_objImg("triangle.svg");
-drawObjects(ctx,triangles,im);
-points = points.concat(drawObjects(ctx,triangles,im));
 
-circles = (generateObjects(ctx,cir,15,points));
-im = get_objImg("circle.svg");
-drawObjects(ctx,circles,im);
-points = points.concat(drawObjects(ctx,circles,im));
 	function get_objImg(what){
 		var im = document.createElement("img");
 		im.src="/static/img/"+what;
@@ -222,6 +225,8 @@ points = points.concat(drawObjects(ctx,circles,im));
 	function drawObjects(ctx,array,img){
 		for (x=0;x<array.length;x++){
 			ctx.beginPath();
+	
+
 			ctx.drawImage(img,array[x].x,array[x].y,array[x].size,array[x].size);
 			ctx.closePath();
 		}

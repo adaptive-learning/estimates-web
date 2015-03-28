@@ -35,6 +35,7 @@ function timer(sec,color,anti,stay){
     	var total = fps*sec;
         for(var i=total;i>=0;i--) {
         var delayed = (function(){
+        	//change this for another start
             var step = 1-i/total;
             var left = Math.ceil(i/fps);
             return function() {

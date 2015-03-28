@@ -12,7 +12,7 @@
 		
 	
 	 	<tr>
-	<th>{{type.type}}</th>
+	<th>{{type.type|get_from_dict}}</th>
 	{% for p in object_list|get_set_p2:type %}
 	
 			<th width="200">{{p}}</th>
