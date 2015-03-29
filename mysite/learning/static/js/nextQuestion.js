@@ -5,7 +5,7 @@ window.onload=function(){
 function handleNextQuestion(t,test,testParam){
 	// window.onbeforeunload=goodbye;
 	if(test == "set"){
-		if (testParam > 10){
+		if (testParam > 5){
 			testParam = 10;
 			get_result(t);
 		}

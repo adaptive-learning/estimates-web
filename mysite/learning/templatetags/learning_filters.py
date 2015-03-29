@@ -20,6 +20,9 @@ def get_set_length(objects,type):
 def get_from_dict(type):
     return variables.mainDict["typeReal"][type]
     
+@register.filter(name="filter_by_type")
+def filter_by_type(objects,type):
+    return objects.filter(type=type)
 
 @register.filter(name='get_types')
 def get_types(objects):

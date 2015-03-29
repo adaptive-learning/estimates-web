@@ -90,15 +90,12 @@ $(function () {
             title: {
                 text: 'čas (s)'
             },
-
         },
         yAxis: {
             title: {
                 text: 'Správnosť (%)'
             },
-
         },
-        
         plotOptions: {
             scatter: {
                 marker: {

@@ -14,19 +14,21 @@
 
 <script src="{% static "js/options.js" %}"></script>
 <script src="{% static "js/decider.js" %}"></script>
-<form id="assigForm" method="POST">{% csrf_token %}
+<form id="assigForm" method="post">{% csrf_token %}
 <div class="row center">
   	<h3 align="center">Vyber si vlastný typ</h3>
   	
 </div>
 <div class="row" id = "mainDiv">
-	
+	{% for t in object_list|get_types%}
   	<label id="mainLabel">
-  		{% for t in object_list|get_types%}
-  		{{t.type|get_from_dict}}
+
+{{t.type|get_from_dict}}
+{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
   		  <div class="large-12 columns" id="typeDiv">
   		  	<div>
-        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" class="small-2"  onchange="changeOption('{{object_list|in_json}}',this,$('#first{{t.type|get_from_dict}}'))" autocomplete="off">
+        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" 
+        	class="small-2"  onchange="changeOption('{{object_list|filter_by_type:t|in_json}}',this,$('#first{{t.type|get_from_dict}}'))" autocomplete="off">
         		{% for param in object_list|get_set_params:t %}
 					<script>createOptions("{{param}}",$("#mainSelectBox{{t.type|get_from_dict}}"),false);</script>	
 				{% endfor %}
@@ -36,9 +38,23 @@
         	</div>
 
 	      </div>
-	              	<input type="hidden" name="{{t.type.type}}" value="t"/>		
-        {% endfor %}
+          	<input type="hidden" name="{{t.type.type}}" value="t"/>		
+          	{% else %}
+  	  		  <div class="large-12 columns">
+  		  	  		
+  	  		
+  		  	<div>
+        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" class="small-2" autocomplete="off">
+				<option value="not">Nič</option>
+				<option value="all" selected>Všetko</option>
+   			</select>
+        	</div>
+
+	      </div>
+          	<input type="hidden" name="{{t.type.type}}" value="t"/>		
+   {% endif %}
   	</label>
+  	 {% endfor %}
 </div>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />
 </form>

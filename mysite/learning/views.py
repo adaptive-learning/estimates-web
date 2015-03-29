@@ -137,7 +137,6 @@ class QuestionFunctions():
         score = []
         t = Type.objects.filter(type__in = types)
         if preffered != None:
-            print "preffered",preffered
             query = preffered
         else:
             query = Params.objects.filter(type__in = t)
@@ -256,6 +255,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         except Params.DoesNotExist:
             raise Exception("wrong params %s %s" % (js['p1'],js['p2']))
         type = self.post.get('type')
+        if type == "":
+            type = par.type.type
         try:
             t = Type.objects.get(type=type)
         except Type.DoesNotExist:
@@ -287,10 +288,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         ctx['action'] = self.request.path
-        print self.type
+        isSettingsOn = False
         if "pref" in self.request.session and self.type == "settings":
                 types = [x.type for x in self.request.session["pref"]]
                 preffered = self.request.session["pref"]
+                print "here"
+                isSettingsOn = True
         else:
             print 'HUUUUUUUUUUUUUUUUUPS'
             clear_session_params(self.request,["pref"]);
@@ -308,11 +311,15 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         self.type = par.type.type
         test = self.kwargs.get("test",None)
         if test is None : raise Exception("no test param in url")
-        
-        if self.is_new_test({"types":types,
+        else: self.request.session['test'] = test
+
+        print "TYPEEEEEEEEEEEEEEEEe",self.type
+        self.request.session["type"] = self.type
+        print isSettingsOn
+        if isSettingsOn == False and self.is_new_test({"types":types,
                                "test":test,
                                "type":self.type,
-                               }):
+                               }) :
             self.set_new_session({"types":types,
                                "test":test,
                                "type":self.type,
@@ -336,10 +343,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             else:
                 self.request.session['medTime']=median(list) 
         self.ctx = ctx       
+        print "session",
         return ctx
 
     def is_new_test(self,dict):
-        print dict
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
                 clear_session_params(self.request)
@@ -349,13 +356,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def is_new_question(self,dict):
         for p in dict:
             if p not in self.request.session:
+                print dict.keys()
                 clear_session_params(self.request,dict.keys())
                 return True;
         return False;
 
     def set_new_session(self,dict):
-
-            
         for p in dict:
             self.request.session[p] = dict[p]
         if 'testParam' not in self.request.session:
@@ -395,8 +401,10 @@ class CreateCurr(CreateQuestion):
  
 def finish(request):
     if request.is_ajax() and request.method == "POST":
-        print request.session["types"]
-        types = request.session["types"]
+        if "pref" in request.session:
+            types = [x.type for x in request.session["pref"]]
+        else:
+            types = request.session["types"]
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
@@ -412,7 +420,7 @@ def finish(request):
             else : s = 1
         elif request.session["test"] == "set":
             try:
-                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:10]
+                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:5]
             except FloatModel.DoesNotExist:
                 raise Exception("f in finish is empty")
         if s != 1:    
@@ -444,6 +452,8 @@ def clearSession(request):
 
 def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
     for param in params:
+        if param == "types":
+            print "HUUUUUUUUUUUUUPS - motherfucker"
         if param in request.session:
             del request.session[param]
         else :
@@ -467,7 +477,8 @@ class OwnChoice(ListView):
     def get_queryset(self,*args,**kwargs):
 
         q = super(OwnChoice,self).get_queryset(*args,**kwargs)
-        print q
+        if self.t == "all":
+                return q
         typesString = variables.mainDict["nameTypes"][self.t]
         types = Type.objects.filter(type__in = typesString)
         q = q.filter(type__in = types)
@@ -483,9 +494,14 @@ class OwnChoice(ListView):
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
         self.request.session["pref"] = []
-        typesString = variables.mainDict["nameTypes"][kwargs.get("type",None)]
-        types = Type.objects.filter(type__in = typesString)
-        params = Params.objects.filter(type__in = types)
+        type = kwargs.get("type",None)
+        if type == "all":
+            params = Params.objects.all()
+            types = Type.objects.all()
+        else: 
+            typesString = variables.mainDict["nameTypes"][kwargs.get("type",None)]
+            types = Type.objects.filter(type__in = typesString)
+            params = Params.objects.filter(type__in = types)
         for x in types:
             val = self.request.POST.get(x.type,None)
             if val == "all":

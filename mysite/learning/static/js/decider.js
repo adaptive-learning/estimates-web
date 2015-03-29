@@ -33,9 +33,6 @@ function decider(curr){
 		}
 }
 
-function appendToThis(p1){
-	
-}
 
 function createQuestion(element,type,question, p1,p2){
 	$("#"+element).append(deciderType(type,question, p1,p2,"?"));
