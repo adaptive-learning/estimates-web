@@ -1,3 +1,4 @@
+
 from lazysignup.decorators import allow_lazy_user
 from django.utils.decorators import method_decorator
 from datetime import datetime
@@ -25,6 +26,19 @@ from learning.models import *
 from model import model
 from pint import UnitRegistry
 import urllib2
+from datetime import tzinfo, timedelta, datetime
+
+ZERO = timedelta(0)
+
+class UTC(tzinfo):
+  def utcoffset(self, dt):
+    return ZERO
+  def tzname(self, dt):
+    return "UTC"
+  def dst(self, dt):
+    return ZERO
+
+utc = UTC()
 
 NameTypes = {'math': ["sqrt", "equa"],
              'curr': ["e", "c"],
@@ -91,10 +105,9 @@ def decider(type, question, src, dst,f = 2):
         else: raise Exception("wrong params") 
             
     elif type == 'curr':
-        raw = urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22" + src + dst + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys")
-        rate = json.loads(raw.read())['query']['results']['rate']['Rate']
-        range = type_to_range(type)        
-        return round(float(rate) * float(question), f)
+        params = Params.objects.get(p1 = src, p2= dst,type = type)
+        rate = CurrTable.objects.get(params = params).rate
+        return round(rate * question)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
         array = arrayToType(type)
         return (round(converter(question, src, dst),f))
@@ -140,7 +153,8 @@ class QuestionFunctions():
             query = preffered
         else:
             query = Params.objects.filter(type__in = t)
-        now = timezone.localtime(timezone.now())
+#         now = timezone.localtime(timezone.now())
+        now = datetime.now(utc)
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
@@ -286,7 +300,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             raise Exception("wrong params for Concept when parsing to model")
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
-        self.model.date = timezone.localtime(timezone.now()) 
+        self.model.date = datetime.now(utc)
         
     def get_context_data(self, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
@@ -417,7 +431,8 @@ def finish(request):
         if request.session["test"] == "time":
             if 'frTimeId' in request.session:
                 date = FloatModel.objects.get(id = request.session["frTimeId"]).date
-                now = timezone.localtime(timezone.now())
+#                 now = timezone.localtime(timezone.now())
+                now = datetime.now(utc)
                 if date is None: date = now;
                 f = FloatModel.objects.filter(user = loggUser, type__in = types, date__range=(date,now))
             else : s = 1
@@ -459,8 +474,6 @@ def clear_session_params(request,params = ["p1","question","p2","testParam","tes
             del request.session[param]
         else :
             print "no %s param in session" % param
-            
-    
     if "medTime" in request.session:
         print "clearing"
         del request.session["medTime"]

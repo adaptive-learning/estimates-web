@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="mainStyle">
-		<div class="row center block-grid-1" id="QuestionDiv" align="center">
+		<div class="row center" id="QuestionDiv" align="center">
 			<!-- <br><br> -->
 			<!-- <script src="{% static "js/draw.js" %}"></script> -->
 			<label class="small-9 collumns" id="label" for="input"></label>
@@ -17,13 +17,13 @@
 				<canvas id="myCanvas" width="250" height="150"></canvas>
 			</div>
 			<!-- <br> -->
-			<div class="large-3 collumns" id="userPart">
+			<div class="small-4 collumns" id="userPart">
 					<input id="input" type="number" name="ans" placeholder="write an answer here" step="0.01" required/>
 					<div id="assigment"></div>
 			</div>
 			<div class="large-6 rows" id="answer" ></div>
-			<div class="large-1 large-centered columns">
-				<canvas id="pie-countdown" width="150" height="150" style="width:70px;height:70px;">
+			<div id="divPie" class="large-1 large-centered columns">
+				<canvas id="pie-countdown" width="70" height="70" >
 	    		Sorry, it doesn't work for you.
 				</canvas>
 			</div>

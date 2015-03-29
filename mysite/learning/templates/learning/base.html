@@ -12,16 +12,6 @@
 <script>
 
 
-$(window).unload(function(){
-	alert("hot it");
-    $.ajax({
-        type: 'POST',
-        url: '/learning/save_time',
-        async:false,
-        data: {data:"e"}
-        
-    });
-});
 $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");

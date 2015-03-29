@@ -2,8 +2,9 @@
 	color:#E0E0E0;
 }
 .mainStyle{
+	position:relative;
 	background-color: #6E6D78;
-	height:65vh;
+	height: 60vh;
 }
 .menu-size{
 }
@@ -21,8 +22,20 @@
 	font-size: 130%;
 	color:silver;
 }
-
+#userPart{
+	position:relative;
+	margin-top:11vh;
+}
+#divPie{
+	position:relative;
+	margin-top:0;
+	/*style="width:5%;height:5%"*/
+}
 #label{
-	position: inherit;
-	top: 50px;
+	margin-top:5vh;
+	position:relative;
+}
+#myCanvas{
+	position:relative;
+	margin-top:0vh;
 }
