@@ -298,7 +298,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 print "here"
                 isSettingsOn = True
         else:
-            print 'HUUUUUUUUUUUUUUUUUPS'
             clear_session_params(self.request,["pref"]);
             types = [self.kwargs.get("type",None)]
             if types == None:
@@ -315,7 +314,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         if test is None : raise Exception("no test param in url")
         else: self.request.session['test'] = test
 
-        print "TYPEEEEEEEEEEEEEEEEe",self.type
         self.request.session["type"] = self.type
         if isSettingsOn == False and self.is_new_test({"types":types,
                                "test":test,
@@ -362,7 +360,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def is_new_question(self,dict):
         for p in dict:
             if p not in self.request.session:
-                print dict.keys()
                 clear_session_params(self.request,dict.keys())
                 return True;
         return False;
@@ -458,8 +455,6 @@ def clearSession(request):
 
 def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
     for param in params:
-        if param == "types":
-            print "HUUUUUUUUUUUUUPS - motherfucker"
         if param in request.session:
             del request.session[param]
         else :
@@ -542,7 +537,6 @@ class ShowTable(ListView):
 #         return query
 
 def save_time(request):
-    print "hereooooooooooooooooooooooooooooooooooooooooooooo5"
     if request.method == "POST":
         print request.POST.get("data")
     
