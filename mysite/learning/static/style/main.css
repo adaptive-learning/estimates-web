@@ -3,7 +3,7 @@
 }
 .mainStyle{
 	background-color: #6E6D78;
-	height: 450px;
+	height:65vh;
 }
 .menu-size{
 }
@@ -20,4 +20,9 @@
 .descTop{
 	font-size: 130%;
 	color:silver;
+}
+
+#label{
+	position: inherit;
+	top: 50px;
 }

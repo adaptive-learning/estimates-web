@@ -28,6 +28,7 @@ function create_post(data,t) {
     	sessionStorage.setItem("sended", true);
 	}
 	// $("#pie-countdown").hide();
+	start = 0;	
 	$("#sub").attr("disabled", "disabled");
 	timer_is_on = 0;
     $.ajax({

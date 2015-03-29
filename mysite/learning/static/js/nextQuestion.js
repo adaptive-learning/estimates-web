@@ -3,7 +3,7 @@ window.onload=function(){
 	$("#input").focus();
 };
 function handleNextQuestion(t,test,testParam){
-	// window.onbeforeunload=goodbye;
+
 	if(test == "set"){
 		if (testParam > 10){
 			testParam = 10;
@@ -26,7 +26,4 @@ function handleNextQuestion(t,test,testParam){
 
 
 }
-function goodbye(e) {
-	event.preventDefault();
-    timer_is_on = 0;
-}
+

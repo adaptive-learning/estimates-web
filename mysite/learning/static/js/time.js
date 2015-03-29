@@ -2,7 +2,8 @@ var c=0;
 var minutes= 0;
 var t;
 var timer_is_on=1;
-
+var start = 1;
+var pieTimerTimeout;
 function time(){
 	if(timer_is_on){
 		var timer = $("#timer");
@@ -23,7 +24,6 @@ function timer(sec,color,anti,stay){
     canvas_size = [canvas.width, canvas.height];
     radius = Math.min(canvas_size[0], canvas_size[1]) / 2;
     center = [canvas_size[0]/2, canvas_size[1]/2];
-    start = 1; // varia de 1 até 0
     fps= 40;
     seconds = 20;
     cycle();
@@ -36,13 +36,13 @@ function timer(sec,color,anti,stay){
         for(var i=total;i>=0;i--) {
         var delayed = (function(){
         	//change this for another start
-            var step = 1-i/total;
+            var step = start-i/total;
             var left = Math.ceil(i/fps);
             return function() {
                 draw_next(step,color,anti,stay);
             };
         })();
-        setTimeout(delayed,-1000/fps*(i-total));
+        pieTimerTimeout = setTimeout(delayed,-1000/fps*(i-total));
     	}
     }
 }

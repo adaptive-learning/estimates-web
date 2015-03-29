@@ -23,13 +23,15 @@
 	{% for t in object_list|get_types%}
 <div>
 	<label >
+
 {{t.type|get_from_dict}}
+		<hr></hr>
 </label>
 {%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
   		  <div class="large-12 columns" id="typeDiv">
   		  	<div>
         	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" 
-        	class="small-2"  onchange="changeOption('{{object_list|filter_by_type:t|in_json}}',this,$('#first{{t.type|get_from_dict}}'))" autocomplete="off">
+        	class="small-4"  onchange="changeOption('{{object_list|filter_by_type:t|in_json}}',this,$('#first{{t.type|get_from_dict}}'))" autocomplete="off">
         		{% for param in object_list|get_set_params:t %}
 					<script>createOptions("{{param}}",$("#mainSelectBox{{t.type|get_from_dict}}"),false);</script>	
 				{% endfor %}
@@ -46,7 +48,7 @@
   		  	  		
   	  		
   		  	<div>
-        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" class="small-2" autocomplete="off">
+        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" class="small-4" autocomplete="off">
 				<option value="not">Nič</option>
 				<option value="all" selected>Všetko</option>
    			</select>
@@ -57,6 +59,7 @@
    {% endif %}
   	 {% endfor %}
 </div>
+		<hr></hr>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />
 </form>
 <script>

@@ -41,7 +41,7 @@ function createQuestion(element,type,question, p1,p2){
 
 function deciderType(type,question, p1,p2,answer){
 var type_question = {
-	"equa": question + " = " + answer,
+	"equa":  p1 + " = " + answer,
 	"sqrt": "\u221A" + question + " = " + answer,
 	"sqr": parseInt(question)+p1.sup()+" = " + answer,
 };

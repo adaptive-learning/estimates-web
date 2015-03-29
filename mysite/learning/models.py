@@ -31,7 +31,7 @@ class FloatModel(models.Model):
             )
             
 class Concept(models.Model):
-    question = models.ForeignKey('Questions');
+    question = models.ForeignKey('Questions',null=True);
     params = models.ForeignKey('Params', related_name ="params")
     type = models.ForeignKey('Type')
     label = models.FloatField(null=True)

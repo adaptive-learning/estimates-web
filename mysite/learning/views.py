@@ -172,7 +172,10 @@ class QuestionFunctions():
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
         toReturn = Concept.objects.get(id = maximum[0])
-        return (toReturn.question.question,toReturn.params.p1,toReturn.params.p2)
+        if toReturn.question == None:
+            q = None
+        else: q = toReturn.question.question
+        return (q,toReturn.params.p1,toReturn.params.p2)
         
     def check_type(self,*args,**kwargs):
         type = kwargs.get("type",None)
@@ -307,7 +310,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                            p2= pa2)
         except Params.DoesNotExist:
             raise Exception("wrong params for Params in get_context_data");
-
         self.type = par.type.type
         test = self.kwargs.get("test",None)
         if test is None : raise Exception("no test param in url")
@@ -315,7 +317,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
 
         print "TYPEEEEEEEEEEEEEEEEe",self.type
         self.request.session["type"] = self.type
-        print isSettingsOn
         if isSettingsOn == False and self.is_new_test({"types":types,
                                "test":test,
                                "type":self.type,
@@ -333,8 +334,13 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
+            
+
         if 'medTime' not in self.request.session:
-            quest = get_object_or_404(Questions, question = q)
+            if q:
+                quest = get_object_or_404(Questions, question = q)
+            else:
+                quest = None
             par = Params.objects.get(p1 = pa1, p2 = pa2)
             c = get_object_or_404(Concept, params = par,question = quest) 
             list = [x.time for x in FloatModel.objects.filter(concept = c)]
@@ -342,8 +348,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['medTime']=15
             else:
                 self.request.session['medTime']=median(list) 
+        
         self.ctx = ctx       
-        print "session",
         return ctx
 
     def is_new_test(self,dict):
@@ -535,5 +541,9 @@ class ShowTable(ListView):
 #         print query
 #         return query
 
+def save_time(request):
+    print "hereooooooooooooooooooooooooooooooooooooooooooooo5"
+    if request.method == "POST":
+        print request.POST.get("data")
     
     ############################################################################
