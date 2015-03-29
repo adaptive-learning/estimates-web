@@ -13,6 +13,12 @@
 
 
 $(document).ready(function(){
+    var c = $('#myCanvas');
+    var ct = c.get(0).getContext('2d');
+    // var container = $(c).parent();
+    // c.attr('width',  ); //max width
+    // c.attr('height', $(container).height() ); //max height
+
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
@@ -23,6 +29,7 @@ $(document).ready(function(){
 		// $("#answer").after('<br/>');
 		// $("#answer").after('<br/>');
 	// }
+
 });
 			
 	sessionStorage.setItem("sended",false); 

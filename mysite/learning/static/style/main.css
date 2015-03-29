@@ -35,7 +35,17 @@
 	margin-top:5vh;
 	position:relative;
 }
-#myCanvas{
+#canvasDiv{
+	    display:block;
+    /*width:80%;*/
+    /*padding:50px 10%;*/
+    /*height:300px;*/
 	position:relative;
 	margin-top:0vh;
 }
+#main{
+    display:block;
+    width:80%;
+    padding:50px 10%;
+    height:300px;
+} 
