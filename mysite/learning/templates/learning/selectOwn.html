@@ -18,12 +18,13 @@
 <div class="row center">
   	<h3 align="center">Vyber si vlastný typ</h3>
   	
-</div>
+</div id = "mainLabel">
 <div class="row" id = "mainDiv">
 	{% for t in object_list|get_types%}
-  	<label id="mainLabel">
-
+<div>
+	<label >
 {{t.type|get_from_dict}}
+</label>
 {%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
   		  <div class="large-12 columns" id="typeDiv">
   		  	<div>
@@ -33,6 +34,7 @@
 					<script>createOptions("{{param}}",$("#mainSelectBox{{t.type|get_from_dict}}"),false);</script>	
 				{% endfor %}
 				<option value="all" selected>Všetko</option>
+				<option value="not">Nič</option>
    			</select>
         	<span id="first{{t.type|get_from_dict}}"></span>	
         	</div>
@@ -53,7 +55,6 @@
 	      </div>
           	<input type="hidden" name="{{t.type.type}}" value="t"/>		
    {% endif %}
-  	</label>
   	 {% endfor %}
 </div>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />

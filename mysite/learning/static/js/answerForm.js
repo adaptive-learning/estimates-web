@@ -1,6 +1,3 @@
-window.onload=function(){
-	$("#input").focus();
-};
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }

@@ -22,8 +22,9 @@
 #border{
 	table.bottom;
 }
-.dontRemove{
 	
+#mainLabel{
+	border-top: solid #B2B2B2;
 }
 
 #loader 

@@ -10,7 +10,7 @@ function changeOption(list,actual,span){
 	j = JSON.parse(list);
     var x = actual.value;
     var Gparent = actual.parentNode.parentNode;
-    if (x!="all" && x!="---"){
+    if (x!="all" && x!="---" && x!="not"){
 		$(span).empty();
 
     	for (i in j){
@@ -45,8 +45,7 @@ function changeOption(list,actual,span){
     				}
     			}
    			}}).appendTo(span);
-    	
-    	
+   			
 		if(Gparent.lastElementChild.isEqualNode(actual.parentNode)){
 	    	if (Gparent.children.length > 1 
     			&& Gparent.children[Gparent.children.length-1].tagName == "A"){
@@ -66,8 +65,8 @@ function changeOption(list,actual,span){
     } else {
     	$(span).empty();
     	$('#all'+x).remove();
-    	if (x == "all"){
-    		for (var i=1; i< Gparent.children.length; i++){
+    	if (x == "all" || x == "not"){
+    		for (var i=Gparent.children.length-1; i>0 ; i--){
     			Gparent.children[i].remove();
     		}
     	}
@@ -191,6 +190,7 @@ function newChangedSelects(Gparent,noChange,j){
 
 			if (Gparent.firstElementChild.isEqualNode(parent)){
 				createOptions("all",select,false);
+				createOptions("not",select,false);
 			} else {
 				createOptions("---",select,def);	
 			}

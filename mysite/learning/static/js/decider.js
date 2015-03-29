@@ -14,6 +14,7 @@ var symbol_dict = {
    'ft': 'ft (foot)',
    'inch': '″ (inch)',
    'all': 'Všetko',
+   'not': 'Nič'
 };	
 var type_pictures_question = {
 	"water":"Koľko percent vody je v pohari?",
