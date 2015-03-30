@@ -72,7 +72,6 @@ function changeOption(list,actual,span){
     	}
     	if (x == "---") {
     		if(Gparent.children[Gparent.children.length-2].isEqualNode(actual.parentNode)){
-	    		alert("her");
     			Gparent.children[Gparent.children.length-1].remove();
 			} else {
 				actual.parentNode.remove();

@@ -8,6 +8,11 @@ function draw(type,question,p1,p2){
 	var c = $("#myCanvas")[0];
 	var ctx = c.getContext("2d");
 	question = question.replace(',','.');
+		// ctx.beginPath();
+	// ctx.moveTo(ctx.canvas.width,ctx.canvas.height);
+	// ctx.lineTo(0,0);
+	// ctx.stroke();
+	// ctx.closePath();
 	switch(type){
 		case 'angle':
 			var A = new Point(160,60);

@@ -15,10 +15,9 @@ def get_set_p1(objects,t):
     params = Params.objects.filter(type = t)
     return list(set([x.p1 for x in params]))
 
-@register.filter(name='get_set_p2')
-def get_set_p2(objects,t):
-    params = Params.objects.filter(type = t)
-    return list(set([x.p2 for x in params]))
+@register.filter(name='get_params')
+def get_prams(objects,t):
+    return Params.objects.filter(type = t)
 
 @register.filter(name='get_types')
 def get_params(objects,type):
@@ -45,6 +44,12 @@ def secondP(objects, second):
     except CurrTable.DoesNotExist:
         if objects[0].params.p1 == second:
             return "1"
+
+@register.filter(name="get_by_p1")
+def get_by_p1(objects,p1):
+    return list(set([x.p2 for x in objects.filter(p1=p1)]))
+        
+        
 @register.filter(name='get_from_dict')
 def get_from_dict(type):
     return variables.mainDict["typeReal"][type]
