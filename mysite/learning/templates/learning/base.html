@@ -23,13 +23,12 @@ $(document).ready(function(){
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false);
-	// if(!$("#myCanvas").is(":visible")){
-		// $("#QuestionDiv").prepend('<br/>');
-		// $("#QuestionDiv").prepend('<br/>');
-		// $("#answer").after('<br/>');
-		// $("#answer").after('<br/>');
-	// }
-
+    $.ajax({
+        type: "POST",
+        url: "/learning/save_time",
+        async: false,
+        data: {data:"e"},
+       });
 });
 			
 	sessionStorage.setItem("sended",false); 

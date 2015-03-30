@@ -346,6 +346,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
+
             
 
         if 'medTime' not in self.request.session:
@@ -422,6 +423,7 @@ def finish(request):
             types = [x.type for x in request.session["pref"]]
         else:
             types = request.session["types"]
+        types = Type.objects.filter(type__in = types)
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
@@ -438,7 +440,7 @@ def finish(request):
             else : s = 1
         elif request.session["test"] == "set":
             try:
-                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:5]
+                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:10]
             except FloatModel.DoesNotExist:
                 raise Exception("f in finish is empty")
         if s != 1:    

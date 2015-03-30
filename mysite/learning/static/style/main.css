@@ -24,12 +24,11 @@
 }
 #userPart{
 	position:relative;
-	margin-top:11vh;
+	margin-top:8vh;
 }
 #divPie{
 	position:relative;
 	margin-top:0;
-	/*style="width:5%;height:5%"*/
 }
 #label{
 	margin-top:5vh;
@@ -37,15 +36,12 @@
 }
 #canvasDiv{
 	    display:block;
-    /*width:80%;*/
-    /*padding:50px 10%;*/
-    /*height:300px;*/
 	position:relative;
 	margin-top:0vh;
 }
-#main{
+/*#main{
     display:block;
     width:80%;
     padding:50px 10%;
     height:300px;
-} 
+} */

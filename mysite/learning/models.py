@@ -36,6 +36,7 @@ class Concept(models.Model):
     type = models.ForeignKey('Type')
     label = models.FloatField(null=True)
     updatedTimes = models.IntegerField(default = 0)
+    hint = models.BooleanField()
 
 class Params(models.Model):
     p1 = models.CharField(max_length = 20)
