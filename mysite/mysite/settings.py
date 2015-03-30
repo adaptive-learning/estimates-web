@@ -131,7 +131,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SESSION_SERIALIZER= 'django.contrib.sessions.serializers.PickleSerializer'
-# SOCIAL_AUTH_USER_MODEL = 'auth.User'
+REDIRECT_URI = '/'
 GOOGLE_OAUTH2_CLIENT_ID = "824945897278-rcivje8rjh86b19ofoe39s7cq6nbnso8.apps.googleusercontent.com"
 GOOGLE_OAUTH2_CLIENT_SECRET = "rWqWGWm0XA8_EgQoHmOhCJlS"
 FACEBOOK_API_SECRET = "471a8f17a2dfe5ea0699855085bf5503"
