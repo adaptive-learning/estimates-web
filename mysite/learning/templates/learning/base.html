@@ -30,18 +30,18 @@ $(document).ready(function(){
 	        }
 		}
 	});
-    // $.ajax({
-    	// url : "/learning/save_time", // the endpoint
-        // type : "POST", // http method
-        // data : { data:"data"}, // data sent with the post request
-		// async: false,
-        // // handle a non-successful response
-        // error : function(xhr,errmsg,err) {
-            // $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                // " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            // alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        // }
-    // });
+    $.ajax({
+    	url : "/learning/save_time", // the endpoint
+        type : "POST", // http method
+        data : { data:"data"}, // data sent with the post request
+		async: false,
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
 });
 			
 	sessionStorage.setItem("sended",false); 

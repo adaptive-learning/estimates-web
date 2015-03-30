@@ -105,7 +105,7 @@ def decider(type, question, src, dst,f = 2):
         else: raise Exception("wrong params") 
             
     elif type == 'curr':
-        params = Params.objects.get(p1 = src, p2= dst,type = type)
+        params = Params.objects.get(p1 = src, p2= dst,type = Type.objects.get(type = type))
         rate = CurrTable.objects.get(params = params).rate
         return round(rate * question)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
@@ -346,7 +346,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "question":q,})
-
+            
             
 
         if 'medTime' not in self.request.session:
@@ -376,6 +376,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         for p in dict:
             if p not in self.request.session:
                 clear_session_params(self.request,dict.keys())
+                clear_session_params(self.request,["pieTimer"])
                 return True;
         return False;
 
@@ -470,7 +471,7 @@ def clearSession(request):
         clear_session_params(request)
         return HttpResponse("ok")
 
-def clear_session_params(request,params = ["p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
+def clear_session_params(request,params = ["pieTimer","p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
     for param in params:
         if param in request.session:
             del request.session[param]
@@ -552,7 +553,14 @@ class ShowTable(ListView):
 #         return query
 
 def save_time(request):
-    if request.method == "POST":
-        print request.POST.get("data")
+    if request.method == "POST" and request.is_ajax():
+        time = request.POST.get("data")
+#         if "pieTimer" in request.session:
+#             request.session["pieTimer"] = time -request.session["pieTimer"]
+#             ok = "false"
+#         else:
+#             request.session["pieTimer"] = time
+#             ok = "true"
+        return HttpResponse(time)
     
     ############################################################################
