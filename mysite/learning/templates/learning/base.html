@@ -23,12 +23,25 @@ $(document).ready(function(){
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false);
+    $.ajaxSetup({
+	    beforeSend: function(xhr, settings) {
+	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	        }
+		}
+	});
     $.ajax({
-        type: "POST",
-        url: "/learning/save_time",
-        async: false,
-        data: {data:"e"},
-       });
+    	url : "/learning/save_time", // the endpoint
+        type : "POST", // http method
+        data : { data:"data"}, // data sent with the post request
+		async: false,
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
 });
 			
 	sessionStorage.setItem("sended",false); 
