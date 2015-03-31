@@ -32,18 +32,25 @@ $(document).ready(function(){
         success: function(response){
         	splitted = response.split("//");
 			if (splitted[0] == "true"){
-        		time = splitted[1];
-        		var start = time / parseFloat("{{request.session.medTime}}");
-        		// start = 0.5;
+        		time = Math.floor(parseFloat(splitted[1]));
+        		var medTime = parseFloat("{{request.session.medTime}}");
+        		var start = time / medTime;
         		var end = 0;
-        		var total = start;
+        		if (time > medTime){
+        			var Newtime = time - medTime;
+					start = Newtime / 30;
+        			timer(30,"#750000",false,true,start,end,start);
+        		} else {
+        			timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,start);
+        		}
         	} else {
         		time = 0;
         		var end = 1;
         		var start = 1;
         		var total = 0;
+        		timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,total);
         	}
-        	timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,total);
+        	
         	times();
         },
 		async: false,

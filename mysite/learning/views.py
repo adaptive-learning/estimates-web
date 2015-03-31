@@ -561,7 +561,6 @@ class ShowTable(ListView):
 def save_time(request):
     if request.method == "POST" and request.is_ajax():
         time = request.POST.get("data")
-        
         if "pieTimer" in request.session:
             print time,request.session["pieTimer"]
             toSend = float(time) - float(request.session["pieTimer"])
