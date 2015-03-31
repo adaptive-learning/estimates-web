@@ -24,8 +24,8 @@ def score(prev,hard, time=None):
         time = 0
     else : time = float(time) 
     e = -(prev+ln(time)-hard)
-    s = float(pow(math.exp(1),e))
-    return 1/(1 + s) 
+    s = float(1 + math.exp(e))
+    return 1/s 
 
 def ln(x):
     return math.log1p(x)
