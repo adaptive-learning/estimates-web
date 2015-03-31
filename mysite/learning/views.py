@@ -375,6 +375,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def is_new_question(self,dict):
         for p in dict:
             if p not in self.request.session:
+                print "new question passed"
                 clear_session_params(self.request,dict.keys())
                 clear_session_params(self.request,["pieTimer"])
                 return True;
@@ -422,7 +423,9 @@ def finish(request):
     if request.is_ajax() and request.method == "POST":
         if "pref" in request.session:
             types = [x.type for x in request.session["pref"]]
+            toDelete = False
         else:
+            toDelete = True
             types = request.session["types"]
         types = Type.objects.filter(type__in = types)
         if request.user.is_authenticated():
@@ -449,7 +452,8 @@ def finish(request):
                 s = sum([x.label for x in f])/len(f);
             else:
                 raise Exception("p is 0")
-        clear_session_params(request)
+        if toDelete:
+            clear_session_params(request)
         try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
         except UserSkill.DoesNotExist: return HttpResponse(s) 
         uS = (sum([x.skill for x in uS]))/float(len(uS))
@@ -472,6 +476,8 @@ def clearSession(request):
         return HttpResponse("ok")
 
 def clear_session_params(request,params = ["pieTimer","p1","question","p2","testParam","test","type","frTimeId","types","pref"]):
+    if params[0] == "pieTimer":
+        print "CLEARING pieTimer"
     for param in params:
         if param in request.session:
             del request.session[param]
@@ -555,12 +561,16 @@ class ShowTable(ListView):
 def save_time(request):
     if request.method == "POST" and request.is_ajax():
         time = request.POST.get("data")
-#         if "pieTimer" in request.session:
-#             request.session["pieTimer"] = time -request.session["pieTimer"]
-#             ok = "false"
-#         else:
-#             request.session["pieTimer"] = time
-#             ok = "true"
-        return HttpResponse(time)
+        
+        if "pieTimer" in request.session:
+            print time,request.session["pieTimer"]
+            toSend = float(time) - float(request.session["pieTimer"])
+            ok = "true"
+        else:
+            ok = "false"
+            toSend=""
+            request.session["pieTimer"] = time
+        print float(request.session["pieTimer"])/float(request.session["medTime"])
+        return HttpResponse("%s//%s"%(ok,toSend))
     
     ############################################################################

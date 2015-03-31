@@ -8,21 +8,16 @@
 		var testParam = "{{request.session.testParam}}";
 		testParam = parseInt(testParm) +1000;
 	</script>
+
 {% endif %}
 <script>
 
 
 $(document).ready(function(){
-    var c = $('#myCanvas');
-    var ct = c.get(0).getContext('2d');
-    // var container = $(c).parent();
-    // c.attr('width',  ); //max width
-    // c.attr('height', $(container).height() ); //max height
-
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
-	timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false);
+	
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -33,7 +28,24 @@ $(document).ready(function(){
     $.ajax({
     	url : "/learning/save_time", // the endpoint
         type : "POST", // http method
-        data : { data:"data"}, // data sent with the post request
+        data : { data:new Date().getTime() / 1000}, 
+        success: function(response){
+        	splitted = response.split("//");
+			if (splitted[0] == "true"){
+        		time = splitted[1];
+        		var start = time / parseFloat("{{request.session.medTime}}");
+        		// start = 0.5;
+        		var end = 0;
+        		var total = start;
+        	} else {
+        		time = 0;
+        		var end = 1;
+        		var start = 1;
+        		var total = 0;
+        	}
+        	timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,total);
+        	times();
+        },
 		async: false,
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -43,7 +55,6 @@ $(document).ready(function(){
         }
     });
 });
-			
 	sessionStorage.setItem("sended",false); 
 	function getCookie(name) {
     var cookieValue = null;

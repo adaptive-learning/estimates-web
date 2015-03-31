@@ -50,19 +50,18 @@
 	<script src="{% static "foundation/js/foundation.min.js" %}"></script>  
     {% endblock foundation_js %}
     {# Custom JS #}
+
+    {% block body_js %}
 	<script src="http://code.highcharts.com/highcharts.js"></script>
 	<script src="http://code.highcharts.com/modules/exporting.js"></script>
 	<script src="{% static "js/draw.js" %}"></script>
 	<script src="{% static "js/decider.js" %}"></script>
-	
     <script src="{% static "js/time.js"%}"></script>
     <script src="{% static "js/hint.js"%}"></script>
     <script src="{% static "js/nextQuestion.js" %}"></script>
 	<script src="{% static "js/pieTimer.js" %}"></script>
 	<script src="{% static "js/answerForm.js" %}"></script>
 	<script src="{% static "js/finish.js" %}"></script>
-    {% block body_js %}
-
     {% endblock body_js %}
 
 

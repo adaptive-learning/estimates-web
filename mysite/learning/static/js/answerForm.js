@@ -39,7 +39,7 @@ function create_post(data,t) {
     	},    
     	url : "", // the endpoint
         type : "POST", // http method
-        data : { answer : $('#input').val(), time:  minutes*60 + c, data: data, type: t}, // data sent with the post request
+        data : { answer : $('#input').val(), time:  time, data: data, type: t}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {
