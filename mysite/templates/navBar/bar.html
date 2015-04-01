@@ -22,8 +22,9 @@
       	<a href="/learning/own-all">Vlastný set</a>
       </li>
       <li class="has-dropdown">
-
+      <a>{{ user.id }}</a>
       {% if user|is_lazy_user or user.is_anonymous%}
+
               <a href="#">Prihlásenie</a>
         <ul class="dropdown">
      	<li><a href="{% url 'socialauth_begin' 'google-oauth2' %}"><img src="/static/img/gmail.png" width="20" height="20">  Login with Google</a></li>

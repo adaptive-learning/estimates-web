@@ -153,7 +153,6 @@ class QuestionFunctions():
             query = preffered
         else:
             query = Params.objects.filter(type__in = t)
-#         now = timezone.localtime(timezone.now())
         now = datetime.now(utc)
         for q in query:
             if self.request.user.is_authenticated():
@@ -176,10 +175,13 @@ class QuestionFunctions():
                     Sprob = Panswer/Ptarget
                 else:
                     Sprob = (1-Panswer)/(1-Ptarget)
-                Scount = 1/sqrt(1+userSkill.number)
+                Scount = 1/sqrt(1+len(floatmodels))
                 try:
-                    Stime = -1/( now - userSkill.date).total_seconds()
-                except userSkill.DoesNotExist:
+                    lastModel = floatmodels.latest('date')
+                    print lastModel.date
+                    Stime = -1/( now - lastModel.date).total_seconds()
+                except FloatModel.DoesNotExist:
+                    print "wrong"
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
@@ -422,12 +424,14 @@ class CreateCurr(CreateQuestion):
 def finish(request):
     if request.is_ajax() and request.method == "POST":
         if "pref" in request.session:
+            print "here"
             types = [x.type for x in request.session["pref"]]
+            print types
             toDelete = False
         else:
             toDelete = True
             types = request.session["types"]
-        types = Type.objects.filter(type__in = types)
+            types = Type.objects.filter(type__in = types)
         if request.user.is_authenticated():
             loggUser = get_user(request).id
         else: 
@@ -444,7 +448,10 @@ def finish(request):
             else : s = 1
         elif request.session["test"] == "set":
             try:
-                f = FloatModel.objects.filter(user = loggUser,type__in = types).order_by('-date')[:10]
+                print loggUser
+                print types
+                f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:10]
+                print f
             except FloatModel.DoesNotExist:
                 raise Exception("f in finish is empty")
         if s != 1:    

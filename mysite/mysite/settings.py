@@ -130,8 +130,18 @@ AUTHENTICATION_BACKENDS = (
     'lazysignup.backends.LazySignupBackend',
 )
 
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    #'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
+)
+
+
 SESSION_SERIALIZER= 'django.contrib.sessions.serializers.PickleSerializer'
-REDIRECT_URI = '/'
 GOOGLE_OAUTH2_CLIENT_ID = "824945897278-rcivje8rjh86b19ofoe39s7cq6nbnso8.apps.googleusercontent.com"
 GOOGLE_OAUTH2_CLIENT_SECRET = "rWqWGWm0XA8_EgQoHmOhCJlS"
 FACEBOOK_API_SECRET = "471a8f17a2dfe5ea0699855085bf5503"
