@@ -181,7 +181,6 @@ class QuestionFunctions():
                     print lastModel.date
                     Stime = -1/( now - lastModel.date).total_seconds()
                 except FloatModel.DoesNotExist:
-                    print "wrong"
                     Stime = 0
                 score.append((i.id,10*Sprob+10*Scount+120*Stime))
         maximum = max(score,key=lambda item:item[1])
@@ -523,6 +522,7 @@ class OwnChoice(ListView):
 
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
+        print self.request.POST
         self.request.session["pref"] = []
         type = kwargs.get("type",None)
         if type == "all":
@@ -533,17 +533,23 @@ class OwnChoice(ListView):
             types = Type.objects.filter(type__in = typesString)
             params = Params.objects.filter(type__in = types)
         for x in types:
-            val = self.request.POST.get(x.type,None)
-            if val == "all":
-                self.request.session["pref"] += params.filter(type = x)
-        for x in list(set([k.p1 for k in params])):
-            l = self.request.POST.getlist(x,None)
-            if l:
-                try:
-                    p = Params.objects.filter(p1=x, p2__in = l)
-                    self.request.session["pref"] += p
-                except Params.DoesNotExist:
-                    continue
+            val = self.request.POST.getlist(x.type,None)
+            if len(val) != 0:
+                print val
+                if val[0] == "all":
+                    self.request.session["pref"] += params.filter(type = x)
+                elif val != None:
+                    self.request.session["pref"] += params.filter(id__in = val)
+        if self.request.session["pref"] == []:
+            raise Exception("nothing was checked")
+#         for x in list(set([k.p1 for k in params])):
+#             l = self.request.POST.getlist(x,None)
+#             if l:
+#                 try:
+#                     p = Params.objects.filter(p1=x, p2__in = l)
+#                     self.request.session["pref"] += p
+#                 except Params.DoesNotExist:
+#                     continue
         return redirect("/learning/own/settings/set")           
                          
 def getFromDict(request):

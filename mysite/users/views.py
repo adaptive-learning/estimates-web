@@ -10,14 +10,12 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.messages.api import get_messages
  
- 
- 
-
+  
 class AuthComplete(View):
     def get(self, request, *args, **kwargs):
-        logout(request) 
+
         backend = kwargs.pop('backend')
-#         try:
+        logout(request) 
         return complete(request, backend, *args, **kwargs)
  
 class LoginError(View):
@@ -27,6 +25,7 @@ class LoginError(View):
 
 class LogoutUser(View):
     def get(self, request, *args, **kwargs):
+        print "logging out"
         logout(request)
         return HttpResponseRedirect(settings.LOGOUT_REDIRECT_URL)
     

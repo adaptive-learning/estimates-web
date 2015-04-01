@@ -11,58 +11,47 @@
 {% load staticfiles %}
 {% load learning_filters %}
 
-
 <script src="{% static "js/options.js" %}"></script>
 <script src="{% static "js/decider.js" %}"></script>
 <form id="assigForm" method="post">{% csrf_token %}
 <div class="row center">
   	<h3 align="center">Vyber si vlastný typ</h3>
   	
-</div id = "mainLabel">
-<div class="row" id = "mainDiv">
-	{% for t in object_list|get_types%}
-<div>
-	<label >
-
-{{t.type|get_from_dict}}
-		<hr></hr>
-</label>
-{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
-  		  <div class="large-12 columns" id="typeDiv">
-  		  	<div>
-        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" 
-        	class="small-4"  onchange="changeOption('{{object_list|filter_by_type:t|in_json}}',this,$('#first{{t.type|get_from_dict}}'))" autocomplete="off">
-        		{% for param in object_list|get_set_params:t %}
-					<script>createOptions("{{param}}",$("#mainSelectBox{{t.type|get_from_dict}}"),false);</script>	
-				{% endfor %}
-				<option value="all" selected>Všetko</option>
-				<option value="not">Nič</option>
-   			</select>
-        	<span id="first{{t.type|get_from_dict}}"></span>	
-        	</div>
-
-	      </div>
-          	<input type="hidden" name="{{t.type.type}}" value="t"/>		
-          	{% else %}
-  	  		  <div class="large-12 columns">
-  		  	  		
-  	  		
-  		  	<div>
-        	<select name="{{t.type}}" id="mainSelectBox{{t.type|get_from_dict}}" class="small-4" autocomplete="off">
-				<option value="not">Nič</option>
-				<option value="all" selected>Všetko</option>
-   			</select>
-        	</div>
-
-	      </div>
-          	<input type="hidden" name="{{t.type.type}}" value="t"/>		
-   {% endif %}
-  	 {% endfor %}
 </div>
-		<hr></hr>
+	{% for t in object_list|get_types%}
+
+<div class="row centered">
+	<label >
+				<hr></hr>	
+		{{t.type|get_from_dict}}
+
+	</label>
+
+	{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
+		
+		{% for p in object_list|get_params:t%}
+			
+				<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="{{p.id}}"/>
+				<label for="{{t.type}}{{p.id}}">		
+					<script>document.write(decider("{{p.p1}}"));</script><span>-></span><script>document.write(decider("{{p.p2}}"));</script>
+				</label>
+		{% endfor %}
+	{% else %}
+		<div class="large-12 collumn">
+			<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="all"/>
+			<label for="{{t.type}}{{p.id}}">		
+				Všetko	
+			</label>
+		</div>
+	
+	{% endif %}
+</div>
+
+	{% endfor %}
+
+<hr></hr>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />
 </form>
 <script>
 </script>
 {% endblock base_body %}
-</html>

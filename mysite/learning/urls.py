@@ -19,4 +19,6 @@ urlpatterns = patterns("",
     url(r'^grap/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^own-(?P<type>[a-z]+)',views.OwnChoice.as_view()),
     url(r'^save_time',views.save_time),
+#     url(r'^(?P<main>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateNonFrTo.as_view()),
+#     url(r'', include('social_auth.urls')),
 )    

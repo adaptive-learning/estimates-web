@@ -5,8 +5,8 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
-{% load learning_table_filters %}
-{% for type in object_list|get_types %}
+{% load learning_filters %}
+{% for type in object_list|get_types_CurrTable %}
 <br>
 <div class="row centered">
 <div class="large-12 columns">
@@ -26,7 +26,7 @@
 		{% for p1 in object_list|get_set_p1:type %}
 	 	<tr>
 			<th ><script>document.write(decider("{{p1}}"));</script></th>
-			{% for p2 in object_list|get_params:type|get_by_p1:p1 %}
+			{% for p2 in object_list|get_params:type|get_p2_by_p1:p1 %}
 
 			<td>{{ object_list|firstP:p1|secondP:p2 }}<script>document.write(" "+decider("{{p2}}"));</script></td>
 			{% endfor %}

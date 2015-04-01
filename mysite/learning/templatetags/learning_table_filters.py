@@ -54,6 +54,3 @@ def get_by_p1(objects,p1):
 def get_from_dict(type):
     return variables.mainDict["typeReal"][type]
     
-@register.filter(name='get_types')
-def get_types(objects):
-    return list(set([x.params.type for x in objects]))
