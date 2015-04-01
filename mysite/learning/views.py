@@ -83,7 +83,9 @@ def get_types(name):
     
 def decider(type, question, src, dst,f = 2):
     if type == 'equa' :
-        return eval(question)
+        if dst != None:
+            return eval(src+dst)
+        else: return eval(src)
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
     elif type == "obj":
