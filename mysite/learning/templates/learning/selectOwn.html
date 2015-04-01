@@ -13,6 +13,7 @@
 
 <script src="{% static "js/options.js" %}"></script>
 <script src="{% static "js/decider.js" %}"></script>
+<div class="row centered">
 <form id="assigForm" method="post">{% csrf_token %}
 <div class="row center">
   	<h3 align="center">Vyber si vlastný typ</h3>
@@ -20,7 +21,7 @@
 </div>
 	{% for t in object_list|get_types%}
 
-<div class="row centered">
+
 	<label >
 				<hr></hr>	
 		{{t.type|get_from_dict}}
@@ -45,13 +46,14 @@
 		</div>
 	
 	{% endif %}
-</div>
 
 	{% endfor %}
 
 <hr></hr>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />
 </form>
+</div>
+
 <script>
 </script>
 {% endblock base_body %}
