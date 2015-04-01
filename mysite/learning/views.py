@@ -268,7 +268,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.request.session['testParam'] += 1
         try: 
             p1 = js['p1'] if js['p1'] is not None else "-1"
-            p2 = js['p2'] if js['p2'] is not None else "-1"
+            p2 = js['p2'] if js['p2'] != "None" else None
             par = Params.objects.get(p1 = p1,p2=p2)
         except Params.DoesNotExist:
             raise Exception("wrong params %s %s" % (js['p1'],js['p2']))
