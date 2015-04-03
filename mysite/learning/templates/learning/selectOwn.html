@@ -30,11 +30,10 @@
 
 	{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
 		
-		{% for p in object_list|get_params:t%}
-			
+		{% for p in object_list|get_concepts:t%}
 				<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="{{p.id}}"/>
 				<label for="{{t.type}}{{p.id}}">		
-					<script>document.write(decider("{{p.p1}}"));</script><span>-></span><script>document.write(decider("{{p.p2}}"));</script>
+					<script>document.write(decider("{{p.p1}}"));</script><span><-></span><script>document.write(decider("{{p.p2}}"));</script>
 				</label>
 		{% endfor %}
 	{% else %}

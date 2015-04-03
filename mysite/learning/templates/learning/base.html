@@ -1,4 +1,5 @@
 
+{% load learning_filters %}
 {% if request.session.testParam == -1%}
 	<script>
 		var testParam = (new Date()).getTime();
@@ -10,12 +11,13 @@
 	</script>
 
 {% endif %}
+{% with request.session.p1|get_reversed:param as pa1 %}
+{% with request.session.p2|get_reversed:param as pa2 %}
 <script>
 
-
 $(document).ready(function(){
-	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
-	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{request.session.p1}}","{{request.session.p2}}");
+	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
+	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	
     $.ajaxSetup({
@@ -90,10 +92,13 @@ $(document).ready(function(){
 			p1:"{{request.session.p1}}",
 			p2:"{{request.session.p2}}",
 			question:"{{request.session.question}}",
+			rev:"{{request.session.rev}}",
 			testP:testParam,
-			used_hint:used_hint,
 		}),"{{request.session.type}}");
 	});
 	
 	var used_hint=0;
+	
 </script>
+{% endwith %}
+{% endwith %}

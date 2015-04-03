@@ -13,39 +13,41 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('result', self.gf('django.db.models.fields.FloatField')()),
             ('answer', self.gf('django.db.models.fields.FloatField')()),
-            ('concept', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Concept'])),
+            ('conceptQuestion', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.ConceptQuestion'])),
             ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Type'])),
             ('time', self.gf('django.db.models.fields.IntegerField')()),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True)),
-            ('usedHint', self.gf('django.db.models.fields.BooleanField')()),
             ('label', self.gf('django.db.models.fields.FloatField')(null=True)),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2015, 3, 7, 0, 0), null=True)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
         db.send_create_signal(u'learning', ['FloatModel'])
 
-        # Adding model 'Concept'
-        db.create_table(u'learning_concept', (
+        # Adding model 'ConceptQuestion'
+        db.create_table(u'learning_conceptquestion', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Questions'])),
-            ('param1', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Params'], null=True)),
-            ('param2', self.gf('django.db.models.fields.related.ForeignKey')(related_name='param2', null=True, to=orm['learning.Params'])),
+            ('number', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Number'], null=True)),
+            ('params', self.gf('django.db.models.fields.related.ForeignKey')(related_name='params', to=orm['learning.Params'])),
             ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Type'])),
+            ('label', self.gf('django.db.models.fields.FloatField')(null=True)),
+            ('updatedTimes', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('hint', self.gf('django.db.models.fields.BooleanField')()),
         ))
-        db.send_create_signal(u'learning', ['Concept'])
+        db.send_create_signal(u'learning', ['ConceptQuestion'])
 
         # Adding model 'Params'
         db.create_table(u'learning_params', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('param', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
+            ('concept', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Concept'])),
+            ('reverse', self.gf('django.db.models.fields.BooleanField')()),
         ))
         db.send_create_signal(u'learning', ['Params'])
 
-        # Adding model 'Questions'
-        db.create_table(u'learning_questions', (
+        # Adding model 'Number'
+        db.create_table(u'learning_number', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('question', self.gf('django.db.models.fields.FloatField')(unique=True)),
+            ('number', self.gf('django.db.models.fields.FloatField')(unique=True)),
         ))
-        db.send_create_signal(u'learning', ['Questions'])
+        db.send_create_signal(u'learning', ['Number'])
 
         # Adding model 'Type'
         db.create_table(u'learning_type', (
@@ -59,29 +61,53 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('skill', self.gf('django.db.models.fields.FloatField')()),
-            ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Type'])),
+            ('concept', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Concept'])),
+            ('number', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal(u'learning', ['UserSkill'])
+
+        # Adding model 'CurrTable'
+        db.create_table(u'learning_currtable', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('params', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Params'])),
+            ('rate', self.gf('django.db.models.fields.FloatField')()),
+        ))
+        db.send_create_signal(u'learning', ['CurrTable'])
+
+        # Adding model 'Concept'
+        db.create_table(u'learning_concept', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('p1', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('p2', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
+            ('type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['learning.Type'])),
+        ))
+        db.send_create_signal(u'learning', ['Concept'])
 
 
     def backwards(self, orm):
         # Deleting model 'FloatModel'
         db.delete_table(u'learning_floatmodel')
 
-        # Deleting model 'Concept'
-        db.delete_table(u'learning_concept')
+        # Deleting model 'ConceptQuestion'
+        db.delete_table(u'learning_conceptquestion')
 
         # Deleting model 'Params'
         db.delete_table(u'learning_params')
 
-        # Deleting model 'Questions'
-        db.delete_table(u'learning_questions')
+        # Deleting model 'Number'
+        db.delete_table(u'learning_number')
 
         # Deleting model 'Type'
         db.delete_table(u'learning_type')
 
         # Deleting model 'UserSkill'
         db.delete_table(u'learning_userskill')
+
+        # Deleting model 'CurrTable'
+        db.delete_table(u'learning_currtable')
+
+        # Deleting model 'Concept'
+        db.delete_table(u'learning_concept')
 
 
     models = {
@@ -124,33 +150,48 @@ class Migration(SchemaMigration):
         u'learning.concept': {
             'Meta': {'object_name': 'Concept'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'param1': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Params']", 'null': 'True'}),
-            'param2': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'param2'", 'null': 'True', 'to': u"orm['learning.Params']"}),
-            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Questions']"}),
+            'p1': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'p2': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"})
+        },
+        u'learning.conceptquestion': {
+            'Meta': {'object_name': 'ConceptQuestion'},
+            'hint': ('django.db.models.fields.BooleanField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'label': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
+            'number': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Number']", 'null': 'True'}),
+            'params': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'params'", 'to': u"orm['learning.Params']"}),
+            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"}),
+            'updatedTimes': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+        },
+        u'learning.currtable': {
+            'Meta': {'object_name': 'CurrTable'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'params': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Params']"}),
+            'rate': ('django.db.models.fields.FloatField', [], {})
         },
         u'learning.floatmodel': {
             'Meta': {'object_name': 'FloatModel'},
             'answer': ('django.db.models.fields.FloatField', [], {}),
-            'concept': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Concept']"}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 3, 7, 0, 0)', 'null': 'True'}),
+            'conceptQuestion': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.ConceptQuestion']"}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'label': ('django.db.models.fields.FloatField', [], {'null': 'True'}),
             'result': ('django.db.models.fields.FloatField', [], {}),
             'time': ('django.db.models.fields.IntegerField', [], {}),
             'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"}),
-            'usedHint': ('django.db.models.fields.BooleanField', [], {}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']", 'null': 'True'})
+        },
+        u'learning.number': {
+            'Meta': {'object_name': 'Number'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'number': ('django.db.models.fields.FloatField', [], {'unique': 'True'})
         },
         u'learning.params': {
             'Meta': {'object_name': 'Params'},
+            'concept': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Concept']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'param': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'})
-        },
-        u'learning.questions': {
-            'Meta': {'object_name': 'Questions'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'question': ('django.db.models.fields.FloatField', [], {'unique': 'True'})
+            'reverse': ('django.db.models.fields.BooleanField', [], {})
         },
         u'learning.type': {
             'Meta': {'object_name': 'Type'},
@@ -159,9 +200,10 @@ class Migration(SchemaMigration):
         },
         u'learning.userskill': {
             'Meta': {'object_name': 'UserSkill'},
+            'concept': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Concept']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'number': ('django.db.models.fields.IntegerField', [], {}),
             'skill': ('django.db.models.fields.FloatField', [], {}),
-            'type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['learning.Type']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         }
     }
