@@ -19,7 +19,6 @@ $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
-	
     $.ajaxSetup({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

@@ -1,4 +1,3 @@
-
 from lazysignup.decorators import allow_lazy_user
 from django.utils.decorators import method_decorator
 from datetime import datetime
@@ -13,7 +12,7 @@ from django.core import serializers
 # from forms import *
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render, render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.response import TemplateResponse
@@ -111,7 +110,7 @@ def decider(type, question, src, dst, reverse, f = 2):
             
     elif type == 'curr':
         concept = get_object_or_404(Concept, p1 = src, p2 = dst,type = get_object_or_404(Type,type = type))
-        params = get_object_or_404(Params, concept = concept)
+        params = get_object_or_404(Params, concept = concept, reverse = reverse)
         rate = CurrTable.objects.get(params = params).rate
         return round(rate * question)
     elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
@@ -160,8 +159,6 @@ class QuestionFunctions():
             else :
                 raise Exception("please log in")
             params = Params.objects.filter(concept = q)
-            print "pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp"
-            print [x.reverse for x in params]
             questions = ConceptQuestion.objects.filter(params__in = params)
             for i in questions:
                 floatmodels = FloatModel.objects.filter(conceptQuestion = i,user = user.id)
@@ -292,11 +289,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         self.model.time = self.post.get('time')
         self.model.date = datetime.now(utc)
         
-    def get_context_data(self, **kwargs):
+    def get_context_data(self,*args, **kwargs):
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         ctx['action'] = self.request.path
-
-        if "pref" in self.request.session and (self.type == "settings" or self.pref):
+        if "pref" in self.request.session and (self.type == "settings" or self.kwargs.get("pref",None)):
                 types = [x.type for x in self.request.session["pref"]]
                 preffered = self.request.session["pref"]
                 print "here"
@@ -395,9 +391,19 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
+        if "test" in self.request.session and self.request.session["test"] == "set":
+            if self.request.session["testParam"] == 11:
+                print self.request.path
+                return redirect("%s/finish"%self.request.path)           
+
+        self.type = kwargs.get("type")
+        print "type in get",self.type
+        super(CreateQuestion,self).get(*args,**kwargs)
+        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+
+class PreffQuestion(CreateQuestion):
+    def get(self,*args,**kwargs):
         self.pref = kwargs.get("pref",None)
-        print self.pref
-        print "here??????"
         if self.pref: 
             if "prefp" in self.request.session and self.request.session["prefp"] != self.pref:
                 print "not equal"
@@ -422,18 +428,38 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             if len(concepts) == 0:
                 raise Exception("no Concept with p1 or p2 equals %s"%self.pref)
             self.request.session["pref"] = concepts
-
-        self.type = kwargs.get("type")
-        print "type in get",self.type
-        super(CreateQuestion,self).get(*args,**kwargs)
-        return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
+        return super(PreffQuestion,self).get(*args,**kwargs)
             
 def date_handler(obj):
     return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
-def finish(request):
-    if request.is_ajax() and request.method == "POST":
-        if "pref" in request.session:
+class Finish(TemplateView):
+    template_name = "learning/finish.html"
+    def get_context_data(self,*args,**kwargs):
+        ctx = super(Finish,self).get_context_data(*args,**kwargs)
+        url = kwargs.get("url",None)
+        ctx["url"] = self.url
+        ctx["score"] = self.s
+        ctx["userScore"] = self.uS
+        print self.out
+        ctx["answers"] = json.dumps(self.out)
+        ctx["best"] = self.res
+        return ctx
+
+    def get(self,*args,**kwargs):
+        self.url = kwargs.get("url",None)
+        if "test" not in self.request.session:
+            print "e";
+            print self.url
+            return redirect("/learning/%s"%self.url)
+        else:
+            print "eh"
+        self.get_finish_result(self.request)
+        return super(Finish,self).get(*args,**kwargs)
+    
+    def get_finish_result(self,request):
+
+        if "pref" in request.session and request.session["pref"] != None:
             types = [x.type for x in request.session["pref"]]
             toDelete = False
         else:
@@ -467,8 +493,13 @@ def finish(request):
                 s = sum([x.label for x in f])/len(f);
             else:
                 raise Exception("p is 0")
+        print toDelete
         if toDelete:
             clear_session_params(request)
+        else:
+            clear_session_params(request,["rev","pieTimer","p1","question",
+                                           "p2","testParam","test","type","frTimeId",
+                                           "types"])
         try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
         except UserSkill.DoesNotExist: return HttpResponse(s) 
         uS = (sum([x.skill for x in uS]))/float(len(uS))
@@ -482,10 +513,12 @@ def finish(request):
 
         
         results = [ob.as_json() for ob in f]
+        self.s = s
+        self.uS = uS
+        self.out = results
+        self.res = res
 
-        out = json.dumps(results)
-        return HttpResponse("%s//%s//%s//%s"%(s,uS,out,res))
-
+        
 class CreateCurr(CreateQuestion):
     def get(self):
         clear_session_params(self.request)

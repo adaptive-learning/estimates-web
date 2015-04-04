@@ -8,26 +8,14 @@ function get_result(data) {
 	        }
 		}
 	});
+	
+	var Formurl = $("#assigForm").attr("action");
     $.ajax({
-    	url : "/learning/finish", // the endpoint
+    	url : Formurl + "/finish", // the endpoint
         type : "POST", // http method
         data : { data:data}, // data sent with the post request
 		
         // handle a successful response
-        success : function(response) {
-        	var r = response.split("//");
-           	$("#label").text("");
-        	$("#label").append("vas priemerny odhad je: "+((1-parseFloat(r[0]).toFixed(2))*100).toString()+" %\n");
-            if (r.length == 4){
- 				$("#label").append("vase skóre v danej oblasti je: "+(r[1]*100).toString()+" %");
-	         	$("#scatterPlot").show();
-         		scatterPlot(r[2],r[3]);
-       		} 
-       		sessionStorage.clear();
-         	$("#userPart").empty();
-         	$("#userControl").empty();
-
-        },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
             $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
@@ -41,6 +29,7 @@ function get_result(data) {
 
 function scatterPlot(data,best){
 	dat = JSON.parse(data);
+	
 	var series=[];
 	m = [];
 	mF = 0;
@@ -59,6 +48,7 @@ function scatterPlot(data,best){
 		}
 	}
 	for (var e=0; e < dat.length;e++){
+
 		var d = dat[e];
 		if (d.type in type_pictures_question){
 			var name = d.a;
@@ -67,21 +57,23 @@ function scatterPlot(data,best){
 		}
 		if (best.indexOf(e) != -1){
 			series.push({name:name, color: 'rgba(20, 255, 20, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
-		}else
-		if (m.indexOf(e) != -1 || e==mF){
+		}else if (m.indexOf(e) != -1 || e==mF){
+							
 			series.push({name:name, color: 'rgba(255, 10, 10, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
 		} else {
 			series.push({name:name, color: 'rgba(51, 51, 51, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});
 		}
+		
+
 	}
-$(function () {
+
     $('#scatterPlot').highcharts({
         chart: {
             type: 'scatter',
             zoomType: 'xy'
         },
         title: {
-            // text: 'Height Versus Weight of 507 Individuals by Gender'
+            text: 'Vaše odpovede'
         },
         subtitle: {
             // text: 'Source: Heinz  2003'
@@ -122,5 +114,4 @@ $(function () {
         },
         series:series
     });
-});
 }

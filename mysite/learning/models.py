@@ -39,7 +39,6 @@ class ConceptQuestion(models.Model):
     type = models.ForeignKey('Type')
     label = models.FloatField(null=True)
     updatedTimes = models.IntegerField(default = 0)
-    hint = models.BooleanField()
 
 class Params(models.Model):
     concept = models.ForeignKey("Concept")
@@ -77,3 +76,5 @@ class Concept(models.Model):
     p2 = models.CharField(max_length = 20,null = True)
     type= models.ForeignKey("Type")
     
+class Hint(models.Model):
+    conceptQuestion = models.ForeignKey("ConceptQuestion")

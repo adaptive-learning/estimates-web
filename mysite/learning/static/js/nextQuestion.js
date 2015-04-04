@@ -5,10 +5,6 @@ window.onload=function(){
 function handleNextQuestion(t,test,testParam){
 
 	if(test == "set"){
-		if (testParam > 10){
-			testParam = 10;
-			get_result(t);
-		}
 		$("#timeCounter").hide();
 		$("#testCounter").show();
 		$("#testCounter").append("<span style=\"width: "+(testParam-1)*10+"%;\" class=\"meter custom\"></span>");
@@ -21,7 +17,7 @@ function handleNextQuestion(t,test,testParam){
 	} else if (test == "time"){
 		$("#testCounter").hide();
 		$("#timeCounter").show();
-		drawTimer("timeCounter",200,250,130,50,t,testParam);
+		drawTimer("timeCounter",10,250,130,50,t,testParam);
 	}
 
 
