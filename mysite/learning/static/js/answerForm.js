@@ -1,3 +1,4 @@
+var prodluva = 0;
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -45,6 +46,7 @@ function create_post(data,t) {
         success : function(response) {
         	response = response.split("//");
             answer(response[0],response[1]);
+            return false;
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -69,9 +71,6 @@ function answer(diff,result){
 	}
 	var d = document.getElementById("next");
 	delet(d);
-	onclick = function(){
-		window.location.href = $('#assigForm').attr('action');
-	};
 	if (diff < 0.03){
 		setStars(img,5);	
 	} else if (diff < 0.06){
@@ -87,10 +86,11 @@ function answer(diff,result){
 	}
 	var txt_message = "spravna odpoved bola: "+result;
 	$("#answer").append(document.createTextNode(txt_message));
-	setTimeout(function alertFunc() {
-		// window.onbeforeunload=null;	
+	setTimeout(function () {
 		window.location.href = $('#assigForm').attr('action');
-		},1500);
+		return false;
+		},4000 + prodluva);
+	prodluva = 4000;
 	return false;
 }
 function setStars(im,x){
@@ -101,7 +101,6 @@ function setStars(im,x){
 			im[p].src="/static/img/star-outline.png";
 		}
 	}
-	return null;
 }
 
 function delet(div){

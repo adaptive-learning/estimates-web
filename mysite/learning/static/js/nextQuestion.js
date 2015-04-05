@@ -19,7 +19,5 @@ function handleNextQuestion(t,test,testParam){
 		$("#timeCounter").show();
 		drawTimer("timeCounter",10,250,130,50,t,testParam);
 	}
-
-
 }
 

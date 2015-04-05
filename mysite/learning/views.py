@@ -85,7 +85,6 @@ def get_types(name):
 def decider(type, question, src, dst, reverse, f = 2):
     if reverse:
         src , dst = dst, src
-    print "type in decider",type
     if type == 'equa' :
         if dst != None:
             return eval(src+dst)
@@ -145,10 +144,8 @@ class QuestionFunctions():
         t = Type.objects.filter(type__in = types)
         if preffered != None:
             query = preffered
-            print "preffered"
         else:
             query = Concept.objects.filter(type__in = t)
-        print query
         now = datetime.now(utc)
         for q in query:
             if self.request.user.is_authenticated():
@@ -175,8 +172,6 @@ class QuestionFunctions():
                 Scount = 1/sqrt(1+len(floatmodels))
                 try:
                     lastModel = floatmodels.latest('date')
-#                     print "lastmodel",lastModel.id
-#                     print lastModel.date
                     Stime = -1/( now - lastModel.date).total_seconds()
                 except FloatModel.DoesNotExist:
                     Stime = 0
@@ -229,11 +224,11 @@ class AjaxableResponseMixin():
         return diff
 
     def form_valid(self, form):
+        print "HERE LIKE A BOSS"
         if self.request.is_ajax():
             self.model = FloatModel()
             self.post = self.request.POST
             self.parseToModel()
-            print "type in form_valid",self.model.type.type
             self.model.result = decider(self.model.type.type,
                                          self.model.conceptQuestion.number.number, 
                                          self.model.conceptQuestion.params.concept.p1, 
@@ -282,22 +277,18 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
 
-        print t.type
-        print par.id
-        print n.number
         self.model.conceptQuestion = get_object_or_404(ConceptQuestion, type=t, params = par,number=n)
-        print "passed"
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
+        print "IN GET CONTExT DATA I AM"
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         ctx['action'] = self.request.path
         if "pref" in self.request.session and (self.type == "settings" or self.kwargs.get("pref",None)):
                 types = [x.type for x in self.request.session["pref"]]
                 preffered = self.request.session["pref"]
-                print "here"
                 isSettingsOn = True
         else:
             clear_session_params(self.request,["pref"]);
@@ -318,7 +309,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         pa1 = par.concept.p1
         pa2 = par.concept.p2
         q = question.number.number
-        print "question in get_context_data",question.id
         rev = par.reverse
         self.request.session["type"] = self.type
         if isSettingsOn == False and self.is_new_test({"types":types,
@@ -341,9 +331,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                               "p2":pa2,
                               "rev":rev,
                               "question":q,})
-        print self.request.session["rev"]," ",rev
-        print self.request.session["p1"]," ",pa1
-        print self.request.session["p2"]," ",pa2
         ctx["param"] = {
                         "p1":self.request.session["p1"],
                         "p2":self.request.session["p2"],
@@ -360,13 +347,23 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['medTime']=15
             else:
                 self.request.session['medTime']=median(l) 
+        num = Number.objects.get(number = self.request.session["question"])
+        param = Params.objects.get(concept = Concept.objects.get(p1 = self.request.session["p1"],
+                                                                 p2 = self.request.session["p2"],
+                                                                 ),
+                                   reverse = self.request.session["rev"])
+        if len(Hint.objects.filter(conceptQuestion = ConceptQuestion.objects.get(params = param,
+                                                                          number = num))) != 0:
+            ctx["hint"] = True
+        else: 
+            ctx["hint"]= False
         self.ctx = ctx   
-        print self.request.session["type"],self.type
         return ctx
 
     def is_new_test(self,dict):
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
+                print "new test passed"
                 clear_session_params(self.request)
                 return True;
         return False;
@@ -395,11 +392,9 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def get(self,*args, **kwargs):
         if "test" in self.request.session and self.request.session["test"] == "set":
             if self.request.session["testParam"] == 11:
-                print self.request.path
                 return redirect("%s/finish"%self.request.path)           
 
         self.type = kwargs.get("type")
-        print "type in get",self.type
         super(CreateQuestion,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
@@ -412,7 +407,7 @@ class PreffQuestion(CreateQuestion):
                 clear_session_params(self.request)
                 clear_session_params(self.request,["prefp"])
             elif "prefp" not in self.request.session:
-                "print equal"
+                print "print equal"
                 clear_session_params(self.request) 
             if self.is_new_test({
                                "test":kwargs.get("test",None),
@@ -420,13 +415,11 @@ class PreffQuestion(CreateQuestion):
                                }) :
                 clear_session_params(self.request,["rev","p1","p2","question","test","type","pref","prefp"])
             self.request.session["prefp"] = self.pref
-            print self.pref
             type = kwargs.get("type",None)
             t = Type.objects.get(type = type)
             concept1 = Concept.objects.filter(p1 = self.pref, type = t)
             concept2 = Concept.objects.filter(p2 = self.pref, type = t)
             concepts = concept1 | concept2
-            print [(x.p1,x.p2) for x in concepts]
             if len(concepts) == 0:
                 raise Exception("no Concept with p1 or p2 equals %s"%self.pref)
             self.request.session["pref"] = concepts
@@ -443,7 +436,6 @@ class Finish(TemplateView):
         ctx["url"] = self.url
         ctx["score"] = self.s
         ctx["userScore"] = self.uS
-        print self.out
         ctx["answers"] = json.dumps(self.out)
         ctx["best"] = self.res
         return ctx
@@ -451,11 +443,8 @@ class Finish(TemplateView):
     def get(self,*args,**kwargs):
         self.url = kwargs.get("url",None)
         if "test" not in self.request.session:
-            print "e";
             print self.url
             return redirect("/learning/%s"%self.url)
-        else:
-            print "eh"
         self.get_finish_result(self.request)
         return super(Finish,self).get(*args,**kwargs)
     
@@ -495,7 +484,6 @@ class Finish(TemplateView):
                 s = sum([x.label for x in f])/len(f);
             else:
                 raise Exception("p is 0")
-        print toDelete
         if toDelete:
             clear_session_params(request)
         else:
@@ -568,7 +556,6 @@ class OwnChoice(ListView):
 
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
-        print self.request.POST
         self.request.session["pref"] = []
         type = kwargs.get("type",None)
         if type == "all":
@@ -620,7 +607,6 @@ def save_time(request):
     
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
-        print request.POST.get("data")
         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
                   [os.environ.get("EMAIL_HOST_USER", '')], fail_silently=False)
         return HttpResponse("1");

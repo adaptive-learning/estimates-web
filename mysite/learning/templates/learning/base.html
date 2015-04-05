@@ -13,20 +13,19 @@
 {% endif %}
 {% with request.session.p1|get_reversed:param as pa1 %}
 {% with request.session.p2|get_reversed:param as pa2 %}
-<script>
 
+<script>
 $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
-    $.ajaxSetup({
+
+    $.ajax({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
 	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	        }
-		}
-	});
-    $.ajax({
+		},
     	url : "/learning/save_time", // the endpoint
         type : "POST", // http method
         data : { data:new Date().getTime() / 1000}, 
@@ -39,6 +38,9 @@ $(document).ready(function(){
         		var end = 0;
         		if (time > medTime){
         			var Newtime = time - medTime;
+        			if (Newtime > 30){
+        				timer(0,"#750000",false,true,1,1,1);
+        			}
 					start = Newtime / 30;
         			timer(30,"#750000",false,true,start,end,start);
         		} else {
@@ -96,7 +98,6 @@ $(document).ready(function(){
 		}),"{{request.session.type}}");
 	});
 	
-	var used_hint=0;
 	
 </script>
 {% endwith %}

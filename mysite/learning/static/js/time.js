@@ -73,7 +73,3 @@ function draw_next(step,color,anti,stay,start,end) { // step between 0 and 1
 	  	}
     }
 }
-
-
-$(document).ready(function() {
-});

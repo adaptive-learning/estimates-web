@@ -1,5 +1,5 @@
 from django import template
-from learning.models import Type, Params, CurrTable, Concept
+from learning.models import Type, Params, CurrTable, Concept, Hint
 from learning.static.python import variables
 import json
 
@@ -8,6 +8,10 @@ register = template.Library()
 @register.filter(name='get_concepts')
 def get_concepts(objects,t):
     return objects.filter(type = t)
+
+@register.filter(name="hint")
+def hint(id):
+    return True if len(Hint.objects.filter(conceptQuestion_id = id)) != 0 else False
 
 @register.filter(name='get_params')
 def get_params(objects,t):

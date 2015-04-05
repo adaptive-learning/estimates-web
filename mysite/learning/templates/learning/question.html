@@ -4,6 +4,7 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
+{% load learning_filters %}
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="mainStyle">
@@ -27,6 +28,7 @@
 	    		Sorry, it doesn't work for you.
 				</canvas>
 			</div>
+
 		</div>
 	</div>
 	<div class="row center">

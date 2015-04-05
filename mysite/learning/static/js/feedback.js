@@ -1,4 +1,5 @@
 function sendFeedback(){
+	event.preventDefault();
 	$.ajax({
 		beforeSend: function(xhr, settings) {
     	    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

@@ -1,16 +1,15 @@
 function get_result(data) {
 	$("#pie-countdown").hide();
 	$("#myCanvas").hide();
-    $.ajaxSetup({
+	
+	var Formurl = $("#assigForm").attr("action");
+	event.preventDefault();
+    $.ajax({
 	    beforeSend: function(xhr, settings) {
 	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
 	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
 	        }
-		}
-	});
-	
-	var Formurl = $("#assigForm").attr("action");
-    $.ajax({
+		},
     	url : Formurl + "/finish", // the endpoint
         type : "POST", // http method
         data : { data:data}, // data sent with the post request
