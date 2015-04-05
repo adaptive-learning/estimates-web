@@ -10,6 +10,7 @@ urlpatterns = patterns("",
 #     url(r'^finish',views.finish,name= "last"),
 #     url(r'^getFromDict',views.getFromDict),
     url(r'^clear_session',views.clearSession, name="clear"),
+    url(r'^send_mail',views.send_email),
     url(r'^(?P<url>([a-zA-Z]|/|-)+)/finish',views.Finish.as_view()),
     url(r'^table',views.ShowTable.as_view()),
     
@@ -18,6 +19,7 @@ urlpatterns = patterns("",
     url(r'^math/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^grap/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^conv/(?P<pref>[A-Z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.PreffQuestion.as_view(), name = 'learning'),
+
     url(r'^own-(?P<type>[a-z]+)',views.OwnChoice.as_view()),
 
     url(r'^save_time',views.save_time),

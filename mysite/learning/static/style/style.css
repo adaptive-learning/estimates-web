@@ -1,7 +1,3 @@
-#imgfyz{  
-	background-size: 100% 100%;
-	height: 500px;
-}
 #label{
 	color: #E0E0E0;
 	font: normal 3vh courier !important;
@@ -19,14 +15,15 @@
 	background-color: #DEDEDE;
 }
 
+
+#userMessage{
+	height: 20vh;
+}
+
 #border{
 	table.bottom;
 }
 	
-#mainLabel{
-	border-top: solid #B2B2B2;
-}
-
 #loader 
 { fill: #0088cc }
 

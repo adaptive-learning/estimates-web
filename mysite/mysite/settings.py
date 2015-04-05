@@ -139,7 +139,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details'
 )
-
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'romanorlicek@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 SESSION_SERIALIZER= 'django.contrib.sessions.serializers.PickleSerializer'
 GOOGLE_OAUTH2_CLIENT_ID = "824945897278-rcivje8rjh86b19ofoe39s7cq6nbnso8.apps.googleusercontent.com"

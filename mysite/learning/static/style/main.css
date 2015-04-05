@@ -6,6 +6,34 @@
 	background-color: #6E6D78;
 	height: 60vh;
 }
+.aboutStyle{
+	
+}
+
+.silverText{
+	color:silver
+}
+
+.bottomText{
+	font-size: 120%;
+}
+
+.secondaryStyle{
+	position:fixed;
+	background-color: #3D3A4F;
+	bottom:0;
+	width:100%;
+}
+.edgeButton{
+	position:fixed;
+	left:0;
+}
+.rotatedText{
+    -ms-transform: rotate(7deg); /* IE 9 */
+    -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg);
+    transform-origin: bottom left;
+}
 .button-container {
     width: 620px;
 }
@@ -38,8 +66,4 @@
 	    display:block;
 	position:relative;
 	margin-top:0vh;
-}
-#pie-countdown{
-	width: 20%;
-	height: 20%;
 }

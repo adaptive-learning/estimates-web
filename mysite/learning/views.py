@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from lazysignup.decorators import allow_lazy_user
 from django.utils.decorators import method_decorator
 from datetime import datetime
@@ -616,4 +617,9 @@ def save_time(request):
             request.session["pieTimer"] = time
         return HttpResponse("%s//%s"%(ok,toSend))
     
+def send_email(request):
+    if request.method == 'POST' and request.is_ajax():
+        send_mail('Feedback: priblizne.cz', request.POST.get("userMessage"), request.POST.get("email"),
+                  ["romanorlicek@gmail.com"], fail_silently=False)
+        return HttpResponse("1");
     ############################################################################

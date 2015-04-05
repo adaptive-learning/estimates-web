@@ -1,19 +1,12 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<head>
-	<script src="/static/js/variables.js"></script>
-	<script src="/static/js/home.js"></script>
-</head>
-<html>
-
-
+<!DOCTYPE html>
 {% extends "foundation/base.html" %}
+<html>
+{% block base_body %}
+{%include "navBar/bar.html" %}
 {% load staticfiles %}
 
-
-
-{% block base_body %}
-
-{%include "navBar/bar.html" %}
+<script src="{% static 'js/feedback.js' %}"></script>
+<script src="{% static 'js/answerForm.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "style/main.css" %}" />
 <div id="main" class="mainStyle">
     <div class="large-12 columns">
@@ -36,17 +29,43 @@
 		Zábavná aplikácia na testovanie vašich schopností na odhady.
 	</span>
 </div>
-
+<button class="rotatedText secondary radius edgeButton small" 
+data-reveal-id="feedback" >Feedback</button>	
 </div>
 <div class="row collapse" align="center">
-<div id="about" class="large-6 collumns" align="left">
+<div id="about" class="aboutStyle" class="large-6 collumns" align="left">
 	<h4>
 		Otázky na mieru:
 	</h4>
 	<span>Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností</span>
 </div>
 </div>
+<div align="center">
+<div id="bottom" class="secondaryStyle">
+	<span class="silverText bottomText">Vyskúšajte taktiež</span>	
+</div>
+</div>
+<div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+  <h3 id="modalTitle">Máte návrhy na zlepšenie? Napíšte nám.</h3>
+  <form id="sendFeedback">
+  	<span>Vaša správa:</span>
+  	<textarea id="userMessage" placeholder="" required></textarea>
+  	<span>Váš email:</span>
+  	<input id="email" type="email" ></input>
+  	<input id="sub" type="submit" class="small button" value="Odoslať"/>
+  	<a class="close-reveal-modal" aria-label="Close">&#215;</a>
+  </form>
+</div>
+<script>
+	var csrftoken = getCookie('csrftoken');
+	$('#sendFeedback').on('submit', function(event){
+    	event.preventDefault();
+
+    	sendFeedback();
+	});
+</script>
 {% endblock base_body %}
+
 
 </html>
  
