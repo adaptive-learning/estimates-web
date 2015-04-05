@@ -140,7 +140,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details'
 )
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'romanorlicek@gmail.com'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", '')
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASS", '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 

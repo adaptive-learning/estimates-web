@@ -1,3 +1,4 @@
+import os
 from django.core.mail import send_mail
 from lazysignup.decorators import allow_lazy_user
 from django.utils.decorators import method_decorator
@@ -619,7 +620,8 @@ def save_time(request):
     
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
-        send_mail('Feedback: priblizne.cz', request.POST.get("userMessage"), request.POST.get("email"),
-                  ["romanorlicek@gmail.com"], fail_silently=False)
+        print request.POST.get("data")
+        send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
+                  [os.environ.get("EMAIL_HOST_USER", '')], fail_silently=False)
         return HttpResponse("1");
     ############################################################################
