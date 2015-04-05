@@ -1,13 +1,14 @@
 
 {% load learning_filters %}
-{% if request.session.testParam == -1%}
+{% if request.session.test == "time" %}
 	<script>
-		var testParam = (new Date()).getTime();
+		var fTime = "{{fullTime}}";
+		testParam = 0;
 	</script>
 {% else %}
 	<script>
-		var testParam = "{{request.session.testParam}}";
-		testParam = parseInt(testParm) +1000;
+		var fTime = "{{request.session.medTime}}";
+		var testParam = "{{request.session.setParam}}";
 	</script>
 
 {% endif %}
@@ -19,51 +20,7 @@ $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
-
-    $.ajax({
-	    beforeSend: function(xhr, settings) {
-	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-	        }
-		},
-    	url : "/learning/save_time", // the endpoint
-        type : "POST", // http method
-        data : { data:new Date().getTime() / 1000}, 
-        success: function(response){
-        	splitted = response.split("//");
-			if (splitted[0] == "true"){
-        		time = Math.floor(parseFloat(splitted[1]));
-        		var medTime = parseFloat("{{request.session.medTime}}");
-        		var start = time / medTime;
-        		var end = 0;
-        		if (time > medTime){
-        			var Newtime = time - medTime;
-        			if (Newtime > 30){
-        				timer(0,"#750000",false,true,1,1,1);
-        			}
-					start = Newtime / 30;
-        			timer(30,"#750000",false,true,start,end,start);
-        		} else {
-        			timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,start);
-        		}
-        	} else {
-        		time = 0;
-        		var end = 1;
-        		var start = 1;
-        		var total = 0;
-        		timer("{{request.session.medTime|stringformat:'2.f'}}","#0F482D",true,false,start,end,total);
-        	}
-        	
-        	times();
-        },
-		async: false,
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        }
-    });
+	drawPieTimer(fTime,"{{request.session.medTime|stringformat:'2.f'}}","{{request.session.test}}");
 });
 	sessionStorage.setItem("sended",false); 
 	function getCookie(name) {
@@ -84,10 +41,11 @@ $(document).ready(function(){
 
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
-		clearInterval(interval);
  		clearInterval(t);
 		var doc = document.getElementById("assigForm");
+
     	event.preventDefault();
+
 
     	create_post(JSON.stringify({
 			p1:"{{request.session.p1}}",

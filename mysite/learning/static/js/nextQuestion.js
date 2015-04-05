@@ -17,7 +17,6 @@ function handleNextQuestion(t,test,testParam){
 	} else if (test == "time"){
 		$("#testCounter").hide();
 		$("#timeCounter").show();
-		drawTimer("timeCounter",10,250,130,50,t,testParam);
 	}
 }
 

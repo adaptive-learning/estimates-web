@@ -1,4 +1,3 @@
-var prodluva = 0;
 function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -52,7 +51,7 @@ function create_post(data,t) {
         error : function(xhr,errmsg,err) {
             $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
                 " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            alert(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
 };
@@ -89,8 +88,7 @@ function answer(diff,result){
 	setTimeout(function () {
 		window.location.href = $('#assigForm').attr('action');
 		return false;
-		},4000 + prodluva);
-	prodluva = 4000;
+		},1500 );
 	return false;
 }
 function setStars(im,x){

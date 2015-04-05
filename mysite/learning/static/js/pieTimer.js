@@ -1,11 +1,5 @@
-var interval;
+
 function drawTimer(ele,sec,width,height,r,t,fr){
-	$('<canvas>').attr({
-	    id: "testTimer"
-	}).css({
-	    width: r*4,
-	    height: r*2, 
-	}).appendTo('#'+ele);
 
 	var canvas = $("#testTimer").get(0);
 	var context=canvas.getContext("2d");
@@ -23,7 +17,7 @@ function drawTimer(ele,sec,width,height,r,t,fr){
    	var startTime = parseInt(fr);
    	// var startTime = 1425639356376;
    	testP = startTime;
-	interval = setInterval(anim, 60);
+	var interval = setInterval(anim, 60);
 	function anim() {
 	    diff = (new Date()).getTime() - startTime;
 

@@ -24,22 +24,36 @@
 			<div class="large-6 rows" id="answer" ></div>
 			
 			<div id="divPie" class="large-1 large-centered columns">
-				<canvas id="pie-countdown" width="70" height="70" style="position:relative;">
+				<canvas id="pie-countdown" width="60" height="60" style="position:relative;">
 	    		Sorry, it doesn't work for you.
 				</canvas>
 			</div>
+			{% if hint %}
+				<div id="hintDiv" class="large-centered columns">
+					<canvas id="hint" width="120" height="120"> 
+	    			Sorry, it doesn't work for you.
+				</canvas>
+				<script>$(document).ready(function(){
+					showHint("{{request.session.p1}}","{{request.session.p2}}");
+				});</script>
+			</div>
+			{%endif%}
+
 
 		</div>
 	</div>
 	<div class="row center">
 
 		<div id="userControl">
-			<div class="round progress success" id="testCounter"></div>
-			<div id="timeCounter" align="center"></div>
-	  		<div class="large-1 columns" id="next">
+				<div class="round progress success" id="testCounter"></div>
+				<div class="large-12 collumns " align="center">
+				<canvas id="testTimer" width="60" height="60" style="position:relative;">
+	    			Sorry, it doesn't work for you.
+				</canvas>
+				</div>
+	  		<div class="large-12 columns" id="next">
 				<input id="sub" type="submit" class="button" value="Odpovedat" />
 			</div>
-
 		</div>
 	</div>
 </form>

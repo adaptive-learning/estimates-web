@@ -12,10 +12,18 @@ function times(){
 		t=setTimeout("times()",1000);
 	}
 }
+function afterTestTimer(stay){
+	if (stay == true){
+		draw_circ(1,true);
+  	} else {
+		timer('pie-countdown',30,"#750000",false,function(){ return afterTestTimer("true");},1,1,0);
+  	}
+}
 
-function timer(sec,color,anti,stay,start,end,itotal){
+
+function timer(element,sec,color,anti,func,start,end,itotal){
 	
-    canvas = document.getElementById('pie-countdown');
+    canvas = document.getElementById(element);
     ctx = canvas.getContext('2d');
     canvas_size = [canvas.width, canvas.height];
     radius = Math.min(canvas_size[0], canvas_size[1]) / 2;
@@ -34,7 +42,7 @@ function timer(sec,color,anti,stay,start,end,itotal){
             var step = start-i/total;
             var left = Math.ceil(i/fps);
             return function() {
-                draw_next(step,color,anti,stay,start,end);
+                draw_next(step,color,anti,func,start,end);
             };
         })();
 
@@ -44,7 +52,7 @@ function timer(sec,color,anti,stay,start,end,itotal){
     }
 }
         
-function draw_next(step,color,anti,stay,start,end) { // step between 0 and 1
+function draw_next(step,color,anti,func,start,end) { // step between 0 and 1
 
     function draw_circ(s,an){
 	    ctx.clearRect(0,0,canvas_size[0], canvas_size[1]);
@@ -66,10 +74,82 @@ function draw_next(step,color,anti,stay,start,end) { // step between 0 and 1
     if(step < end) {
 		draw_circ(step,anti);           
     } else {
-    	if (stay == true){
-			draw_circ(1,true);
-      	} else {
-			timer(30,"#750000",false,true,1,1,0);
-	  	}
+		func();
     }
 }
+
+
+function drawPieTimer(fullTime,medTime2f,test){
+	$.ajax({
+	    beforeSend: function(xhr, settings) {
+	        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+	        }
+		},
+    	url : "/learning/save_time", // the endpoint
+        type : "POST", // http method
+        data : { data:new Date().getTime() / 1000}, 
+        success: function(response){
+        	if (test == "set"){
+        		timerSet(response,fullTime);
+        	} 	else if(test == "time"){
+        		timerTime(response,fullTime);
+        	}
+        	times();
+        },
+		async: false,
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });	
+}
+function timerSet(response,fullTime){
+	splitted = response.split("//");
+	if (splitted[0] == "true"){
+		time = Math.floor(parseFloat(splitted[1]));
+		var medTime = parseFloat(fullTime);
+		var start = time / medTime;
+		var end = 0;
+		
+		if (time > medTime){
+			
+			var Newtime = time - medTime;
+			
+			if (Newtime > 30){
+				timer('pie-countdown',0,"#750000",false,function(){ return afterTestTimer("true");},1,1,1);
+
+			}
+			start = Newtime / 30;
+			timer(30,"#750000",false,true,start,end,start);
+		} else {
+			timer('pie-countdown',fullTime,"#0F482D",true,function(){ return afterTestTimer("true");},start,end,start);
+		}
+	} else {
+		time = 0;
+		var end = 1;
+		var start = 1;
+		var total = 0;
+		timer('pie-countdown',fullTime,"#0F482D",true,function(){ return afterTestTimer("true");},start,end,total);
+	}	
+} 
+
+function timerTime(response,fullTime){
+	splitted = response.split("//");
+	if (splitted[0] == "true"){
+		
+		time = Math.floor(parseFloat(splitted[1]));
+
+	} else {
+		time = 0;
+	}
+	var start = Math.floor(parseFloat(splitted[2])) / fullTime;
+	var end = 0;
+	timer('testTimer',fullTime,"#0F482D",true,get_result,start,end,start);
+	
+}
+
+
+

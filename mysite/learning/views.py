@@ -224,11 +224,10 @@ class AjaxableResponseMixin():
         return diff
 
     def form_valid(self, form):
-        print "HERE LIKE A BOSS"
         if self.request.is_ajax():
             self.model = FloatModel()
             self.post = self.request.POST
-            self.parseToModel()
+            self.parse_to_model()
             self.model.result = decider(self.model.type.type,
                                          self.model.conceptQuestion.number.number, 
                                          self.model.conceptQuestion.params.concept.p1, 
@@ -238,8 +237,6 @@ class AjaxableResponseMixin():
             self.model.save()
             self.update_skill()
             print "diff to send",self.model.label
-            if "frTimeId" not in self.request.session and self.request.session["test"] == "time":
-                self.request.session["frTimeId"] = self.model.id
             clear_session_params(self.request,["p1","question","p2"]);
 
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
@@ -248,22 +245,18 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     model = FloatModel
     template_name = "learning/question.html"
     fields = ['answer']            
-    def parseToModel(self):
+    def parse_to_model(self):
         js = json.loads(self.post.get('data'))
-        if self.request.session['test'] == "time":
-            self.request.session['testParam'] = js['testP']
-        elif self.request.session['test'] == "set":
-            self.request.session['testParam'] += 1
+        self.request.session['setParam'] += 1
 
         p1 = js['p1'] if js['p1'] is not None else "-1"
         p2 = js['p2'] if js['p2'] != 'None' else None
         try:
             c = Concept.objects.get(p1 = p1, p2 = p2)
-            rev = False
         except Concept.DoesNotExist:
             c = Concept.objects.get(p1 = p2, p2 = p1)
-            rev = True
-        par = get_object_or_404(Params, concept = c, reverse = rev)
+        
+        par = get_object_or_404(Params, concept = c, reverse = self.request.session["rev"])
         type = self.post.get('type')
 
         if type == "":
@@ -277,13 +270,17 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         else :
             self.model.user = None
 
+        print "here "
+        print "type id",t.id
+        print "par id",par.id
+        print "number id",n.id
         self.model.conceptQuestion = get_object_or_404(ConceptQuestion, type=t, params = par,number=n)
+        print "is the probblem"
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
-        print "IN GET CONTExT DATA I AM"
         ctx = super(CreateQuestion, self).get_context_data(**kwargs)
         ctx['action'] = self.request.path
         if "pref" in self.request.session and (self.type == "settings" or self.kwargs.get("pref",None)):
@@ -304,7 +301,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         self.type = question.type.type
         test = self.kwargs.get("test",None)
         if test is None : raise Exception("no test param in url")
-        else: self.request.session['test'] = test
 #        TODO: not p1 and p2 but whole params
         pa1 = par.concept.p1
         pa2 = par.concept.p2
@@ -320,22 +316,24 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                "type":self.type,
                                "p1":pa1,
                               "p2":pa2,
-                              "rev":par.reverse,
+                              "rev":rev,
                               "question":q,
                               "pref":preffered})
         elif self.is_new_question({"p1":pa1,
                               "p2":pa2,
-                              "rev":par.reverse,
+                              "rev":rev,
                               "question":q,}):
             self.set_new_session({"p1":pa1,
                               "p2":pa2,
                               "rev":rev,
-                              "question":q,})
+                              "question":q,
+                              "test":test,})
         ctx["param"] = {
                         "p1":self.request.session["p1"],
                         "p2":self.request.session["p2"],
                         "reverse":self.request.session["rev"],
                         } 
+        print "reverse in context data",self.request.session["rev"], rev
         if 'medTime' not in self.request.session:
             if q:
                 quest = get_object_or_404(Number, number = q)
@@ -347,6 +345,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['medTime']=15
             else:
                 self.request.session['medTime']=median(l) 
+        if self.request.session["test"] == "time":
+            ctx["fullTime"] = 150;
         num = Number.objects.get(number = self.request.session["question"])
         param = Params.objects.get(concept = Concept.objects.get(p1 = self.request.session["p1"],
                                                                  p2 = self.request.session["p2"],
@@ -378,20 +378,25 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         return False;
 
     def set_new_session(self,dict):
+        print"setting new session"
         for p in dict:
             self.request.session[p] = dict[p]
-        if 'testParam' not in self.request.session:
+        if 'setParam' not in self.request.session:
+            print "not exist"
             if self.request.session["test"] == "set":
-                self.request.session['testParam'] = 1;
+                self.request.session['setParam'] = 1
             elif self.request.session["test"] == "time":
-                self.request.session['testParam'] = -1 
+                self.request.session['setParam'] = 0 
             else: 
                 return HttpResponse(status = 401)
+        else:
+            print "eh?"
+            print self.request.session["setParam"]
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
         if "test" in self.request.session and self.request.session["test"] == "set":
-            if self.request.session["testParam"] == 11:
+            if self.request.session["setParam"] == 11:
                 return redirect("%s/finish"%self.request.path)           
 
         self.type = kwargs.get("type")
@@ -448,6 +453,11 @@ class Finish(TemplateView):
         self.get_finish_result(self.request)
         return super(Finish,self).get(*args,**kwargs)
     
+    def post(self,*args,**kwargs):
+        if self.request.session["test"] == "time" and self.request.is_ajax():
+            print self.request.path
+            return redirect("/%sfinish"%self.request.path)
+    
     def get_finish_result(self,request):
 
         if "pref" in request.session and request.session["pref"] != None:
@@ -464,50 +474,45 @@ class Finish(TemplateView):
         concepts = Concept.objects.filter(type__in = types)
         params = Params.objects.filter(concept__in = concepts)
         s=0;
+        f = []
         if request.session["test"] == "time":
-            #TODO: make na cas 
-            raise Exception("not supported yet")
-            if 'frTimeId' in request.session:
-                date = FloatModel.objects.get(id = request.session["frTimeId"]).date
-#                 now = timezone.localtime(timezone.now())
-                now = datetime.now(utc)
-                if date is None: date = now;
-                f = FloatModel.objects.filter(user = loggUser, type__in = types, date__range=(date,now))
-            else : s = 1
+            count = int(request.session["setParam"])
+            if count == 0:
+                s = 1
+            else:
+                f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:count]
         elif request.session["test"] == "set":
-            try:
-                f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:10]
-            except FloatModel.DoesNotExist:
-                raise Exception("f in finish is empty")
+            f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:10]
         if s != 1:    
             if len(f) != 0:
                 s = sum([x.label for x in f])/len(f);
             else:
-                raise Exception("p is 0")
+                raise Exception("f is 0")
         if toDelete:
             clear_session_params(request)
         else:
             clear_session_params(request,["rev","pieTimer","p1","question",
-                                           "p2","testParam","test","type","frTimeId",
+                                           "p2","setParam","test","type","timeParam",
                                            "types"])
-        try: uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
-        except UserSkill.DoesNotExist: return HttpResponse(s) 
+        uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
         uS = (sum([x.skill for x in uS]))/float(len(uS))
-
-        scores = [(math.log1p(model.score(1,x.label, x.time)+(1/x.time)),x.id) for x in f]
-        print scores
-        res = max(scores,key=lambda item:item[0])
-        res = [x[1] for x in scores if x[0]==res[0]]
-        ids = [x.id for x in f]
-        res = [ids.index(x) for x in res]
-
         
-        results = [ob.as_json() for ob in f]
+        if len(f) != 0:
+            scores = [(math.log1p(model.score(1,x.label, x.time)+(1/x.time)),x.id) for x in f]
+            print scores
+            res = max(scores,key=lambda item:item[0])
+            res = [x[1] for x in scores if x[0]==res[0]]
+            ids = [x.id for x in f]
+            res = [ids.index(x) for x in res]
+            results = [ob.as_json() for ob in f]
+
+            self.out = results
+            self.res = res
+        else:
+            self.out = []
+            self.res = []
         self.s = s
         self.uS = uS
-        self.out = results
-        self.res = res
-
         
 class CreateCurr(CreateQuestion):
     def get(self):
@@ -521,10 +526,10 @@ def clearSession(request):
         return HttpResponse("ok")
 
 def clear_session_params(request,params = ["rev","pieTimer","p1","question",
-                                           "p2","testParam","test","type","frTimeId",
+                                           "p2","timeParam","test","type","setParam",
                                            "types","pref"]):
-    if params[0] == "pieTimer":
-        print "CLEARING pieTimer"
+    if params[0] == "timeParam":
+        print "CLEARING timeParam"
     for param in params:
         if param in request.session:
             del request.session[param]
@@ -601,9 +606,20 @@ def save_time(request):
             ok = "true"
         else:
             ok = "false"
-            toSend=""
+            toSend=0
             request.session["pieTimer"] = time
-        return HttpResponse("%s//%s"%(ok,toSend))
+        Ttime = 0;
+        if request.session["test"] == "time":
+            if "timeParam" in request.session:
+                print "in save_time",float(time)
+                print "request session Time",float(request.session["timeParam"])
+                Ttime = float(time) - float(request.session["timeParam"])
+                print Ttime
+            else:
+                request.session["timeParam"] = float(time)
+            
+        return HttpResponse("%s//%s//%s"%(ok,toSend,Ttime))
+
     
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
