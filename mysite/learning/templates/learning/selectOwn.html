@@ -11,7 +11,6 @@
 {% load staticfiles %}
 {% load learning_filters %}
 
-<script src="{% static "js/options.js" %}"></script>
 <script src="{% static "js/decider.js" %}"></script>
 <div class="row centered">
 <form id="assigForm" method="post">{% csrf_token %}
@@ -29,13 +28,28 @@
 	</label>
 
 	{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
-		
+
 		{% for p in object_list|get_concepts:t%}
-				<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="{{p.id}}"/>
-				<label for="{{t.type}}{{p.id}}">		
-					<script>document.write(decider("{{p.p1}}"));</script><span><-></span><script>document.write(decider("{{p.p2}}"));</script>
-				</label>
+		<div>
+			<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="{{p.id}}"/>
+			<label for="{{t.type}}{{p.id}}">		
+				<script>document.write(decider("{{p.p1}}"));</script><span><-></span><script>document.write(decider("{{p.p2}}"));</script>
+			</label>
+		</div>
 		{% endfor %}
+
+				<button type="button" class="small" onclick="selectAll('{{t.type}}')">Označ všetko</button>
+				<script>{
+					function selectAll(element){
+						list = document.getElementsByName(element);
+						for (i = 0; i < list.length; i++) {
+    						if (list[i].type == "checkbox") {
+        						list[i].checked = true;
+    						}
+						}
+					}
+				}</script>
+
 	{% else %}
 		<div class="large-12 collumn">
 			<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="all"/>
