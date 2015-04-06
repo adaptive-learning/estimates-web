@@ -110,8 +110,14 @@ function delet(div){
 }
 
 function resize(img){
-	img.setAttribute("width","35");
-	img.setAttribute("height","35");
+	var byWindow = ((5*$(window).height())/100);
+	if (byWindow < 35){
+		img.setAttribute("width",byWindow);
+		img.setAttribute("height",byWindow);
+	} else {
+		img.setAttribute("width","35");
+		img.setAttribute("height","35");
+	}
 }
 
 Number.prototype.round = function(places) {
