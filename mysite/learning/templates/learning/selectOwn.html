@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 {% extends "foundation/base.html" %}
 <head>
-	
+
 
 </head>
 <html>
@@ -21,12 +21,21 @@
 	{% for t in object_list|get_types%}
 
 
-	<label >
+	<label onclick="showType('{{t.type}}')">
 				<hr></hr>	
 		{{t.type|get_from_dict}}
-
+<script>
+	function showType(type){
+			var element = $("#"+type);
+			if(element.is(':visible')){
+				element.slideUp();
+			} else {
+				 element.slideDown();
+			}
+	}
+</script>	
 	</label>
-
+	<div id="{{t.type}}" style="display: none;">
 	{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
 
 		{% for p in object_list|get_concepts:t%}
@@ -49,6 +58,8 @@
 						}
 					}
 				}</script>
+				
+
 
 	{% else %}
 		<div class="large-12 collumn">
@@ -59,14 +70,11 @@
 		</div>
 	
 	{% endif %}
-
+	</div>
 	{% endfor %}
-
 <hr></hr>
 <input id="sub" type="submit" class="button" value="Potvrdiť" />
 </form>
 </div>
 
-<script>
-</script>
 {% endblock base_body %}
