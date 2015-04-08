@@ -119,7 +119,7 @@ msgstr ""
 
 #: templates/home/index.html:75
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
-msgstr ""
+msgstr "Máte návrhy na zlepšení? Napište nám."
 
 #: templates/home/index.html:77
 msgid "Vaša správa:"
