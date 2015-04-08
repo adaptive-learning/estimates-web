@@ -24,8 +24,8 @@ def get_set_length(objects,type):
     return set([x.p1 for x in objects]).length
 
 @register.filter(name='get_from_dict')
-def get_from_dict(type):
-    return variables.mainDict["typeReal"][type]
+def get_from_dict(type,main):
+    return variables.mainDict[main][type]
     
 @register.filter(name="filter_by_type")
 def filter_by_type(objects,type):
@@ -75,15 +75,7 @@ def get_p2_by_p1(objects,pa1):
 
 @register.filter(name='firstP')
 def firstP(objects, first):
-#     out = []
-#     for x in objects:
-#         if x.params.reverse:
-#             if x.params.concept.p2 == first:
-#                 out.append(x)
-#         else:
-#             if x.params.concept.p1 == first:
-#                 out.append(x)
-#     return out
+
     concept = Concept.objects.filter(p1 = first) | Concept.objects.filter(p2 = first)
     params = Params.objects.filter(concept__in = concept)
     return objects.filter(params__in = params)
@@ -99,31 +91,3 @@ def secondP(objects, second):
             if x.params.concept.p2 == second:
                 return x.rate
             
-    
-    
-#     for x in objects:
-#         if x.para
-#     concept = Concept.objects.filter(p2 = )
-#     rev = False
-#     if len(concept) == 0:
-#         concept = Concept.objects.filter(p2 = first)
-#         rev = True
-#     
-#     params = Params.objects.filter(concept__in = concept, reverse = rev)
-#     return objects.filter(params__in = params)
-
-#     concepts = Concept.objects.filter(p1 = second) | Concept.objects.filter(p2 = second)
-#     params = Params.objects.filter(concept__in = concepts)
-#     return objects.filter(params__in = params)
-#     try:
-#         params = [e for e in  Params.objects.filter(p2 = second)]
-#         try:
-#             obj = objects.get(params__in  = params)
-#         except: return "-"
-#             
-#         return obj.rate
-#     except CurrTable.DoesNotExist:
-#         if objects[0].params.p1 == second:
-#             return "1"
-
-

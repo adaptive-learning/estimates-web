@@ -5,6 +5,7 @@
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
 {% load learning_filters %}
+{% load i18n %}
 <link rel="stylesheet" type="text/css" href="{% static "style/style.css" %}" />
 <form id="assigForm" action={{action}}>{% csrf_token %}
 	<div class="mainStyle">
@@ -30,8 +31,8 @@
 				</canvas>
 			</div>
 			{% elif request.session.test == "time" %}
-				<span class="silverText" style="font: normal 4vh courier;">
-					{{request.session.setParam}}	
+				<span class="silverText" style="font: normal 3vh courier;">
+					{% trans "Počet zodpovedaných otázok:" %}{{request.session.setParam}}	
 				</span>
 			{% endif %}
 			{% if hint %}
@@ -53,8 +54,8 @@
 		<div id="userControl">
 				{% if request.session.test == "set"%}
 				<div class="round progress success" id="testCounter"></div>
-				<div class="large-12 collumns " align="center">
 				{% elif request.session.test == "time" %}
+	  		<div class="large-12 columns" align="center">
 				<canvas id="testTimer" width="60" height="60" style="position:relative;">
 	    			Sorry, it doesn't work for you.
 				</canvas>

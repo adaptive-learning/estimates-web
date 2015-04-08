@@ -4,6 +4,7 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 <script src="{% static 'js/feedback.js' %}"></script>
 <script src="{% static 'js/answerForm.js' %}"></script>
@@ -26,31 +27,56 @@
 </div>
 <div class="descTop" align="center" id="labelAbout">
 	<span>
-		Zábavná aplikácia na testovanie vašich schopností na odhady.
-	</span>
+		{% trans "Zábavná aplikácia na testovanie vašich schopností na odhady." %}
+	</span><br>
+	<div class="fb-like" data-href="http://localhost:8000/learning/" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
 </div>
-<button class="rotatedText secondary radius edgeButton small" 
-data-reveal-id="feedback" >Feedback</button>	
+<button class="rotatedText secondary radius edgeButton small" data-reveal-id="feedback" >{% trans "Napíšte nám" %}</button>	
 </div>
 <div class="row collapse" align="center">
 <div id="about" class="aboutStyle" class="large-6 collumns" align="left">
 	<h4>
-		Otázky na mieru:
+		{% trans "Otázky na mieru:" %}
 	</h4>
-	<span>Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností</span>
+	<span>{% trans "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností" %}</span>
+	<hr></hr>
+	<h4>
+		{% trans "Široká škála úloh:" %}
+	</h4>
+	<span>{% trans "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez obrázky až po prevody medzi imperialnym a metrickým systémom..."  %}</span>
+	<hr></hr>
+	<h4>
+		{% trans "Dva typy testov:" %}
+	</h4>
+
+	<span>{% trans "Zodpovedajte čo najviac otázok v priebehu 2 a pol minúty, alebo 10 otázok v čo najkratšiom čase"  %}</span>
+		<hr></hr>
+	<h4>
+		{% trans "Facebook" %}
+	</h4>
+	<span>{% trans "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"  %}</span>
+	
+	
+	<br/><br/><br/>
 </div>
 </div>
-<div align="center">
-<div id="bottom" class="secondaryStyle">
-	<span class="silverText bottomText">Vyskúšajte taktiež</span>	
+<div align="left" id="bottom" class=" footer">
+	
+
+<div class="row">	
+<div align="left" id="bottom" class="large-6 footer">
+	<span class="silverText bottomText">{% trans "Vyskúšajte taktiež" %}</span>	<br/>
+
+	<span><a href="http://slepemapy.cz/">slepemapy.cz</a></span>		<br/>
+	<span><a href="http://www.slepaanatomie.cz/">slepaanatomie.cz</a></span>		<br/>
 </div>
 </div>
 <div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-  <h3 id="modalTitle">Máte návrhy na zlepšenie? Napíšte nám.</h3>
+  <h3 id="modalTitle">{% trans "Máte návrhy na zlepšenie? Napíšte nám." %}</h3>
   <form id="sendFeedback">
-  	<span>Vaša správa:</span>
+  	<span>{% trans "Vaša správa:" %}</span>
   	<textarea id="userMessage" placeholder="" required></textarea>
-  	<span>Váš email:</span>
+  	<span>{% trans "Váš email:" %}</span>
   	<input id="email" type="email" ></input>
   	<input id="sub" type="submit" class="small button" value="Odoslať"/>
   	<a class="close-reveal-modal" aria-label="Close">&#215;</a>

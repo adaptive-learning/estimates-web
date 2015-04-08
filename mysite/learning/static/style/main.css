@@ -18,11 +18,10 @@
 	font-size: 120%;
 }
 
-.secondaryStyle{
-	position:fixed;
+.footer{
 	background-color: #3D3A4F;
 	bottom:0;
-	width:100%;
+	width:100% ;
 }
 .edgeButton{
 	position:fixed;

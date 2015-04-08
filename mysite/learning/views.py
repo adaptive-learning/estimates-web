@@ -1,8 +1,11 @@
+from django.utils import translation
+from django.utils.translation import ugettext as _
 import os
 from django.core.mail import send_mail
 from lazysignup.decorators import allow_lazy_user
 from django.utils.decorators import method_decorator
 from datetime import datetime
+import time
 import json
 from math import sqrt
 import math
@@ -53,6 +56,7 @@ Wtarget = 10
 
 
 def index(request):
+    clear_session_params(request)
     return TemplateResponse(request, 'home/index.html')
 
 def converter(amount, src, dst):
@@ -395,10 +399,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
-        if "test" in self.request.session and self.request.session["test"] == "set":
-            if self.request.session["setParam"] == 11:
-                return redirect("%s/finish"%self.request.path)           
-
+        if "test" in self.request.session:
+            if self.request.session["test"] == "set":
+                if self.request.session["setParam"] == 11:
+                    return redirect("%s/finish"%self.request.path)           
+            elif self.request.session["test"] == "time":
+                pass
         self.type = kwargs.get("type")
         super(CreateQuestion,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
@@ -585,14 +591,18 @@ class OwnChoice(ListView):
         return redirect("/learning/own/settings/set")           
                          
 def getFromDict(request):
-    if request.method == "POST" and not request.is_ajax():
-        
+    if request.method == "POST" and request.is_ajax():
         t = request.POST.get("type",None)
         if t == None: raise Exception 
         q = request.POST.get("question",None)
-        if q == None: return HttpResponse(variables.mainDict[t])
-        else: return HttpResponse( variables.mainDict[t][q])
-        
+        print "getFrom Dict"
+        print q,t
+        if q == None:
+            out = json.dumps([_(x) for x in variables.mainDict[t]])
+            return HttpResponse(out)
+        else:
+            out = json.dumps([_(x) for x in variables.mainDict[t][q]])
+            return HttpResponse(out) 
 
 class ShowTable(ListView):
     model = CurrTable  
@@ -626,4 +636,10 @@ def send_email(request):
         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
                   [os.environ.get("EMAIL_HOST_USER", '')], fail_silently=False)
         return HttpResponse("1");
+
+def change_lang(request):
+   
+    translation.activate("en_US")
+    print translation.get_language()
+    return redirect("/learning")
     ############################################################################

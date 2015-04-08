@@ -23,7 +23,7 @@
 
 	<label onclick="showType('{{t.type}}')">
 				<hr></hr>	
-		{{t.type|get_from_dict}}
+		{{t.type|get_from_dict:"typeReal"}}
 <script>
 	function showType(type){
 			var element = $("#"+type);

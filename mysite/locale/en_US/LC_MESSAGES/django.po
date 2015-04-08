@@ -1,0 +1,81 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-08 10:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: learning/views.py:58
+msgid "ee"
+msgstr "AA"
+
+#: learning/templates/learning/question.html:35
+msgid "Počet zodpovedaných otázok:"
+msgstr "Number of answered questions:"
+
+#: mysite/settings.py:86
+msgid "English"
+msgstr "English"
+
+#: templates/admin/base_site.html:4
+msgid "Django site admin"
+msgstr "Django site admin"
+
+#: templates/admin/base_site.html:7
+msgid "Mysite administration"
+msgstr "Mysite administration"
+
+#: templates/admin/index.html:20
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr "Models in the %(name)s application"
+
+#: templates/admin/index.html:21
+#, python-format
+msgid "%(name)s"
+msgstr "%(name)s"
+
+#: templates/admin/index.html:33
+msgid "Add"
+msgstr "Add"
+
+#: templates/admin/index.html:39
+msgid "Change"
+msgstr "Change"
+
+#: templates/admin/index.html:49
+msgid "You don't have permission to edit anything."
+msgstr "You don't have permission to edit anything."
+
+#: templates/admin/index.html:57
+msgid "Recent Actions"
+msgstr "Recent Actions"
+
+#: templates/admin/index.html:58
+msgid "My Actions"
+msgstr "My Actions"
+
+#: templates/admin/index.html:62
+msgid "None available"
+msgstr "None available"
+
+#: templates/admin/index.html:76
+msgid "Unknown content"
+msgstr "Unknown content"
+
+#: templates/home/index.html:30
+msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
+msgstr "Funny application for testing your skills in estimation"
+

@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -47,6 +48,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -80,7 +82,13 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 # LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'sk-SK'
+LANGUAGES = (
+  ('en', ('English')),
+  ('sk', ('Slovak')),
+)
+LOCALE_PATHS = (
+    '/home/roman/projekty/github/estimates-web/mysite/locale',
+)
 
 TIME_ZONE = 'Europe/Bratislava'
 

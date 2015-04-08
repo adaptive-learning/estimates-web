@@ -1,5 +1,5 @@
 <script src="/static/js/jquery-2.1.3.min.js"></script>
-<!-- <script src="/static/js/getType.js"></script> -->
+
 <script src="/static/js/home.js"></script>
 <script src="/static/js/variables.js"></script>
 
@@ -9,26 +9,27 @@
   <ul class="title-area">
     <li class="toggle-topbar menu-icon"><a href="#"><img src="/static/img/menu.png" width="25" height="25"></a></li>
     <li class="name">
-      <h1><a onclick="home('home')" href="/learning">Odhad jednotiek</a></h1>
+      <h1><a onclick="home('home')" href="/learning">{% trans "Priblizne.cz" %}</a></h1>
   </ul>
   <section class="top-bar-section" id="bar">
 
     <!-- Right Nav Section -->
     <ul class="right">
       <li>
-      	<a href="/learning/table">Tabulka prevodov</a>
+      	<a href="/learning/table">{% trans "Tabulka prevodov" %}</a>
+      	{{get_available_languages}}
       </li>
       <li>
-      	<a href="/learning/own-all">Vlastný set</a>
+      	<a href="/learning/own-all">{% trans "Vlastný set" %}</a>
       </li>
       <li class="has-dropdown">
       {% if user|is_lazy_user or user.is_anonymous%}
 
-              <a href="#">Prihlásenie</a>
-        <ul class="dropdown">
+              <a href="#">{% trans "Prihlásenie" %}</a>
+		<ul class="dropdown">
      	<li><a href="{% url 'socialauth_begin' 'google-oauth2' %}"><img src="/static/img/gmail.png" width="20" height="20">  Login with Google</a></li>
      	<li><a href="{% url 'socialauth_begin' 'facebook'  %}"><img src="/static/img/fb.png" width="20" height="20">  Login with Facebook</a></li> 
-
+       </ul>
           {% else %}
 
       <a href="#">{{ user.get_full_name }}</a>
@@ -40,17 +41,32 @@
 			</div> 
 		</li>	
        <li><a href="/users/logout">Odhlásiť sa</a></li> 
-	</ul>
-     
+	  </ul>
           {% endif %}
-            </ul>
-        </ul>
+	</li>
+	      <li class="has-dropdown">
+	      	<a><img width="25" height="25" src="/static/img/{{LANGUAGE_CODE }}.png" alt="/static/img/{{LANGUAGE_CODE }}.png" align="center"/></a>
+	      	<ul class="dropdown">
+	<form action="{% url 'set_language' %}" id="langPref" method="post">
+{% csrf_token %}
+{% get_language_info_list for LANGUAGES as languages %}
+{% for language in languages %}
+{% if language.code != LANGUAGE_CODE %}
+	<li>
+		{{ language.code }}
+    	<input name="language" type="hidden"  value="{{ language.code }}"/>
+        <a href="#" onclick="$('#langPref').submit();"><img width="25" height="25" src="/static/img/{{language.code}}.png" alt="{{language.code}}"/></a>
+    </li>
+{% endif %}
+
+{% endfor %}
+</form>
+</ul>
+</li>
+    </ul>
   </section>
+  <script src="/static/js/getFromDict.js"></script>
     <script>
-       	// var nameTypes = getType("nameTypes");  
-       	// alert(nameTypes);
-       	// var nameChoose = getType("nameChoose");
-       	// var nameUrls = getType("nameUrls");
 
         var cList = $('<ul/>')
             .addClass("left")
