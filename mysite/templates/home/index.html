@@ -3,6 +3,7 @@
 <html>
 {% block base_body %}
 {%include "navBar/bar.html" %}
+{%include "learning/home.html"%}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -14,10 +15,11 @@
         <h1 id="header" align="center"></h1>
     </div>
     <div align="center">
-    	<span style="color:silver; font-size: 120%;">vyber si kategóriu</span>
+    	<span style="color:silver; font-size: 120%;">{% trans "vyber si kategóriu" %}</span>
     	</div>
 
 <div class="row collapse" align="center" id="choice" style="position:relative;">
+
 	<script>
 		home("home");
 	</script>
@@ -64,11 +66,12 @@
 	
 
 <div class="row">	
-<div align="left" id="bottom" class="large-6 footer">
-	<span class="silverText bottomText">{% trans "Vyskúšajte taktiež" %}</span>	<br/>
-
-	<span><a href="http://slepemapy.cz/">slepemapy.cz</a></span>		<br/>
-	<span><a href="http://www.slepaanatomie.cz/">slepaanatomie.cz</a></span>		<br/>
+<div align="left" id="bottom" class="large-6 footer silverText">
+	<a href="http://fi.muni.cz/"><img src="{% static 'img/logoFi.png' %}"/></a>&nbsp;&nbsp;|&nbsp;&nbsp;
+	<a href="/about">{% trans "O projekte" %}</a>   &nbsp;&nbsp;|&nbsp;&nbsp;
+	<span class="silverText bottomText">{% trans "Vyskúšajte taktiež:" %}</span>
+	<span><a href="http://slepemapy.cz/">slepemapy.cz</a></span>,		
+	<span><a href="http://www.slepaanatomie.cz/">slepaanatomie.cz</a></span>		
 </div>
 </div>
 <div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
@@ -86,7 +89,6 @@
 	var csrftoken = getCookie('csrftoken');
 	$('#sendFeedback').on('submit', function(event){
     	event.preventDefault();
-
     	sendFeedback();
 	});
 </script>

@@ -14,11 +14,11 @@
 {% endif %}
 {% with request.session.p1|get_reversed:param as pa1 %}
 {% with request.session.p2|get_reversed:param as pa2 %}
-
 <script>
 $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
-	createQuestion("label","{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
+	createQuestion("label","{{request.session.type}}","{{request.session.type|get_from_dict:'typeQuestions'}}",
+					"{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
 	drawPieTimer(fTime,"{{request.session.medTime|stringformat:'2.f'}}","{{request.session.test}}");
 });

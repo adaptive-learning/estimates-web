@@ -2,7 +2,13 @@ function get_result() {
 	var Formurl = $("#assigForm").attr("action");
 	window.location.href = "time/finish";
 };
-
+//TODO: send escaping from server
+var escape = [
+	"water",
+	"angle",
+	"line" ,
+	"obj"  ,
+];
 
 function scatterPlot(data,best){
 	dat = JSON.parse(data);
@@ -27,10 +33,10 @@ function scatterPlot(data,best){
 	for (var e=0; e < dat.length;e++){
 
 		var d = dat[e];
-		if (d.type in type_pictures_question){
+		if (d.type in escape){
 			var name = d.a;
 		} else {
-			var name = deciderType(d.type,d.q,d.p1,d.p2,d.a);
+			var name = deciderType(d.type,false,d.q,d.p1,d.p2,d.a);
 		}
 		if (best.indexOf(e) != -1){
 			series.push({name:name, color: 'rgba(20, 255, 20, .9)',data:[[dat[e].time,(1-dat[e].label)*100]]});

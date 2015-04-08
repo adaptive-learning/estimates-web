@@ -23,10 +23,30 @@ def get_set_length(objects,type):
     objects = objects.filter(type = type)
     return set([x.p1 for x in objects]).length
 
+@register.filter(name="json_from_dict")
+def json_from_dict(main):
+    return json.dumps(variables.mainDict[main])
+
 @register.filter(name='get_from_dict')
 def get_from_dict(type,main):
-    return variables.mainDict[main][type]
-    
+    try:
+        out = variables.mainDict[main][type]
+        return out
+    except KeyError:
+        return False
+
+@register.filter(name="get_n_element")
+def get_n_element(objects,n):
+    return objects[n]
+
+@register.filter(name='get_keys_from_dict')
+def get_keys_from_dict(type):
+    try:
+        out = variables.mainDict[type].keys()
+        return sorted(out,reverse=True)
+    except KeyError:
+        return False
+
 @register.filter(name="filter_by_type")
 def filter_by_type(objects,type):
     return objects.filter(type=type)
@@ -37,7 +57,6 @@ def get_types(objects):
 
 @register.filter(name='get_reversed')
 def get_reversed(param,object):
-    print object["reverse"]
     if object["reverse"]:
         if param == object["p1"]:
             return object["p2"]

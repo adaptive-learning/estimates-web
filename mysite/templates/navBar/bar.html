@@ -4,6 +4,7 @@
 <script src="/static/js/variables.js"></script>
 
 {% load i18n lazysignup_tags %}
+{% load learning_filters %}
 <div class="contain-to-grid fixed">
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
@@ -12,7 +13,108 @@
       <h1><a onclick="home('home')" href="/learning">{% trans "Priblizne.cz" %}</a></h1>
   </ul>
   <section class="top-bar-section" id="bar">
+  	
+  	
+  	
+  	
+	<ul class="left" id="leftUl">
+	{% for name in 'nameReal'|get_keys_from_dict %}
+		<li class="has-dropdown">
+			<a>{{ name|get_from_dict:'nameReal'|get_n_element:0 }}</a>
+			<ul class="dropdown" id="ul{{name}}">
+				{% for type in name|get_from_dict:'nameTypes'%}
+					<li class="has-dropdown">
+						
+						<a>{{type|get_from_dict:'typeReal'}}</a>
+						<ul class="dropdown" >
+							<li>
+								<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/set">{% trans "test" %}</a>
+							</li>	
+							<li>
+								<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/time">{% trans "na čas" %}</a>
+							</li>
+							
+						</ul>	
+					</li>
 
+				{% endfor %}	
+			</ul>
+		</li>	
+								{% if name in 'nameChoose'|get_keys_from_dict %}
+						<script>
+			            	var liC = $("<li/>")
+            					.appendTo($("#ul{{name}}"));
+						</script>
+							{% for x in name|get_from_dict:'nameChoose' %}
+								<script>
+									$('<a/>')
+                						.attr("href", "/learning/{{x}}")
+                						.text("{{x|get_from_dict:'typeReal'}}")
+           		 						.appendTo(liC);
+								</script>
+							{% endfor %}
+					{% endif %}
+	{% endfor %}
+
+
+    <!-- <script>
+        var cList = $('<ul/>')
+            .addClass("left")
+            .appendTo($("#bar"));
+        names = JSON.parse("{{'nameTypes'|get_keys_from_dict|escapejs}}");
+        for (var i in names){
+        	alert(i);
+            value = nameTypes['home'][i];
+            var li = $('<li/>')
+         		.addClass('has-dropdown')
+                .appendTo(cList);
+            var aaa = $('<a/>')
+                .text(nameReal[value][0])
+                .appendTo(li);
+            var ul = $('<ul/>')
+                .addClass("dropdown")
+                .appendTo(li);
+            for (var e in nameTypes[value]){
+                type = nameTypes[value][e];
+                var inLi = $('<li/>')
+                    .addClass('has-dropdown')
+                    .appendTo(ul);
+                var a = $('<a/>')
+                    .text(typeReal[type])
+                    .appendTo(inLi);
+            	var InUl = $('<ul/>')
+                	.addClass("dropdown")
+                	.appendTo(inLi);
+            	var li2 = $("<li/>")
+            		.appendTo(InUl);
+        		var li21 = $("<li/>")
+        			.appendTo(InUl);
+                var a2 = $('<a/>')
+                    .attr("href","/learning/"+nameUrls[value]+"/"+type+"/set")
+                    .text("test")
+                    .appendTo(li2);
+                var a21 = $('<a/>')
+                	.attr("href","/learning/"+nameUrls[value]+"/"+type+"/time")
+                    .text("na čas")
+                    .appendTo(li21);
+            }
+        	if (value in nameChoose){
+            	var liC = $("<li/>")
+            		.appendTo(ul);
+       	 		for (var x in nameChoose[value]){
+					$('<a/>')
+                	.attr("href", "/learning/"+nameChoose[value][x])
+                	.text(typeReal[nameChoose[value][x]])
+           		 	.appendTo(liC);
+            	}
+            }
+        }
+    </script> -->
+    
+    
+    
+    
+	</ul>
     <!-- Right Nav Section -->
     <ul class="right">
       <li>
@@ -60,66 +162,11 @@
 {% endif %}
 
 {% endfor %}
-
 </ul>
 </li>
     </ul>
   </section>
-  <script src="/static/js/getFromDict.js"></script>
-    <script>
-
-        var cList = $('<ul/>')
-            .addClass("left")
-            .appendTo($("#bar"));
-        names = nameTypes['home'];
-        for (var i in names){
-            value = nameTypes['home'][i];
-            var li = $('<li/>')
-         		.addClass('has-dropdown')
-                .appendTo(cList);
-            var aaa = $('<a/>')
-                // .attr("href", "/learning/"+nameUrls[value]+"/"+value+'-all/test')
-                .text(nameReal[value][0])
-                .appendTo(li);
-            var ul = $('<ul/>')
-                .addClass("dropdown")
-                .appendTo(li);
-            for (var e in nameTypes[value]){
-                type = nameTypes[value][e];
-                var inLi = $('<li/>')
-                    .addClass('has-dropdown')
-                    .appendTo(ul);
-                var a = $('<a/>')
-                    .text(typeReal[type])
-                    .appendTo(inLi);
-            	var InUl = $('<ul/>')
-                	.addClass("dropdown")
-                	.appendTo(inLi);
-            	var li2 = $("<li/>")
-            		.appendTo(InUl);
-        		var li21 = $("<li/>")
-        			.appendTo(InUl);
-                var a2 = $('<a/>')
-                    .attr("href","/learning/"+nameUrls[value]+"/"+type+"/set")
-                    .text("test")
-                    .appendTo(li2);
-                var a21 = $('<a/>')
-                	.attr("href","/learning/"+nameUrls[value]+"/"+type+"/time")
-                    .text("na čas")
-                    .appendTo(li21);
-            }
-        	if (value in nameChoose){
-            	var liC = $("<li/>")
-            		.appendTo(ul);
-       	 		for (var x in nameChoose[value]){
-					$('<a/>')
-                	.attr("href", "/learning/"+nameChoose[value][x])
-                	.text(typeReal[nameChoose[value][x]])
-           		 	.appendTo(liC);
-            	}
-            }
-        }
-    </script>
+	
 </nav>
 <!-- </div> -->
 </div> 

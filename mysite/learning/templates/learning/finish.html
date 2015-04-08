@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% extends "foundation/base.html" %}
-</head>
 <html>
 {% block base_body %}
 {%include "navBar/bar.html" %}
@@ -9,11 +8,11 @@
 <label id="labelFinish">
 	
 </label>
-<script src="{% static 'js/finish.js' %}"></script>
+<!-- <script src="{% static 'js/finish.js' %}"></script>
 <script src="{% static 'js/decider.js' %}"></script>
 <script src="{% static 'js/facebook.js' %}"></script>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
-	<script src="http://code.highcharts.com/modules/exporting.js"></script>
+	<script src="http://code.highcharts.com/modules/exporting.js"></script> -->
 <div id="scatterPlot" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto; display:none"></div>
 <script>
            	$("#labelFinish").text("");
@@ -23,9 +22,10 @@
          		scatterPlot("{{answers|escapejs}}","{{best}}");
        		sessionStorage.clear();
 </script>
-<button class="button" id="sub" onclick="function(){
-	window.location.href = '{{url}}';
-};">Znova</button>
+{{url}}
+<button class="button" id="sub" onclick="
+	window.location.href = '/learning/{{url}}';
+">Znova</button>
 <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
 </div>
 

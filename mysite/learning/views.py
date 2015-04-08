@@ -54,6 +54,13 @@ Ptarget = 0.75
 Wcount = 10
 Wtarget = 10
 
+TIME_MOD = 120
+COUNT_MOD = 10
+PROB_MOD = 10
+
+
+TIME_TEST = 150
+SET_TEST = 10 
 
 def index(request):
     clear_session_params(request)
@@ -179,7 +186,7 @@ class QuestionFunctions():
                     Stime = -1/( now - lastModel.date).total_seconds()
                 except FloatModel.DoesNotExist:
                     Stime = 0
-                score.append((i.id,10*Sprob+10*Scount+120*Stime))
+                score.append((i.id,PROB_MOD*Sprob+COUNT_MOD*Scount+TIME_MOD*Stime))
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
@@ -282,6 +289,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         print "is the probblem"
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
+        if int(self.model.time) > 60: self.model.time = 60
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
@@ -350,7 +358,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             else:
                 self.request.session['medTime']=median(l) 
         if self.request.session["test"] == "time":
-            ctx["fullTime"] = 150;
+            ctx["fullTime"] = TIME_TEST;
         num = Number.objects.get(number = self.request.session["question"])
         param = Params.objects.get(concept = Concept.objects.get(p1 = self.request.session["p1"],
                                                                  p2 = self.request.session["p2"],
@@ -401,9 +409,9 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def get(self,*args, **kwargs):
         if "test" in self.request.session:
             if self.request.session["test"] == "set":
-                if self.request.session["setParam"] == 11:
+                if self.request.session["setParam"] == SET_TEST+1:
                     return redirect("%s/finish"%self.request.path)           
-            elif self.request.session["test"] == "time":
+            elif self.request.session["test"] == "time" and "timeParam" in self.request.session:
                 pass
         self.type = kwargs.get("type")
         super(CreateQuestion,self).get(*args,**kwargs)
@@ -488,7 +496,7 @@ class Finish(TemplateView):
             else:
                 f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:count]
         elif request.session["test"] == "set":
-            f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:10]
+            f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
         if s != 1:    
             if len(f) != 0:
                 s = sum([x.label for x in f])/len(f);
@@ -552,11 +560,11 @@ class OwnChoice(ListView):
     def get_queryset(self,*args,**kwargs):
         q = super(OwnChoice,self).get_queryset(*args,**kwargs)
         if self.t == "all":
-                return q
-        typesString = variables.mainDict["nameTypes"][self.t]
+            print [x.type.type for x in q]
+            return q
+        typesString = variables.mainDict["nameTypesInDb"][self.t]
         types = Type.objects.filter(type__in = typesString)
         q = q.filter(type__in = types)
-
         return q
     
     def get(self,*args,**kwargs):
@@ -573,7 +581,7 @@ class OwnChoice(ListView):
             concepts = Concept.objects.all()
             types = Type.objects.all()
         else: 
-            typesString = variables.mainDict["nameTypes"][kwargs.get("type",None)]
+            typesString = variables.mainDict["nameTypesInDb"][kwargs.get("type",None)]
             types = Type.objects.filter(type__in = typesString)
             concepts = Concept.objects.filter(type__in = types)
 
@@ -595,18 +603,19 @@ def getFromDict(request):
         t = request.POST.get("type",None)
         if t == None: raise Exception 
         q = request.POST.get("question",None)
-        print "getFrom Dict"
-        print q,t
-        if q == None:
-            out = json.dumps([_(x) for x in variables.mainDict[t]])
+        if q == "":
+            out = json.dumps([x for x in variables.mainDict[t]])
             return HttpResponse(out)
         else:
-            out = json.dumps([_(x) for x in variables.mainDict[t][q]])
+            out = json.dumps([x for x in variables.mainDict[t][q]])
             return HttpResponse(out) 
 
 class ShowTable(ListView):
     model = CurrTable  
     template_name = "learning/table.html"
+    def get(self,*args,**kwargs):
+        clear_session_params(self.request)
+        return super(ShowTable,self).get(*args,**kwargs)
 
 def save_time(request):
     if request.method == "POST" and request.is_ajax():
@@ -621,10 +630,11 @@ def save_time(request):
         Ttime = 0;
         if request.session["test"] == "time":
             if "timeParam" in request.session:
-                print "in save_time",float(time)
-                print "request session Time",float(request.session["timeParam"])
                 Ttime = float(time) - float(request.session["timeParam"])
-                print Ttime
+                if Ttime > TIME_TEST:
+                    #TODO: test this
+                    raise Exception("user opened closed time_test after %s sec"%TIME_SET)
+                    redirect("%s/finish"%request.path)
             else:
                 request.session["timeParam"] = float(time)
             

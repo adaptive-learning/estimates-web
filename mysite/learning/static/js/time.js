@@ -23,7 +23,10 @@ function afterTestTimer(stay){
 
 function timer(element,sec,color,anti,func,start,end,itotal){
 	
+
+	
     canvas = document.getElementById(element);
+    
     ctx = canvas.getContext('2d');
     canvas_size = [canvas.width, canvas.height];
     radius = Math.min(canvas_size[0], canvas_size[1]) / 2;
@@ -121,10 +124,13 @@ function timerSet(response,fullTime){
 			if (Newtime > 30){
 				timer('pie-countdown',0,"#750000",false,function(){ return afterTestTimer("true");},1,1,1);
 
+			} else {
+
+				start = Newtime / 30;
+				timer('pie-countdown',30,"#750000",false,true,start,end,start);
 			}
-			start = Newtime / 30;
-			timer(30,"#750000",false,true,start,end,start);
 		} else {
+
 			timer('pie-countdown',fullTime,"#0F482D",true,function(){ return afterTestTimer("true");},start,end,start);
 		}
 	} else {
@@ -132,7 +138,7 @@ function timerSet(response,fullTime){
 		var end = 1;
 		var start = 1;
 		var total = 0;
-		timer('pie-countdown',fullTime,"#0F482D",true,function(){ return afterTestTimer("true");},start,end,total);
+		timer('pie-countdown',parseFloat(fullTime),"#0F482D",true,function(){ return afterTestTimer("true");},start,end,total);
 	}	
 } 
 
