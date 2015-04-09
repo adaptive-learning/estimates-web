@@ -1,4 +1,5 @@
 {% load learning_filters %}
+<script src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
  <script>
  var nameReal = JSON.parse("{{'nameReal'|json_from_dict|escapejs}}");
  var typeReal = JSON.parse("{{'typeReal'|json_from_dict|escapejs}}");
@@ -25,6 +26,7 @@ function createButton(tag,name,onclick,parent,last){
 
 function createHrefButton(tag,name,href,parent,last){
 	var btn = document.createElement(tag);
+
 	var t = document.createTextNode(name);
 	btn.appendChild(t);
 	btn.setAttribute('class', 'secondary radius large button');

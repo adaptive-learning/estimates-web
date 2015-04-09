@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-08 22:05+0200\n"
+"POT-Creation-Date: 2015-04-09 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,97 +186,97 @@ msgstr "None available"
 msgid "Unknown content"
 msgstr "Unknown content"
 
-#: templates/home/index.html:18
+#: templates/home/index.html:22
 msgid "vyber si kategóriu"
 msgstr ""
 
-#: templates/home/index.html:32
+#: templates/home/index.html:36
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Funny application for testing your skills in estimation"
 
-#: templates/home/index.html:36
+#: templates/home/index.html:40
 msgid "Napíšte nám"
 msgstr ""
 
-#: templates/home/index.html:41
+#: templates/home/index.html:45
 msgid "Otázky na mieru:"
 msgstr ""
 
-#: templates/home/index.html:43
+#: templates/home/index.html:47
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností"
 msgstr ""
 
-#: templates/home/index.html:46
+#: templates/home/index.html:50
 msgid "Široká škála úloh:"
 msgstr ""
 
-#: templates/home/index.html:48
+#: templates/home/index.html:52
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
 msgstr ""
 
-#: templates/home/index.html:51
+#: templates/home/index.html:55
 msgid "Dva typy testov:"
 msgstr ""
 
-#: templates/home/index.html:54
+#: templates/home/index.html:58
 msgid ""
 "Zodpovedajte čo najviac otázok v priebehu 2 a pol minúty, alebo 10 otázok v "
 "čo najkratšiom čase"
 msgstr ""
 
-#: templates/home/index.html:57
+#: templates/home/index.html:61
 msgid "Facebook"
 msgstr ""
 
-#: templates/home/index.html:59
+#: templates/home/index.html:63
 msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
 msgstr ""
 
-#: templates/home/index.html:71
+#: templates/home/index.html:75
 msgid "O projekte"
 msgstr ""
 
-#: templates/home/index.html:72
+#: templates/home/index.html:76
 msgid "Vyskúšajte taktiež:"
 msgstr ""
 
-#: templates/home/index.html:78
+#: templates/home/index.html:82
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr ""
 
-#: templates/home/index.html:80
+#: templates/home/index.html:84
 msgid "Vaša správa:"
 msgstr ""
 
-#: templates/home/index.html:82
+#: templates/home/index.html:86
 msgid "Váš email:"
 msgstr ""
 
-#: templates/navBar/bar.html:13
+#: templates/navBar/bar.html:12
 msgid "Priblizne.cz"
 msgstr ""
 
-#: templates/navBar/bar.html:31
+#: templates/navBar/bar.html:30
 msgid "test"
 msgstr ""
 
-#: templates/navBar/bar.html:34
+#: templates/navBar/bar.html:33
 msgid "na čas"
 msgstr ""
 
-#: templates/navBar/bar.html:106
+#: templates/navBar/bar.html:120
 msgid "Tabulka prevodov"
 msgstr ""
 
-#: templates/navBar/bar.html:110
+#: templates/navBar/bar.html:124
 msgid "Vlastný set"
 msgstr ""
 
-#: templates/navBar/bar.html:115
+#: templates/navBar/bar.html:129
 msgid "Prihlásenie"
 msgstr ""
 

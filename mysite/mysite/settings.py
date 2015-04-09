@@ -90,7 +90,7 @@ LANGUAGES = (
   ('en', ('English')),
 )
 LOCALE_PATHS = (
-    '/home/roman/projekty/github/estimates-web/mysite/locale',
+    'locale',
 )
 
 TIME_ZONE = 'Europe/Bratislava'

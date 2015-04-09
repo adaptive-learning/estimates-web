@@ -1,4 +1,5 @@
 from django import template
+from django.utils.translation import ugettext as _
 from learning.models import Type, Params, CurrTable, Concept, Hint
 from learning.static.python import variables
 import json
@@ -25,13 +26,40 @@ def get_set_length(objects,type):
 
 @register.filter(name="json_from_dict")
 def json_from_dict(main):
+    out = {}
+    print main
+    for f in variables.mainDict[main].keys():
+        print f
+        inner = variables.mainDict[main][f]
+        if isinstance(inner, (str, unicode)):
+            try:
+                out[f] = _(inner)
+            except KeyError:
+                out[f] = inner
+        else:
+            inInner = []
+            for x in inner:
+                print x
+                try:
+                    inInner.append(_(x))
+                except KeyError:
+                    inInner.append(x)
+            out[f] = inInner
+
+    return  json.dumps(out)
+        
     return json.dumps(variables.mainDict[main])
 
 @register.filter(name='get_from_dict')
 def get_from_dict(type,main):
     try:
         out = variables.mainDict[main][type]
-        return out
+        if isinstance(out, (str, unicode)):
+            return _(out)
+        lis = []
+        for x in out:
+           lis.append(_(x))
+        return lis
     except KeyError:
         return False
 
