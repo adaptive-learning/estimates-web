@@ -644,7 +644,7 @@ def save_time(request):
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
-                  [os.environ.get("EMAIL_HOST_USER", '')], fail_silently=False)
+                  ["priblizne@googlegroups.com"], fail_silently=False)
         return HttpResponse("1");
 
 def change_lang(request):
