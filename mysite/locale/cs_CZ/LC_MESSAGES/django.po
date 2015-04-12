@@ -192,7 +192,7 @@ msgstr "vyber kategorii"
 
 #: templates/home/index.html:36
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
-msgstr "Zábavná aplikace na testovaní vašich schopností na odhady."
+msgstr "Zábavná aplikace na testování vašich schopností na odhady."
 
 #: templates/home/index.html:40
 msgid "Napíšte nám"
@@ -212,7 +212,7 @@ msgstr ""
 
 #: templates/home/index.html:50
 msgid "Široká škála úloh:"
-msgstr "Široká ??? úloh:"
+msgstr "Široká škála úloh:"
 
 #: templates/home/index.html:52
 msgid ""

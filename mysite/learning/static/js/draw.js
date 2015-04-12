@@ -135,7 +135,6 @@ function find_angle(A,B,C) {
 function drawLines(ctx,small, big){
 
 	if (big > ctx.canvas.width){
-		alert("is bigger");
 		newB = ctx.canvas.width - 10;
 		var per = (newB)/big;
 		big = newB;
@@ -244,12 +243,52 @@ imSquare.onload = function(){
 function drawObjsVol(ctx,a,b){
 		var objA = JSON.parse(a);
 		var objB = JSON.parse(b);
+		alert(objA["r"]);
+		alert(objB["r"]);
+		objs = normalizeObjects(ctx,[objA,objB]);
+
+		objA = objs[0];
+		objB = objs[1];
+
 		Axy = findXY(ctx,0,objA);
 		Bxy = findXY(ctx,1,objB);
-
+		
+		alert(objA["r"]);
+		alert(objB["r"]);
+		
 		drawObjVolByType(ctx,objA,Axy);
 		drawObjVolByType(ctx,objB,Bxy);
 }
+
+function normalizeObjects(ctx,objs){
+	var sizes;
+	var x = 0;
+	for (i in objs){
+		if (objs[i]["t"] == "c"){
+			x += parseInt(objs[i]["r"])*2;
+			y = x;
+			
+		}
+		 
+	}
+
+	if (ctx.canvas.width < x+20){
+		alert("here");
+		var n = ctx.canvas.width/2 - 20;
+		if (objs[0]["t"] == "c"){
+			var change = n / (2*objs[0]["r"]);
+			objs[0]["r"] = n/2;
+		}
+		for (var i = 1; i<objs.length; i++){
+			if (objs[i]["t"] == "c"){
+				objs[i]["r"] = ((objs[i]["r"]*2) * change)/2;
+			}
+		}
+	}
+	return objs;
+}
+	
+
 function drawObjVolByType(ctx, obj,pos){
 	switch(obj["t"]){
 		case "c":
