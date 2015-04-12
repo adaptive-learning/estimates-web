@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.utils import translation
 from django.utils.translation import ugettext as _
 import os
@@ -29,7 +30,6 @@ from django.views.generic.edit import CreateView, FormView
 from learning.models import *
 from model import model
 from pint import UnitRegistry
-import urllib2
 from datetime import tzinfo, timedelta, datetime
 
 ZERO = timedelta(0)
@@ -65,6 +65,11 @@ SET_TEST = 10
 def index(request):
     clear_session_params(request)
     return TemplateResponse(request, 'home/index.html')
+
+def get_volume(jsonObject): 
+    if jsonObject["t"] == "c":
+        return math.pi * pow(jsonObject["r"],2)
+
 
 def converter(amount, src, dst):
     Q_ = UnitRegistry(autoconvert_offset_to_baseunit=True).Quantity
@@ -119,13 +124,21 @@ def decider(type, question, src, dst, reverse, f = 2):
         elif src == "out":
             return 360-float(question)
         else: raise Exception("wrong params") 
+    elif type == "objsVol":
+        objA = json.loads(src)
+        objB = json.loads(dst)
+        volA = get_volume(objA)
+        volB = get_volume(objB)
+        if volA < volB:
+            raise Exception("logic error in volume of objects")
+        return round(volA / volB,f)
             
     elif type == 'curr':
         concept = get_object_or_404(Concept, p1 = src, p2 = dst,type = get_object_or_404(Type,type = type))
         params = get_object_or_404(Params, concept = concept, reverse = reverse)
         rate = CurrTable.objects.get(params = params).rate
         return round(rate * question)
-    elif type == 'vol' or type == 'surf' or type == 'len' or type == 'temp':
+    elif type in  ['vol','surf', 'len', 'temp']:
         array = arrayToType(type)
         return (round(converter(question, src, dst),f))
     else :
@@ -444,9 +457,6 @@ class PreffQuestion(CreateQuestion):
             self.request.session["pref"] = concepts
         return super(PreffQuestion,self).get(*args,**kwargs)
             
-def date_handler(obj):
-    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
-
 class Finish(TemplateView):
     template_name = "learning/finish.html"
     def get_context_data(self,*args,**kwargs):
@@ -528,12 +538,6 @@ class Finish(TemplateView):
         self.s = s
         self.uS = uS
         
-class CreateCurr(CreateQuestion):
-    def get(self):
-        clear_session_params(self.request)
-
-
-
 def clearSession(request):
     if request.method == "POST" and request.is_ajax():
         clear_session_params(request)
@@ -566,7 +570,15 @@ class OwnChoice(ListView):
         types = Type.objects.filter(type__in = typesString)
         q = q.filter(type__in = types)
         return q
-    
+
+    def get_context_data(self,*args,**kwargs):
+        ctx = super(OwnChoice, self).get_context_data(*args,**kwargs)
+        print self.kwargs.get("failed")
+        if self.kwargs.get("failed",None) == "not":
+            ctx["failed"] = True
+            print "here"
+        return ctx
+        
     def get(self,*args,**kwargs):
         clear_session_params(self.request)
         self.t =  kwargs.get("type",None)
@@ -575,6 +587,7 @@ class OwnChoice(ListView):
 
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
+        print self.request.POST
         self.request.session["pref"] = []
         type = kwargs.get("type",None)
         if type == "all":
@@ -594,9 +607,14 @@ class OwnChoice(ListView):
                 elif val != None:
                     self.request.session["pref"] += concepts.filter(id__in = val)
         if self.request.session["pref"] == []:
-            raise Exception("nothing was checked")
-
-        return redirect("/learning/own/settings/set")           
+            if self.kwargs.get("failed"):
+                return redirect("%s"%self.request.path)
+            else:
+                return redirect("%snot"%self.request.path)
+        if self.request.POST.get("testType") in ["set","test"]:
+            return redirect("/learning/own/settings/%s"%self.request.POST.get("testType"))        
+        else:
+            raise Exception("wrong testType")
                          
 def getFromDict(request):
     if request.method == "POST" and request.is_ajax():

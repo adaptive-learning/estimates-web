@@ -12,7 +12,7 @@ mainDict = {
                             'math': ["sqrt", "equa","sqr"],
                             'curr': ["EUR/curr", "CZK/curr"],
                             'phys': ["vol", "surf", "len", "temp"],
-                            'grap': ["angle","water","line","obj"],
+                            'grap': ["angle","water","line","obj", "objsVol"],
                             },
                
             'nameChoose' : {
@@ -43,6 +43,7 @@ mainDict = {
                           'line':_("Dĺžka priamky".decode("utf-8")),
                           'obj': _("Počet objektov".decode("utf-8")),
                           'sqr': _("Mocniny"),
+                          "objsVol": _("Obsah objektov"),
                           },
             
             'nameTypesInDb' : {
@@ -50,13 +51,14 @@ mainDict = {
                             'math': ["sqrt", "equa","sqr"],
                             'curr': ["curr"],
                             'phys': ["vol", "surf", "len", "temp"],
-                            'grap': ["angle","water","line","obj"],
+                            'grap': ["angle","water","line","obj","objsVol"],
                             },
             'typeQuestions' : {
                                       "water":_("Koľko percent vody je v pohari?".decode("utf-8")),
                                       "angle":_("Koľko ° má uhol?".decode("utf-8")),
                                       "line": _("Koľko krát je spodná priamka väčšia ako vrchná?".decode("utf-8")),
                                       "obj" : _("koľko je na obrázku objektov?".decode("utf-8")),
+                                      "objsVol":_("Koľko krát je obsah objektu a väčší ako objekt b".decode("utf-8")),
                                       },
             }
 

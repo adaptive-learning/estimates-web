@@ -29,6 +29,8 @@ function draw(type,question,p1,p2){
 		case 'obj':
 			drawObjs(ctx,question,parseFloat(p1),parseFloat(p2));
 			break;
+		case 'objsVol':
+			drawObjsVol(ctx,p1,p2);			break;
 		default:
 			$("#canvasDiv").insertAfter("<br/>");
 			$("#canvasDiv").hide();
@@ -237,4 +239,40 @@ imSquare.onload = function(){
 		}
 		return array;
 	}
+}
+
+function drawObjsVol(ctx,a,b){
+		var objA = JSON.parse(a);
+		var objB = JSON.parse(b);
+		Axy = findXY(ctx,0,objA);
+		Bxy = findXY(ctx,1,objB);
+
+		drawObjVolByType(ctx,objA,Axy);
+		drawObjVolByType(ctx,objB,Bxy);
+}
+function drawObjVolByType(ctx, obj,pos){
+	switch(obj["t"]){
+		case "c":
+			ctx.beginPath();
+			ctx.arc(pos[0],pos[1],obj["r"],0,2*Math.PI);
+			ctx.stroke();
+			ctx.closePath();
+			break;
+	}
+}
+function findXY(ctx, num, obj){
+	if (num == 0){
+		switch(obj["t"]){
+			case "c":
+				return [ctx.canvas.width -10 - obj["r"]
+						, ctx.canvas.height -10 - obj["r"]];
+			}		
+	} else if (num == 1){
+		switch(obj["t"]){
+			case "c":
+				var pos = 10+obj["r"];
+				return [pos,pos];
+			}
+	}
+
 }

@@ -18,10 +18,10 @@ urlpatterns = patterns("",
     url(r'^conv/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(), name = 'learn'),
     url(r'^own/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(),name="own"),
     url(r'^math/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
-    url(r'^grap/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
+    url(r'^grap/(?P<type>([a-z]|[A-Z])+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),
     url(r'^conv/(?P<pref>[A-Z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.PreffQuestion.as_view(), name = 'learning'),
 
-    url(r'^own-(?P<type>[a-z]+)',views.OwnChoice.as_view()),
+    url(r'^own-(?P<type>[a-z]+)/(?P<failed>[a-z]*)',views.OwnChoice.as_view()),
 
     url(r'^save_time',views.save_time),
 #     url(r'^(?P<main>[a-z]+)/(?P<type>([a-z]|-)+)/(?P<test>[a-z]+)',views.CreateNonFrTo.as_view()),

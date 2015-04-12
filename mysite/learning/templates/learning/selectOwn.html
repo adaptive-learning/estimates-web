@@ -14,10 +14,12 @@
 {% load i18n %}
 <script src="{% static "js/decider.js" %}"></script>
 <div class="row centered">
-<form id="assigForm" method="post">{% csrf_token %}
+<form id="assigForm" method="post" >{% csrf_token %}
 <div class="row center">
   	<h3 align="center">{% trans "Vyber si vlastný typ" %}</h3>
-  	
+  	{% if failed %}
+  		<h4 align="left" style="color:red;">{%trans "Označte aspoň jeden typ"%}</h4>
+	{% endif %}
 </div>
 	{% for t in object_list|get_types%}
 
@@ -74,7 +76,14 @@
 	</div>
 	{% endfor %}
 <hr></hr>
-<input id="sub" type="submit" class="button" value="Potvrdiť" />
+<input type="hidden" name="testType" id="chosen"/> 
+<input id="sub" type="submit" class="button" onclick="setTest('set')" value="vytvoriť test" />
+<input id="sub1" type="submit" class="button" onclick="setTest('time')" value="vytvoriť na čas" />
+<script>
+	function setTest(type){
+		$("#chosen").val(type);
+	}
+</script>
 </form>
 </div>
 
