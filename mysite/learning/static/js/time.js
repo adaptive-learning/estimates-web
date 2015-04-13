@@ -57,7 +57,7 @@ function timer(element,sec,color,anti,func,start,end,itotal){
         
 function draw_next(step,color,anti,func,start,end) { // step between 0 and 1
 
-    function draw_circ(s,an){
+    function draw_circ(s,an,color){
 	    ctx.clearRect(0,0,canvas_size[0], canvas_size[1]);
     	ctx.beginPath();
         ctx.moveTo(center[0], center[1]); 
@@ -75,7 +75,7 @@ function draw_next(step,color,anti,func,start,end) { // step between 0 and 1
  		ctx.fill();
     }
     if(step < end) {
-		draw_circ(step,anti);           
+		draw_circ(step,anti,color);           
     } else {
 		func();
     }
@@ -122,7 +122,7 @@ function timerSet(response,fullTime){
 			var Newtime = time - medTime;
 			
 			if (Newtime > 30){
-				timer('pie-countdown',0,"#750000",false,function(){ return afterTestTimer("true");},1,1,1);
+				timer('pie-countdown', 0, "#750000", false, function(){ return afterTestTimer("true"); },0,0,0);
 
 			} else {
 

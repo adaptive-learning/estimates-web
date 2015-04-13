@@ -27,9 +27,7 @@ def get_set_length(objects,type):
 @register.filter(name="json_from_dict")
 def json_from_dict(main):
     out = {}
-    print main
     for f in variables.mainDict[main].keys():
-        print f
         inner = variables.mainDict[main][f]
         if isinstance(inner, (str, unicode)):
             try:
@@ -39,7 +37,6 @@ def json_from_dict(main):
         else:
             inInner = []
             for x in inner:
-                print x
                 try:
                     inInner.append(_(x))
                 except KeyError:

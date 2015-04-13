@@ -56,62 +56,7 @@
 	{% endfor %}
 
 
-    <!-- <script>
-        var cList = $('<ul/>')
-            .addClass("left")
-            .appendTo($("#bar"));
-        names = JSON.parse("{{'nameTypes'|get_keys_from_dict|escapejs}}");
-        for (var i in names){
-        	alert(i);
-            value = nameTypes['home'][i];
-            var li = $('<li/>')
-         		.addClass('has-dropdown')
-                .appendTo(cList);
-            var aaa = $('<a/>')
-                .text(nameReal[value][0])
-                .appendTo(li);
-            var ul = $('<ul/>')
-                .addClass("dropdown")
-                .appendTo(li);
-            for (var e in nameTypes[value]){
-                type = nameTypes[value][e];
-                var inLi = $('<li/>')
-                    .addClass('has-dropdown')
-                    .appendTo(ul);
-                var a = $('<a/>')
-                    .text(typeReal[type])
-                    .appendTo(inLi);
-            	var InUl = $('<ul/>')
-                	.addClass("dropdown")
-                	.appendTo(inLi);
-            	var li2 = $("<li/>")
-            		.appendTo(InUl);
-        		var li21 = $("<li/>")
-        			.appendTo(InUl);
-                var a2 = $('<a/>')
-                    .attr("href","/learning/"+nameUrls[value]+"/"+type+"/set")
-                    .text("test")
-                    .appendTo(li2);
-                var a21 = $('<a/>')
-                	.attr("href","/learning/"+nameUrls[value]+"/"+type+"/time")
-                    .text("na čas")
-                    .appendTo(li21);
-            }
-        	if (value in nameChoose){
-            	var liC = $("<li/>")
-            		.appendTo(ul);
-       	 		for (var x in nameChoose[value]){
-					$('<a/>')
-                	.attr("href", "/learning/"+nameChoose[value][x])
-                	.text(typeReal[nameChoose[value][x]])
-           		 	.appendTo(liC);
-            	}
-            }
-        }
-    </script> -->
-    
-    
-    
+   
     
 	</ul>
     <!-- Right Nav Section -->

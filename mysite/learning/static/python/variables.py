@@ -58,7 +58,7 @@ mainDict = {
                                       "angle":_("Koľko ° má uhol?".decode("utf-8")),
                                       "line": _("Koľko krát je spodná priamka väčšia ako vrchná?".decode("utf-8")),
                                       "obj" : _("koľko je na obrázku objektov?".decode("utf-8")),
-                                      "objsVol":_("Koľko krát je obsah objektu a väčší ako objekt b".decode("utf-8")),
+                                      "objsVol":_("Koľko krát sa objekt b zmestí do objektu a?".decode("utf-8")),
                                       },
             }
 

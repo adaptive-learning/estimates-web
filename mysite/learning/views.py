@@ -99,8 +99,6 @@ def get_types(name):
 
     
 def decider(type, question, src, dst, reverse, f = 2):
-    if reverse:
-        src , dst = dst, src
     if type == 'equa' :
         if dst != None:
             return eval(src+dst)
@@ -257,9 +255,13 @@ class AjaxableResponseMixin():
                                          self.model.conceptQuestion.params.concept.p1, 
                                          self.model.conceptQuestion.params.concept.p2,
                                          self.model.conceptQuestion.params.reverse)
+            print "n"
             self.model.label = self.get_proximation_error(self.model)
+            print "e"
             self.model.save()
+            print "s"
             self.update_skill()
+            print "eq"
             print "diff to send",self.model.label
             clear_session_params(self.request,["p1","question","p2"]);
 
@@ -414,9 +416,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['setParam'] = 0 
             else: 
                 return HttpResponse(status = 401)
-        else:
-            print "eh?"
-            print self.request.session["setParam"]
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
@@ -564,7 +563,6 @@ class OwnChoice(ListView):
     def get_queryset(self,*args,**kwargs):
         q = super(OwnChoice,self).get_queryset(*args,**kwargs)
         if self.t == "all":
-            print [x.type.type for x in q]
             return q
         typesString = variables.mainDict["nameTypesInDb"][self.t]
         types = Type.objects.filter(type__in = typesString)
@@ -665,9 +663,3 @@ def send_email(request):
                   ["priblizne@googlegroups.com"], fail_silently=False)
         return HttpResponse("1");
 
-def change_lang(request):
-   
-    translation.activate("en_US")
-    print translation.get_language()
-    return redirect("/learning")
-    ############################################################################
