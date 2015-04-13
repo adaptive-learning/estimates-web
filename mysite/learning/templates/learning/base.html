@@ -1,17 +1,11 @@
 
 {% load learning_filters %}
-{% if request.session.test == "time" %}
-	<script>
-		var fTime = "{{fullTime}}";
-		testParam = 0;
-	</script>
-{% else %}
+
 	<script>
 		var fTime = "{{request.session.medTime}}";
 		var testParam = "{{request.session.setParam}}";
 	</script>
 
-{% endif %}
 {% with request.session.p1|get_reversed:param as pa1 %}
 {% with request.session.p2|get_reversed:param as pa2 %}
 <script>
@@ -58,6 +52,5 @@ $(document).ready(function(){
 	
 	
 </script>
-{{request.session.rev}}
 {% endwith %}
 {% endwith %}

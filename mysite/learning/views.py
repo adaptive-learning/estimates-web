@@ -255,9 +255,9 @@ class AjaxableResponseMixin():
                                          self.model.conceptQuestion.params.concept.p1, 
                                          self.model.conceptQuestion.params.concept.p2,
                                          self.model.conceptQuestion.params.reverse)
-            print "n"
             self.model.label = self.get_proximation_error(self.model)
-            print "e"
+            print self.model.label
+            print self.model.time
             self.model.save()
             print "s"
             self.update_skill()
@@ -304,7 +304,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         print "is the probblem"
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
-        if int(self.model.time) > 60: self.model.time = 60
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
@@ -372,8 +371,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['medTime']=15
             else:
                 self.request.session['medTime']=median(l) 
-        if self.request.session["test"] == "time":
-            ctx["fullTime"] = TIME_TEST;
+#         if self.request.session["test"] == "time":
+#             ctx["fullTime"] = TIME_TEST;
         num = Number.objects.get(number = self.request.session["question"])
         param = Params.objects.get(concept = Concept.objects.get(p1 = self.request.session["p1"],
                                                                  p2 = self.request.session["p2"],
@@ -410,21 +409,21 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.request.session[p] = dict[p]
         if 'setParam' not in self.request.session:
             print "not exist"
-            if self.request.session["test"] == "set":
-                self.request.session['setParam'] = 1
-            elif self.request.session["test"] == "time":
-                self.request.session['setParam'] = 0 
-            else: 
-                return HttpResponse(status = 401)
+#             if self.request.session["test"] == "set":
+            self.request.session['setParam'] = 1
+#             elif self.request.session["test"] == "time":
+#                 self.request.session['setParam'] = 0 
+#             else: 
+#                 return HttpResponse(status = 401)
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
         if "test" in self.request.session:
-            if self.request.session["test"] == "set":
-                if self.request.session["setParam"] == SET_TEST+1:
-                    return redirect("%s/finish"%self.request.path)           
-            elif self.request.session["test"] == "time" and "timeParam" in self.request.session:
-                pass
+#             if self.request.session["test"] == "set":
+            if self.request.session["setParam"] == SET_TEST+1:
+                return redirect("%s/finish"%self.request.path)           
+#             elif self.request.session["test"] == "time" and "timeParam" in self.request.session:
+#                 pass
         self.type = kwargs.get("type")
         super(CreateQuestion,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
@@ -476,10 +475,10 @@ class Finish(TemplateView):
         self.get_finish_result(self.request)
         return super(Finish,self).get(*args,**kwargs)
     
-    def post(self,*args,**kwargs):
-        if self.request.session["test"] == "time" and self.request.is_ajax():
-            print self.request.path
-            return redirect("/%sfinish"%self.request.path)
+#     def post(self,*args,**kwargs):
+#         if self.request.session["test"] == "time" and self.request.is_ajax():
+#             print self.request.path
+#             return redirect("/%sfinish"%self.request.path)
     
     def get_finish_result(self,request):
 
@@ -499,11 +498,13 @@ class Finish(TemplateView):
         s=0;
         f = []
         if request.session["test"] == "time":
-            count = int(request.session["setParam"])
-            if count == 0:
-                s = 1
-            else:
-                f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:count]
+            f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
+#             pass
+#             count = int(request.session["setParam"])
+#             if count == 0:
+#                 s = 1
+#             else:
+#                 f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:count]
         elif request.session["test"] == "set":
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
         if s != 1:    
@@ -643,18 +644,17 @@ def save_time(request):
             ok = "false"
             toSend=0
             request.session["pieTimer"] = time
-        Ttime = 0;
-        if request.session["test"] == "time":
-            if "timeParam" in request.session:
-                Ttime = float(time) - float(request.session["timeParam"])
-                if Ttime > TIME_TEST:
-                    #TODO: test this
-                    raise Exception("user opened closed time_test after %s sec"%TIME_SET)
-                    redirect("%s/finish"%request.path)
-            else:
-                request.session["timeParam"] = float(time)
+#         if request.session["test"] == "time":
+#             if "timeParam" in request.session:
+#                 Ttime = float(time) - float(request.session["timeParam"])
+#                 if Ttime > TIME_TEST:
+#                     #TODO: test this
+#                     raise Exception("user opened closed time_test after %s sec"%TIME_SET)
+#                     redirect("%s/finish"%request.path)
+#             else:
+#                 request.session["timeParam"] = float(time)
             
-        return HttpResponse("%s//%s//%s"%(ok,toSend,Ttime))
+        return HttpResponse("%s//%s"%(ok,toSend))
 
     
 def send_email(request):

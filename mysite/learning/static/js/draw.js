@@ -266,9 +266,7 @@ function normalizeObjects(ctx,objs){
 		if (objs[i]["t"] == "c"){
 			x += parseInt(objs[i]["r"])*2;
 			y = x;
-			
 		}
-		 
 	}
 
 	if (ctx.canvas.width < x+20){

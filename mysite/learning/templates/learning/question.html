@@ -22,16 +22,12 @@
 			</div>
 			<div class="large-6 rows" id="answer" ></div>
 			
-			{% if request.session.test == "set" %}
+			{% if request.session.test == "time" %}
 			<div id="divPie" class="large-1 large-centered columns">
 				<canvas id="pie-countdown" width="60" height="60" style="position:relative;">
 	    		Sorry, it doesn't work for you.
 				</canvas>
 			</div>
-			{% elif request.session.test == "time" %}
-				<span class="silverText" style="font: normal 3vh courier;">
-					{% trans "Počet zodpovedaných otázok:" %}{{request.session.setParam}}	
-				</span>
 			{% endif %}
 			{% if hint %}
 				<div id="hintDiv" class="large-centered columns">
@@ -50,15 +46,8 @@
 	<div class="row center">
 
 		<div id="userControl">
-				{% if request.session.test == "set"%}
 				<div class="round progress success" id="testCounter"></div>
-				{% elif request.session.test == "time" %}
-	  		<div class="large-12 columns" align="center">
-				<canvas id="testTimer" width="60" height="60" style="position:relative;">
-	    			Sorry, it doesn't work for you.
-				</canvas>
-				</div>
-				{% endif %}
+
 	  		<div class="large-12 columns" id="next">
 				<input id="sub" type="submit" class="button" value='{% trans "Odpovedať" %}' />
 			</div>
