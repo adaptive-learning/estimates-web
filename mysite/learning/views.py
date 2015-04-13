@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10 
+SET_TEST = 3
 
 def index(request):
     clear_session_params(request)
@@ -464,7 +464,8 @@ class Finish(TemplateView):
         ctx["score"] = self.s
         ctx["userScore"] = self.uS
         ctx["answers"] = json.dumps(self.out)
-        ctx["best"] = self.res
+        ctx["best"] = self.best
+        ctx["fastest"] = self.fastest
         return ctx
 
     def get(self,*args,**kwargs):
@@ -522,19 +523,19 @@ class Finish(TemplateView):
         uS = (sum([x.skill for x in uS]))/float(len(uS))
         
         if len(f) != 0:
-            scores = [(math.log1p(model.score(1,x.label, x.time)+(1/x.time)),x.id) for x in f]
-            print scores
-            res = max(scores,key=lambda item:item[0])
-            res = [x[1] for x in scores if x[0]==res[0]]
-            ids = [x.id for x in f]
-            res = [ids.index(x) for x in res]
+            scores = [(x.label,x.time,x.id) for x in f]
+
+            self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
+            self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
+
+
             results = [ob.as_json() for ob in f]
 
             self.out = results
-            self.res = res
         else:
             self.out = []
-            self.res = []
+            self.fastest = []
+            self.best = []
         self.s = s
         self.uS = uS
         

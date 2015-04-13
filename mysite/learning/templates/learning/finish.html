@@ -3,6 +3,7 @@
 <html>
 {% block base_body %}
 {%include "navBar/bar.html" %}
+{% load i18n %}
 {% load staticfiles %}
 <div class="row centered">
 <label id="labelFinish">
@@ -19,12 +20,12 @@
         	$("#labelFinish").append("vas priemerny odhad je: "+((1-parseFloat("{{score}}").toFixed(2))*100).toString()+" %\n");
  				$("#label").append("vase skóre v danej oblasti je: "+("{{userScore}}"*100).toString()+" %");
 	         	$("#scatterPlot").show();
-         		scatterPlot("{{answers|escapejs}}","{{best}}");
+         		scatterPlot("{{answers|escapejs}}","{{best}}","{{fastest}}");
        		sessionStorage.clear();
 </script>
 <button class="button" id="sub" onclick="
 	window.location.href = '/learning/{{url}}';
-">Znova</button>
+">{% trans "Znova" %}</button>
 <div align="center" class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
 </div>
 

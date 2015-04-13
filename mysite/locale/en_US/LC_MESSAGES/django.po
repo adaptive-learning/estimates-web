@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-09 14:26+0200\n"
+"POT-Creation-Date: 2015-04-13 19:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,36 +108,60 @@ msgstr ""
 msgid "Mocniny"
 msgstr ""
 
-#: learning/static/python/variables.py:56
-msgid "Koľko percent vody je v pohari?"
+#: learning/static/python/variables.py:46
+msgid "Obsah objektov"
 msgstr ""
 
 #: learning/static/python/variables.py:57
-msgid "Koľko ° má uhol?"
+msgid "Koľko percent vody je v pohari?"
 msgstr ""
 
 #: learning/static/python/variables.py:58
-msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
+msgid "Koľko ° má uhol?"
 msgstr ""
 
 #: learning/static/python/variables.py:59
+msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
+msgstr ""
+
+#: learning/static/python/variables.py:60
 msgid "koľko je na obrázku objektov?"
 msgstr ""
 
-#: learning/templates/learning/question.html:33
-msgid "Počet zodpovedaných otázok:"
-msgstr "Number of answered questions:"
+#: learning/static/python/variables.py:61
+msgid "Koľko krát sa objekt b zmestí do objektu a?"
+msgstr ""
+
+#: learning/templates/learning/finish.html:28
+msgid "Znova"
+msgstr ""
+
+#: learning/templates/learning/question.html:52
+msgid "Odpovedať"
+msgstr ""
 
 #: learning/templates/learning/selectOwn.html:19
 msgid "Vyber si vlastný typ"
 msgstr ""
 
-#: learning/templates/learning/selectOwn.html:51
+#: learning/templates/learning/selectOwn.html:21
+msgid "Označte aspoň jeden typ"
+msgstr ""
+
+#: learning/templates/learning/selectOwn.html:53
 msgid "Označ všetko"
 msgstr ""
 
-#: learning/templates/learning/selectOwn.html:69
+#: learning/templates/learning/selectOwn.html:71
 msgid "Všetko"
+msgstr ""
+
+#: learning/templates/learning/selectOwn.html:80
+msgid "vytvoriť test"
+msgstr ""
+
+#: learning/templates/learning/selectOwn.html:81
+msgid "vytvoriť na čas"
 msgstr ""
 
 #: templates/admin/base_site.html:4
@@ -186,74 +210,78 @@ msgstr "None available"
 msgid "Unknown content"
 msgstr "Unknown content"
 
-#: templates/home/index.html:22
+#: templates/home/index.html:18
 msgid "vyber si kategóriu"
 msgstr ""
 
-#: templates/home/index.html:36
+#: templates/home/index.html:32
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Funny application for testing your skills in estimation"
 
-#: templates/home/index.html:40
+#: templates/home/index.html:36
 msgid "Napíšte nám"
 msgstr ""
 
-#: templates/home/index.html:45
+#: templates/home/index.html:41
 msgid "Otázky na mieru:"
 msgstr ""
 
-#: templates/home/index.html:47
+#: templates/home/index.html:43
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností"
 msgstr ""
 
-#: templates/home/index.html:50
+#: templates/home/index.html:46
 msgid "Široká škála úloh:"
 msgstr ""
 
-#: templates/home/index.html:52
+#: templates/home/index.html:48
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
 msgstr ""
 
-#: templates/home/index.html:55
+#: templates/home/index.html:51
 msgid "Dva typy testov:"
 msgstr ""
 
-#: templates/home/index.html:58
+#: templates/home/index.html:54
 msgid ""
 "Zodpovedajte čo najviac otázok v priebehu 2 a pol minúty, alebo 10 otázok v "
 "čo najkratšiom čase"
 msgstr ""
 
-#: templates/home/index.html:61
+#: templates/home/index.html:57
 msgid "Facebook"
 msgstr ""
 
-#: templates/home/index.html:63
+#: templates/home/index.html:59
 msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
 msgstr ""
 
-#: templates/home/index.html:75
+#: templates/home/index.html:71
 msgid "O projekte"
 msgstr ""
 
-#: templates/home/index.html:76
+#: templates/home/index.html:72
 msgid "Vyskúšajte taktiež:"
 msgstr ""
 
-#: templates/home/index.html:82
+#: templates/home/index.html:78
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr ""
 
-#: templates/home/index.html:84
+#: templates/home/index.html:80
 msgid "Vaša správa:"
 msgstr ""
 
-#: templates/home/index.html:86
+#: templates/home/index.html:82
 msgid "Váš email:"
+msgstr ""
+
+#: templates/home/index.html:84
+msgid "Odoslať"
 msgstr ""
 
 #: templates/navBar/bar.html:12
@@ -268,17 +296,20 @@ msgstr ""
 msgid "na čas"
 msgstr ""
 
-#: templates/navBar/bar.html:120
+#: templates/navBar/bar.html:65
 msgid "Tabulka prevodov"
 msgstr ""
 
-#: templates/navBar/bar.html:124
+#: templates/navBar/bar.html:69
 msgid "Vlastný set"
 msgstr ""
 
-#: templates/navBar/bar.html:129
+#: templates/navBar/bar.html:74
 msgid "Prihlásenie"
 msgstr ""
+
+#~ msgid "Počet zodpovedaných otázok:"
+#~ msgstr "Number of answered questions:"
 
 #~ msgid "ee"
 #~ msgstr "AA"
