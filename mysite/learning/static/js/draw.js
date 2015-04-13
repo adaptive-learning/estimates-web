@@ -182,12 +182,7 @@ function generateObjects(ctx,k,size,points) {
 					 bX[0] == bordersX[0] && bY[0] == bordersY[0]){
 			
 			 	 	ok = false;
-			 		// counter++;
-			 		// if (counter >= 5){
-			 			// ctx.canvas.width += 3*size;
-			 			// // alert("i am here");
-			 			// counter=0;
-			 		// }
+
 			 		break;
 			 	} else {
 					ok = true;
@@ -243,8 +238,6 @@ imSquare.onload = function(){
 function drawObjsVol(ctx,a,b){
 		var objA = JSON.parse(a);
 		var objB = JSON.parse(b);
-		alert(objA["r"]);
-		alert(objB["r"]);
 		objs = normalizeObjects(ctx,[objA,objB]);
 
 		objA = objs[0];
@@ -253,11 +246,17 @@ function drawObjsVol(ctx,a,b){
 		Axy = findXY(ctx,0,objA);
 		Bxy = findXY(ctx,1,objB);
 		
-		alert(objA["r"]);
-		alert(objB["r"]);
+		drawObjVolByType(ctx,objA,Axy,"red",0.5);
+		drawObjVolByType(ctx,objB,Bxy,"blue",0.5);
+		var offset = 8;
+		ctx.beginPath();
 		
-		drawObjVolByType(ctx,objA,Axy);
-		drawObjVolByType(ctx,objB,Bxy);
+		ctx.font="20px Georgia";
+		ctx.globalAlpha = 1.0;
+		ctx.fillStyle = "black";
+		ctx.fillText("A",Axy[0]-offset,Axy[1]+offset);
+		ctx.fillText("B",Bxy[0]-offset,Bxy[1]+offset);
+		ctx.closePath();
 }
 
 function normalizeObjects(ctx,objs){
@@ -289,12 +288,15 @@ function normalizeObjects(ctx,objs){
 }
 	
 
-function drawObjVolByType(ctx, obj,pos){
+function drawObjVolByType(ctx, obj,pos,color,alpha){
 	switch(obj["t"]){
 		case "c":
 			ctx.beginPath();
 			ctx.arc(pos[0],pos[1],obj["r"],0,2*Math.PI);
+			ctx.fillStyle = color;
+    		ctx.globalAlpha = alpha;
 			ctx.stroke();
+			ctx.fill();
 			ctx.closePath();
 			break;
 	}
