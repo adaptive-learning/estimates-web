@@ -17,52 +17,55 @@
   	
   	
 	<ul class="left" id="leftUl">
-	{% for name in 'nameReal'|get_keys_from_dict %}
-		<li class="has-dropdown">
-			<a>{{ name|get_from_dict:'nameReal'|get_n_element:0 }}</a>
-			<ul class="dropdown" id="ul{{name}}">
-				{% for type in name|get_from_dict:'nameTypes'%}
-					<li class="has-dropdown">
-						
-						<a>{{type|get_from_dict:'typeReal'}}</a>
-						<ul class="dropdown" >
-							<li>
-								<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/set">{% trans "test" %}</a>
-							</li>	
-							<li>
-								<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/time">{% trans "na čas" %}</a>
-							</li>
+	<li class="has-dropdown">
+		<a>{% trans "Kategórie" %}</a>
+		<ul class="dropdown">
+		{% for name in 'nameReal'|get_keys_from_dict %}
+			<li class="has-dropdown">
+				<a>{{ name|get_from_dict:'nameReal'|get_n_element:0 }}</a>
+				<ul class="dropdown" id="ul{{name}}">
+					{% for type in name|get_from_dict:'nameTypes'%}
+						<li class="has-dropdown">
 							
-						</ul>	
-					</li>
+							<a>{{type|get_from_dict:'typeReal'}}</a>
+							<ul class="dropdown" >
+								<li>
+									<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/set">{% trans "test" %}</a>
+								</li>	
+								<li>
+									<a href="/learning/{{name|get_from_dict:'nameUrls'}}/{{type}}/time">{% trans "na čas" %}</a>
+								</li>
+								
+							</ul>	
+						</li>
+	
+					{% endfor %}	
+				</ul>
+			</li>	
+									{% if name in 'nameChoose'|get_keys_from_dict %}
+							<script>
+				            	var liC = $("<li/>")
+	            					.appendTo($("#ul{{name}}"));
+							</script>
+								{% for x in name|get_from_dict:'nameChoose' %}
+									<script>
+										$('<a/>')
+	                						.attr("href", "/learning/{{x}}")
+	                						.text("{{x|get_from_dict:'typeReal'}}")
+	           		 						.appendTo(liC);
+									</script>
+								{% endfor %}
+						{% endif %}
+		{% endfor %}
 
-				{% endfor %}	
-			</ul>
-		</li>	
-								{% if name in 'nameChoose'|get_keys_from_dict %}
-						<script>
-			            	var liC = $("<li/>")
-            					.appendTo($("#ul{{name}}"));
-						</script>
-							{% for x in name|get_from_dict:'nameChoose' %}
-								<script>
-									$('<a/>')
-                						.attr("href", "/learning/{{x}}")
-                						.text("{{x|get_from_dict:'typeReal'}}")
-           		 						.appendTo(liC);
-								</script>
-							{% endfor %}
-					{% endif %}
-	{% endfor %}
 
-
-   
-    
+   		</ul>
+    </li>
 	</ul>
     <!-- Right Nav Section -->
     <ul class="right">
       <li>
-      	<a href="/learning/table">{% trans "Tabulka prevodov" %}</a>
+      	<a href="/learning/table">{% trans "Tabuľka prevodov" %}</a>
       	{{get_available_languages}}
       </li>
       <li>
