@@ -13,33 +13,42 @@
 {% load learning_filters %}
 {% load i18n %}
 <script src="{% static "js/decider.js" %}"></script>
-<div class="row centered">
 <form id="assigForm" method="post" >{% csrf_token %}
-<div class="row center">
-  	<h3 align="center">{% trans "Vyber si vlastný typ" %}</h3>
-  	{% if failed %}
-  		<h4 align="left" style="color:red;">{%trans "Označte aspoň jeden typ"%}</h4>
-	{% endif %}
-</div>
-	{% for t in object_list|get_types%}
-
-
-	<label onclick="showType('{{t.type}}')">
-				<hr></hr>	
-		{{t.type|get_from_dict:'typeReal'}}
-<script>
+	<div class="row center">
+	<script>
 	function showType(type){
 			var element = $("#"+type);
 			if(element.is(':visible')){
 				element.slideUp();
+
+				$("#img"+type).addClass('slideImg');
+			    rotateAnimation("img"+type,-90);
 			} else {
 				 element.slideDown();
+				 $("#img"+type).removeClass('slideImg');
+				 rotateAnimation("img"+type,90);
 			}
 	}
 </script>	
+<div class="row center">
+  	<h3 align="center">{% trans "Vyber si vlastný typ" %}</h3>
+	{% if failed %}
+  		<h4 align="left" style="color:red;">{%trans "Označte aspoň jeden typ"%}</h4>
+	{% endif %}
+</div>
+
+	{% for t in object_list|get_types%}
+		{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
+
+	
+	<label onclick="showType('{{t.type}}')">
+				<hr></hr>	
+				<img  src="{% static "img/icon-slidedown.png" id="img{{t.type}}" %}"/>
+		{{t.type|get_from_dict:'typeReal'}}
+
 	</label>
-	<div id="{{t.type}}" style="display: none;">
-	{%if t.type == "curr" or t.type == "vol" or t.type == "len" or t.type == "temp" or t.type == "surf"%}
+	<div id="{{t.type}}" style="display: none;" >
+
 
 		{% for p in object_list|get_concepts:t%}
 		<div>
@@ -61,19 +70,22 @@
 						}
 					}
 				}</script>
-				
-
-
-	{% else %}
-		<div class="large-12 collumn">
-			<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="all"/>
-			<label for="{{t.type}}{{p.id}}">		
-				{% trans "Všetko" %}	
-			</label>
-		</div>
-	
+				</div>		
 	{% endif %}
-	</div>
+
+	{% endfor %}
+
+	{% for t in object_list|get_types%}
+		{%if t.type != "curr" and t.type != "vol" and t.type != "len" and t.type != "temp" and t.type != "surf"%}
+		<hr></hr>	
+		<div id="{{t.type}}">
+				<input type="checkbox" name="{{t.type}}" id="{{t.type}}{{p.id}}" value="all"/>
+				<label for="{{t.type}}{{p.id}}">		
+					<span>{{t.type|get_from_dict:'typeReal'}}</span>
+				</label>
+		</div>
+	{% endif %}
+
 	{% endfor %}
 <hr></hr>
 <input type="hidden" name="testType" id="chosen"/> 
@@ -83,8 +95,21 @@
 	function setTest(type){
 		$("#chosen").val(type);
 	}
+	function rotateAnimation(el,degrees){
+
+	$('#'+el).animate({
+    	step: function(now,fx) {
+    		alert("now");
+      		// $(this).css('-webkit-transform','rotate('+now+'deg)'); 
+      		// $(this).css('-moz-transform','rotate('+now+'deg)');
+      		// $(this).css('transform','rotate('+now+'deg)');
+    	},
+    	duration:'slow'
+	},'linear');
+		
+	}
 </script>
+	</div>
 </form>
-</div>
 
 {% endblock base_body %}

@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 3
+SET_TEST = 10
 
 def index(request):
     clear_session_params(request)
@@ -383,6 +383,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             ctx["hint"] = True
         else: 
             ctx["hint"]= False
+        ctx["numQuestion"] = SET_TEST
         self.ctx = ctx   
         return ctx
 

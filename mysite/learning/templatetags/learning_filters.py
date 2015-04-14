@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django import template
 from django.utils.translation import ugettext as _
 from learning.models import Type, Params, CurrTable, Concept, Hint
@@ -130,8 +131,8 @@ def secondP(objects, second):
     for x in objects:
         if x.params.reverse:
             if x.params.concept.p1 == second:
-                return x.rate
+                return "%.5f"%x.rate
         else:
             if x.params.concept.p2 == second:
-                return x.rate
+                return "%.5f"%x.rate
             

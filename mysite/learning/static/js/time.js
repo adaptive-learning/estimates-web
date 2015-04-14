@@ -1,6 +1,6 @@
 var t;
 var timer_is_on=1;
-var time = 0;
+var time ;
 var pieTimerTimeout;
 function times(){
 	if(timer_is_on){
@@ -91,12 +91,15 @@ function drawPieTimer(fullTime,medTime2f,test){
         type : "POST", // http method
         data : { data:new Date().getTime() / 1000}, 
         success: function(response){
+			splitted = response.split("//");
+			if (splitted[0] == "true"){
+				time = Math.floor(parseFloat(splitted[1]));
+			}	 else {
+				time = 0;
+			}
         	if (test == "time"){
         		timerSet(response,fullTime);
         	} 	
-        	// else if(test == "time"){
-        		// timerTime(response,fullTime);
-        	// }
         	times();
         },
 		async: false,
@@ -112,7 +115,7 @@ function timerSet(response,fullTime){
 
 	splitted = response.split("//");
 	if (splitted[0] == "true"){
-		time = Math.floor(parseFloat(splitted[1]));
+		var medTime = parseFloat(fullTime);
 		var medTime = parseFloat(fullTime);
 		var start = time / medTime;
 		var end = 0;
@@ -131,7 +134,6 @@ function timerSet(response,fullTime){
 			timer('pie-countdown',fullTime,"#0F482D",true,function(){ return afterTestTimer("true");},start,end,start);
 		}
 	} else {
-		time = 0;
 		var end = 1;
 		var start = 1;
 		var total = 0;

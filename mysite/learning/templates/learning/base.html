@@ -3,7 +3,6 @@
 
 	<script>
 		var fTime = "{{request.session.medTime}}";
-		var testParam = "{{request.session.setParam}}";
 	</script>
 
 {% with request.session.p1|get_reversed:param as pa1 %}
@@ -13,7 +12,7 @@ $(document).ready(function(){
 	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1|escapejs}}","{{pa2|escapejs}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.type|get_from_dict:'typeQuestions'}}",
 					"{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
-	handleNextQuestion("{{request.session.type}}","{{request.session.test}}",testParam);
+	handleNextQuestion("{{request.session.type}}","{{request.session.setParam}}","{{numQuestion}}");
 	drawPieTimer(fTime,"{{request.session.medTime|stringformat:'2.f'}}","{{request.session.test}}");
 });
 	sessionStorage.setItem("sended",false); 
@@ -46,7 +45,7 @@ $(document).ready(function(){
 			p2:"{{request.session.p2|escapejs|safe}}",
 			question:"{{request.session.question}}",
 			rev:"{{request.session.rev}}",
-			testP:testParam,
+			testP:"{{request.session.setParam}}",
 		}),"{{request.session.type}}");
 	});
 	
