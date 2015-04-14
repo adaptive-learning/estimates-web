@@ -20,13 +20,13 @@
 			var element = $("#"+type);
 			if(element.is(':visible')){
 				element.slideUp();
+				$("#img"+type).removeClass("slideDownImg");
+				$("#img"+type).addClass("slideUpImg");
 
-				$("#img"+type).addClass('slideImg');
-			    rotateAnimation("img"+type,-90);
 			} else {
 				 element.slideDown();
-				 $("#img"+type).removeClass('slideImg');
-				 rotateAnimation("img"+type,90);
+				 $("#img"+type).removeClass("slideUpImg");
+				 $("#img"+type).addClass("slideDownImg");
 			}
 	}
 </script>	
@@ -43,7 +43,7 @@
 	
 	<label onclick="showType('{{t.type}}')">
 				<hr></hr>	
-				<img  src="{% static "img/icon-slidedown.png" id="img{{t.type}}" %}"/>
+				<img class="slideUpImg" src="{% static "img/icon-slidedown.png"%}" id="img{{t.type}}"/>
 		{{t.type|get_from_dict:'typeReal'}}
 
 	</label>

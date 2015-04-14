@@ -6,18 +6,21 @@
 	background-color: #6E6D78;
 	height: 60vh;
 }
-.slideImg{
-transform: rotate(180deg);
--ms-transform: rotate(180deg); /* IE 9 */
--webkit-transform: rotate(180deg); /* Safari and Chrome */
--o-transform: rotate(180deg); /* Opera */
--moz-transform: rotate(180deg); /* Firefox */
+.slideUpImg{
+transform: rotate(-90deg);
+-ms-transform: rotate(-90deg); /* IE 9 */
+-webkit-transform: rotate(-90deg); /* Safari and Chrome */
+-o-transform: rotate(-90deg); /* Opera */
+-moz-transform: rotate(-90deg); /* Firefox */
 
 /* if you want to do this move with animate use transition */
-transition: .5s;
--moz-transition: .5s; /* Firefox 4 */
--webkit-transition: .5s; /* Safari and Chrome */
--o-transition: .5s; /* Opera */
+}
+.slideDownImg{
+	transform: rotate(90deg);
+-ms-transform: rotate(90deg); /* IE 9 */
+-webkit-transform: rotate(90deg); /* Safari and Chrome */
+-o-transform: rotate(90deg); /* Opera */
+-moz-transform: rotate(90deg); /* Firefox */
 }
 	
 .silverText{
