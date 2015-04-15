@@ -14,8 +14,6 @@ var escape = [
 function scatterPlot(data,best,fastest){
 	dat = JSON.parse(data);
 	var series=[];
-	alert(best);
-	alert(fastest);
 	for (var e=0; e < dat.length;e++){
 		var d = dat[e];
 		if (d.type in escape){

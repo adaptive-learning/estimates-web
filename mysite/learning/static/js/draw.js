@@ -270,7 +270,6 @@ function normalizeObjects(ctx,objs){
 	}
 
 	if (ctx.canvas.width < x+20){
-		alert("here");
 		var n = ctx.canvas.width/2 - 20;
 		if (objs[0]["t"] == "c"){
 			var change = n / (2*objs[0]["r"]);

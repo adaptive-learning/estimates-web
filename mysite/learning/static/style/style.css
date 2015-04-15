@@ -2,6 +2,9 @@
 	color: #E0E0E0;
 	font: normal 5vh courier !important;
 }
+#hint{
+	font: normal 2.5vh courier !important;
+}
 #input{
     background-color: #6E6D78;
     color:#E0E0E0;

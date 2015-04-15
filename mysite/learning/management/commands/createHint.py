@@ -15,10 +15,15 @@ class Command(BaseCommand):
         for p in params:
             questions = ConceptQuestion.objects.filter(params = p)
             numbers = sorted([x.number.number for x in questions])
-            tenPercent = int(len(numbers)/(100/20))
-            tenPercent = numbers[:tenPercent]
-            Numbers = Number.objects.filter(number__in = tenPercent)
+            percent = (int(len(numbers)*15)/100)
+            percent = numbers[:percent]
+            Numbers = Number.objects.filter(number__in = percent)
             questions = questions.filter(number__in = Numbers)
             for q in questions:
-                Hint.objects.get_or_create(conceptQuestion = q)
-            
+                try:
+                    newQ = ConceptQuestion.objects.get(hint = True, number = q.number, params = q.params,
+                                                     type = q.type)
+                except ConceptQuestion.DoesNotExist:
+                    newQ = ConceptQuestion(hint = True, number = q.number, params = q.params,
+                                                     type = q.type, label = 0.5, updatedTimes = 0)
+                    newQ.save()

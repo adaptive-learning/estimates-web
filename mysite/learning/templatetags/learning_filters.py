@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django import template
 from django.utils.translation import ugettext as _
-from learning.models import Type, Params, CurrTable, Concept, Hint
+from learning.models import Type, Params, CurrTable, Concept
 from learning.static.python import variables
 import json
 

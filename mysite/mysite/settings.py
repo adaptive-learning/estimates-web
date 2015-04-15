@@ -129,21 +129,18 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 COMPRESS_ROOT = (
     'static'
 )
-## https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/learning'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-#     'social_auth.backends.yahoo.YahooBackend',
     'django.contrib.auth.backends.ModelBackend',
     'lazysignup.backends.LazySignupBackend',
 )
 
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    #'social_auth.backends.pipeline.associate.associate_by_email',
     'social_auth.backends.pipeline.user.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
