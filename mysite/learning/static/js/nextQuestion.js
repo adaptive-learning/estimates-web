@@ -5,7 +5,9 @@ window.onload=function(){
 function handleNextQuestion(t,testParam,maxQ){
 		$("#timeCounter").hide();
 		$("#testCounter").show();
-		$("#testCounter").append("<span style=\"width: "+(testParam-1)*maxQ+"%;\" class=\"meter custom\"></span>");
+		$("#testCounter").append("<span style=\"width: "+(testParam-1)*maxQ+"%;\" class=\"meter custom\" \
+			align='center'></span>");
+		
 		var v=testParam;
 	 	if (v>100){
 	 		throw 404;

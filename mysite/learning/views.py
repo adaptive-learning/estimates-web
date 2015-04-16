@@ -243,7 +243,6 @@ class AjaxableResponseMixin():
             res = converter(model.result, dst,"degC")
             ans = converter(model.answer, dst,"degC")
         if model.type.type == "equa": model.conceptQuestion.number.number = None
-
         diff = float(res) - float(ans)
         diff = abs(diff)/abs(float(res))
         if diff > 1: diff = 1.0
