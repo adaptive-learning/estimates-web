@@ -9,18 +9,33 @@ var escape = [
 	"line" ,
 	"obj"  ,
 	'sqrt',
+	'objsVol',
 ];
+
+function createName(param,  question, answer, rightAnswer, type){
+	switch(type){
+		default:
+			return answer + "("+ rightAnswer +")";
+	}
+}
 
 function scatterPlot(data,best,fastest){
 	dat = JSON.parse(data);
 	var series=[];
 	for (var e=0; e < dat.length;e++){
 		var d = dat[e];
-		if (d.type in escape){
-			var name = d.a;
+		if (escape.indexOf(d.type)){
+			var name = createName(d.params, d.q, d.a, d.right, d.type);
 		} else {
+			if (d.p1 == null){
+				d.p1 = "";
+			}
+			if (d.p2 == null){
+				d.p2 = "";
+			}
 			var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a);
 		}
+		
 		if (best.indexOf(e) != -1){
 			series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',
 						data:[[dat[e].time,(1-dat[e].label)*100]]});

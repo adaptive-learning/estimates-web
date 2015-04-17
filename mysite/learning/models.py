@@ -28,8 +28,10 @@ class FloatModel(models.Model):
             a = self.answer,
             p1 = pa1,
             p2 = pa2,
+            params = self.conceptQuestion.params,
             q = n.number,
             type = t.type, 
+            right = self.result
             )
             
 class ConceptQuestion(models.Model):

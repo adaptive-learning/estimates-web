@@ -202,6 +202,7 @@ function generateObjects(ctx,k,size,points) {
 
 function drawObjs(ctx,sq,cir,tri){
 
+
 var points = [];
 
 var squares = (generateObjects(ctx,sq,15,points));

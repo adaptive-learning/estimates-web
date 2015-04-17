@@ -18,7 +18,6 @@
 <script>
            	$("#labelFinish").text("");
         	$("#labelFinish").append("vas priemerny odhad je: "+((1-parseFloat("{{score}}").toFixed(2))*100).toString()+" %\n");
- 				$("#label").append("vase skóre v danej oblasti je: "+("{{userScore}}"*100).toString()+" %");
 	         	$("#scatterPlot").show();
          		scatterPlot("{{answers|escapejs}}","{{best}}","{{fastest}}");
        		sessionStorage.clear();

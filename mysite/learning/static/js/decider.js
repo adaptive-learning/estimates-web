@@ -33,7 +33,12 @@ function createQuestion(element,type,translated,question, p1,p2){
 	$("#"+element).append(deciderType(type,translated,question, p1,p2,"?"));
 }
 
-function deciderType(type,translated,question, p1,p2,answer){
+function deciderType(type,translated,question, p1,p2,answer,rightAnswer){
+var type_question_mod = {
+	"equa":  p1 + " = " + answer + "(" + rightAnswer + ")",
+	"sqrt": "\u221A" + question + " = " + answer + "(" + rightAnswer + ")",
+	"sqr": parseInt(question)+p1.sup()+" = " + answer + "(" + rightAnswer +")",
+};
 var type_question = {
 	"equa":  p1 + " = " + answer,
 	"sqrt": "\u221A" + question + " = " + answer,
@@ -42,8 +47,14 @@ var type_question = {
 	if (translated != "False"){
 		return (translated);
 	} else if(type in type_question) {
+		if (rightAnswer){
+			return type_question_mod;
+		} 
 		return (type_question[type]);
 	} else {
+		if (rightAnswer){
+			return (question+ decider(p1)+ " = "+ answer +"("+ rightAnswer +") "+ decider(p2) );
+		}
 		return (question+ decider(p1)+ " = "+ answer + decider(p2) );
 	}
 }

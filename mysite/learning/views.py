@@ -105,7 +105,7 @@ def decider(type, question, src, dst, params, f = 2):
     elif type == 'sqrt' :
         return round(sqrt(float(question)), f)
     elif type == "obj":
-        return float(question)+float(splitted[0])+float(splitted[0]);
+        return float(question)+float(splitted[1])+float(splitted[0]);
     elif type == "sqr":
         return math.pow(float(question),float(params))
     elif type == "water":
@@ -527,10 +527,7 @@ class Finish(TemplateView):
 
             self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
             self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
-
-
             results = [ob.as_json() for ob in f]
-
             self.out = results
         else:
             self.out = []

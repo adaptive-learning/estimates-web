@@ -82,16 +82,6 @@ def filter_by_type(objects,t):
 def get_types(objects):
     return list(set([x.type for x in objects]))
 
-# @register.filter(name='get_reversed')
-# def get_reversed(param,rev):
-#     if object["param"]:
-#         if param == object["p1"]:
-#             return object["p2"]
-#         elif param == object["p2"]:
-#             return object["p1"]
-#         return object.param
-#     else: return param
-        
 @register.filter(name='get_types_CurrTable')
 def get_types_CurrTable(objects):
     return list(set([x.concept.type for x in objects]))
@@ -123,11 +113,8 @@ def get_p2_by_p1(objects,pa1):
 
 @register.filter(name='firstP')
 def firstP(objects, first):
-
     concepts = Concept.objects.filter(p1 = first) | Concept.objects.filter(p2 = first)
     return objects.filter(concept__in = concepts)
-#     params = Params.objects.filter(concept__in = concept)
-#     return objects.filter(params__in = params)
 
     
 @register.filter(name='secondP')

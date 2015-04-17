@@ -5,7 +5,7 @@
 		var fTime = "{{request.session.medTime}}";
 	</script>
 
-{% with request.session.par as param %}
+{% with request.session.par|escapejs as param %}
 
 <script>
 $(document).ready(function(){
