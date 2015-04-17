@@ -14,6 +14,7 @@ urlpatterns = patterns("",
     url(r'^(?P<url>([a-zA-Z]|/|-)+)/finish',views.Finish.as_view()),
     url(r'^table',views.ShowTable.as_view()),
     
+    url(r'^all/(?P<type>[a-z]+)/(?P<cat>[a-z]+)/(?P<test>[a-z]+)',views.AllFromCategory.as_view()),
     url(r'^conv/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(), name = 'learn'),
     url(r'^own/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view(),name="own"),
     url(r'^math/(?P<type>[a-z]+)/(?P<test>[a-z]+)',views.CreateQuestion.as_view()),

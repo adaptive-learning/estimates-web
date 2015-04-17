@@ -178,6 +178,7 @@ class QuestionFunctions():
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
         for q in query:
+            print q
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
                 try:
@@ -208,7 +209,9 @@ class QuestionFunctions():
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
-        return get_object_or_404(ConceptQuestion,id = maximum[0])
+        e = get_object_or_404(ConceptQuestion,id = maximum[0])
+        print e.concept.p1
+        return e
         
     def check_type(self,*args,**kwargs):
         type = kwargs.get("type",None)
@@ -319,6 +322,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 raise Exception("type is None in CreateQuestion")
             preffered = None
             isSettingsOn = False
+        print "pref",preffered
         question = self.get_question(types,preffered)
 
         self.type = question.type.type
@@ -331,6 +335,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         par = question.params
 
         self.request.session["type"] = self.type
+        print "self.type",self.type
         print "hint",question.hint
         if isSettingsOn == False and self.is_new_test({"types":types,
                                "test":test,
@@ -360,6 +365,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         print "p1",self.request.session["p1"]
         print "p2",self.request.session["p2"]
         print "par",self.request.session["par"]
+        print self.request.session["type"]
         if self.request.session["par"] == True:
             ctx["pa1"]= self.request.session["p2"]
             ctx["pa2"] = self.request.session["p1"]
@@ -433,6 +439,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))
 
 class PreffQuestion(CreateQuestion):
+    @method_decorator(allow_lazy_user)
     def get(self,*args,**kwargs):
         self.pref = kwargs.get("pref",None)
         if self.pref: 
@@ -456,7 +463,23 @@ class PreffQuestion(CreateQuestion):
                 raise Exception("no Concept with p1 or p2 equals %s"%self.pref)
             self.request.session["pref"] = concepts
         return super(PreffQuestion,self).get(*args,**kwargs)
-            
+    
+class AllFromCategory(CreateQuestion):
+    @method_decorator(allow_lazy_user)
+    def get(self,*args,**kwargs):
+        clear_session_params(self.request)
+        cat = kwargs.get("cat",None)
+        if kwargs.get("type") != "settings":
+            raise Exception("no page found")
+        if cat == None or cat == "home":
+            raise Exception("no valid category %s"%cat)
+        print "cat",cat
+        typeNames = variables.mainDict['nameTypesInDb'][cat]
+        types = Type.objects.filter(type__in  = typeNames)
+        concepts = Concept.objects.filter(type__in = types)
+        self.request.session["pref"] = concepts
+        return super(AllFromCategory,self).get(*args,**kwargs)
+
 class Finish(TemplateView):
     template_name = "learning/finish.html"
     def get_context_data(self,*args,**kwargs):
@@ -606,7 +629,7 @@ class OwnChoice(ListView):
                 return redirect("%s"%self.request.path)
             else:
                 return redirect("%snot"%self.request.path)
-        if self.request.POST.get("testType") in ["set","test"]:
+        if self.request.POST.get("testType") in ["set","time"]:
             return redirect("/learning/own/settings/%s"%self.request.POST.get("testType"))        
         else:
             raise Exception("wrong testType")

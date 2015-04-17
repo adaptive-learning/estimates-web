@@ -40,6 +40,19 @@
 						</li>
 	
 					{% endfor %}	
+					<li class="has-dropdown">
+						<a>Všetko</a>
+							<ul class="dropdown" >
+								<li>
+									<a href="/learning/all/settings/{{name}}/set">{% trans "test" %}</a>
+								</li>	
+								<li>
+									<a href="/learning/all/settings/{{name}}/time">{% trans "na čas" %}</a>
+								</li>
+								
+							</ul>	
+						
+					</li>
 				</ul>
 			</li>	
 									{% if name in 'nameChoose'|get_keys_from_dict %}
