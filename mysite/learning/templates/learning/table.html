@@ -25,7 +25,7 @@
 		{% for p1 in object_list|get_set_p1:type %}
 	 	<tr>
 			<th ><script>document.write(decider("{{p1}}"));</script></th>
-			{% for p2 in object_list|get_params:type|get_p2_by_p1:p1 %}
+			{% for p2 in object_list|filter_by_type:type|get_p2_by_p1:p1 %}
 
 			<td>{{ object_list|firstP:p1|secondP:p2 }}<script>document.write(" "+decider("{{p2}}"));
 				</script></td>

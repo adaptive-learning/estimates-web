@@ -13,14 +13,14 @@
 		<div class="row center" id="QuestionDiv" align="center">
 			<label class="small-9 collumns" id="label" for="input"></label>
 			
-			{% if request.session.hint %}
+			{% if request.session.param == True %}
 				<br/>
 				<span class="silverText">{% trans "nápoveda:" %}</span>
 				<label id="hint" class="small-9 collumns silverText" style=""></label>
 				<script src="{% static "js/hint.js" %}"></script>
 				<script>
 					getHint("hint","{{request.session.type}}","{{request.session.p1}}",
-							"{{request.session.p2}}","{{request.session.reverse}}");
+							"{{request.session.p2}}","{{request.session.par}}");
 				</script>
 			{%endif%}	
 			<div id="canvasDiv">

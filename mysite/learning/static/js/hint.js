@@ -20,6 +20,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 function getHint(ele, type, p1,p2,reverse){
+	
 	if (type == "temp"){
 		var label = $("#"+ele);
 		if (reverse){

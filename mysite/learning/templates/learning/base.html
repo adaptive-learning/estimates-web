@@ -5,11 +5,12 @@
 		var fTime = "{{request.session.medTime}}";
 	</script>
 
-{% with request.session.p1|get_reversed:param as pa1 %}
-{% with request.session.p2|get_reversed:param as pa2 %}
+{% with request.session.par as param %}
+
 <script>
 $(document).ready(function(){
-	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}","{{pa1|escapejs}}","{{pa2|escapejs}}");
+	draw("{{request.session.type}}","{{request.session.question|stringformat:'2.f'}}",
+		"{{param}}");
 	createQuestion("label","{{request.session.type}}","{{request.session.type|get_from_dict:'typeQuestions'}}",
 					"{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.setParam}}","{{numQuestion}}");
@@ -44,12 +45,11 @@ $(document).ready(function(){
 			p1:"{{request.session.p1|escapejs|safe}}",
 			p2:"{{request.session.p2|escapejs|safe}}",
 			question:"{{request.session.question}}",
-			rev:"{{request.session.rev}}",
+			par:"{{param}}",
 			testP:"{{request.session.setParam}}",
 		}),"{{request.session.type}}");
 	});
 	
 	
 </script>
-{% endwith %}
 {% endwith %}

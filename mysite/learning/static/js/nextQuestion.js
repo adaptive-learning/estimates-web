@@ -5,7 +5,13 @@ window.onload=function(){
 function handleNextQuestion(t,testParam,maxQ){
 		$("#timeCounter").hide();
 		$("#testCounter").show();
-		$("#testCounter").append("<span style=\"width: "+(testParam-1)*maxQ+"%;\" class=\"meter custom\" \
+		if (testParam == 0){
+			startCounter = 0;
+		} else {
+			startCounter = testParam -1;
+		}
+
+		$("#testCounter").append("<span id='customCounter' style=\"width: "+(startCounter)*maxQ+"%;\" class=\"meter custom\" \
 			align='center'></span>");
 		
 		var v=testParam;
@@ -13,7 +19,7 @@ function handleNextQuestion(t,testParam,maxQ){
 	 		throw 404;
 	 	}
 	 	v*=maxQ;
-		$(".custom").animate({width:v.toString()+"%"});
+		$("#customCounter").animate({width:v.toString()+"%"});
 	// if (test == "time"){
 		// $("#testCounter").hide();
 		// $("#timeCounter").show();

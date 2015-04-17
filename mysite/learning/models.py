@@ -16,12 +16,11 @@ class FloatModel(models.Model):
     date = models.DateTimeField(auto_now=True)
     
     def as_json(self):
-        par = get_object_or_404(Params,id = self.conceptQuestion.params.id)
         n = get_object_or_404(Number,id = self.conceptQuestion.number.id)
         t = get_object_or_404(Type,id = self.type.id)
-        pa1 = par.concept.p1
-        pa2 = par.concept.p2
-        if par.reverse:
+        pa1 = self.conceptQuestion.concept.p1
+        pa2 = self.conceptQuestion.concept.p2
+        if self.conceptQuestion.params == True:
             pa1, pa2 = pa2, pa1
         return dict(
             time=self.time, 
@@ -35,27 +34,13 @@ class FloatModel(models.Model):
             
 class ConceptQuestion(models.Model):
     number = models.ForeignKey('Number',null=True);
-    params = models.ForeignKey('Params', related_name ="params")
+    concept = models.ForeignKey('Concept', related_name ="concept")
+    params = models.CharField(max_length = 40, null = True) 
     type = models.ForeignKey('Type')
     label = models.FloatField(null=True)
     updatedTimes = models.IntegerField(default = 0)
     hint = models.BooleanField()
 
-class Params(models.Model):
-    concept = models.ForeignKey("Concept")
-    reverse = models.BooleanField()
-       
-    def as_json(self):
-        if reverse:
-            return dict(
-                        p1 = concept.p2,
-                        p2 = concept.p1,
-                        )
-        else :
-            return dict(
-                        p1 = concept.p1,
-                        p2 = concept.p2,
-                        )
 class Number(models.Model):
     number = models.FloatField(unique = True)
 
@@ -69,11 +54,12 @@ class UserSkill(models.Model):
     number = models.IntegerField()
     
 class CurrTable(models.Model):
-    params = models.ForeignKey('Params')
+    concept = models.ForeignKey('Concept')
+    reversed = models.BooleanField()
     rate = models.FloatField()
 
 class Concept(models.Model):
-    p1 = models.CharField(max_length = 20)
+    p1 = models.CharField(max_length = 20, null = True)
     p2 = models.CharField(max_length = 20,null = True)
     type= models.ForeignKey("Type")
     

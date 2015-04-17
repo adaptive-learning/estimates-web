@@ -4,7 +4,7 @@ function Point(x,y,size){
 	this.size = size;
 }
 
-function draw(type,question,p1,p2){
+function draw(type,question,param){
 	var c = $("#myCanvas")[0];
 	var ctx = c.getContext("2d");
 	question = question.replace(',','.');
@@ -18,19 +18,22 @@ function draw(type,question,p1,p2){
 			var A = new Point(160,60);
 			var B = new Point(80,60);
 			var C = drawAngle(ctx,A,B,question,90);
-			drawAngleSymbol(p1,ctx,A,B,C);
+			drawAngleSymbol(param,ctx,A,B,C);
 			break;
 		case 'water':
-			drawGlass(ctx,question,parseInt(p1),parseInt(p2));
+			splitted = param.split(" ");
+			drawGlass(ctx,question,parseInt(splitted[0]),parseInt(splitted[1]));
 			break;
 		case 'line':
-			drawLines(ctx,parseFloat(question),parseFloat(p1));
+			drawLines(ctx,parseFloat(question),parseFloat(param));
 			break;
 		case 'obj':
-			drawObjs(ctx,question,parseFloat(p1),parseFloat(p2));
+			splitted = param.split(" ");
+			drawObjs(ctx,question,parseFloat(splitted[0]),parseFloat(splitted[1]));
 			break;
 		case 'objsVol':
-			drawObjsVol(ctx,p1,p2);			break;
+			splitted = param.split(" ");
+			drawObjsVol(ctx,splitted[0],splitted[1]);			break;
 		default:
 			$("#canvasDiv").insertAfter("<br/>");
 			$("#canvasDiv").hide();
