@@ -4,28 +4,55 @@
 {% block base_body %}
 {%include "navBar/bar.html" %}
 {% load i18n %}
+{% load learning_filters %}
 {% load staticfiles %}
 <div class="row centered">
-<label id="labelFinish">
-	
-</label>
+<div id="progressScores">
+
+</div>
+
 <script src="{% static 'js/finish.js' %}"></script>
 <script src="{% static 'js/decider.js' %}"></script>
 <script src="{% static 'js/facebook.js' %}"></script>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
 	<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<h4>{% trans "Vaše skóre" %}</h4><br/>
+{% for x in score %}
+{{x.0.type|get_from_dict:'typeReal' }} <div class="round progress">
+	<span id='{{x.0.type}}' style='width:0%;' class="meter"></span>
+	<script>
+		$("#"+"{{x.0.type}}").animate({width:"{{x.1}}"+"%"});
+	</script>
+				</div> 
+		
+{% endfor %}
 <div id="scatterPlot" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto; display:none"></div>
+{% if test == "set" %}
+	<img src="{% static 'img/blueCircle.png'%}"/>{% trans " Najrýchlejšia odpoveď" %}
+	<img src="{% static 'img/redCircle.png'%}"/>{% trans " Preskočená odpoveď" %}
+	<img src="{% static 'img/greenCircle.png'%}"/>{% trans " Najsprávnejšia odpoveď" %}
+{% elif test == "time" %}	
+	<img src="{% static 'img/redCircle.png'%}"/>{% trans " Nestihnutá odpoveď" %}
+	<img src="{% static 'img/blackCircle.png'%}"/>{% trans " Preskočená odpoveď" %}
+	<img src="{% static 'img/greenCircle.png'%}"/>{% trans " Stihnutá odpoveď" %}
+{% endif %}
+<br/>
+<div class="large-12 columns">
+<button class="button" id="sub" onclick="
+	window.location.href = '/learning/{{url}}';
+">{% trans "Znova" %}</button>
+
+<div align="center" class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
+</div>
+</div>
+</div>
 <script>
-           	$("#labelFinish").text("");
+
         	$("#labelFinish").append("vas priemerny odhad je: "+((1-parseFloat("{{score}}").toFixed(2))*100).toString()+" %\n");
 	         	$("#scatterPlot").show();
          		scatterPlot("{{answers|escapejs}}","{{best}}","{{fastest}}","{{test}}");
        		sessionStorage.clear();
 </script>
-<button class="button" id="sub" onclick="
-	window.location.href = '/learning/{{url}}';
-">{% trans "Znova" %}</button>
-<div align="center" class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
-</div>
+
 
 {% endblock base_body %}

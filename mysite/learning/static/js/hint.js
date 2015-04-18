@@ -58,7 +58,10 @@ $.ajax({
 		
         // handle a successful response
         success : function(response) {
-        	$("#"+ele).html(deciderType(type,"False",1,p1,p2,response));
+        	$(document).ready(function(){
+        		$("#"+ele).empty();
+        		$("#"+ele).append(deciderType(type,"False",1,p1,p2,response));
+        	});
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {

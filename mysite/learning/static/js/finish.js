@@ -28,7 +28,11 @@ function scatterPlot(data,best,fastest,test){
 			if (escape.indexOf(d.type) != -1){
 				var name = createName(d.params, d.q, d.a, d.right, d.type);
 			} else {
-				if (d.p1 == null){
+				if (d.p1 == null && d.p2 == null){
+					d.p1 = d.params; 
+					d.p2 = "";
+				}
+				if(d.p1 == null){
 					d.p1 = "";
 				}
 				if (d.p2 == null){
@@ -46,8 +50,8 @@ function scatterPlot(data,best,fastest,test){
 				}else if (fastest.indexOf(e) != -1 ){
 					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(0, 13, 119, .9)',
 								data:[[dat[e].time,(1-dat[e].label)*100]]});
-				} else {
-					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(51, 51, 51, .9)',
+				} else if (d.skipped == false){
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(10, 10, 10, .9)',
 								data:[[dat[e].time,(1-dat[e].label)*100]]});
 				}
 				
@@ -81,6 +85,7 @@ function scatterPlot(data,best,fastest,test){
 							data:[[dat[e].time,(1-dat[e].label)*100]]});
 			}
 		}
+		
 		
 
 	}

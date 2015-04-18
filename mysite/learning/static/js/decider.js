@@ -48,13 +48,16 @@ var type_question = {
 	"sqr": parseInt(question)+p1.sup()+" = " + answer,
 };
 	if (translated != "False"){
+
 		return (translated);
 	} else if(type in type_question) {
+
 		if (rightAnswer){
-			return type_question_mod;
+			return type_question_mod[type];
 		} 
 		return (type_question[type]);
 	} else {
+
 		if (rightAnswer){
 			return (question+ decider(p1)+ " = "+ answer +"("+ rightAnswer +") "+ decider(p2) );
 		}

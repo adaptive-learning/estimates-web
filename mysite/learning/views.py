@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 3
+SET_TEST = 1
 
 def index(request):
     clear_session_params(request)
@@ -158,8 +158,9 @@ def decider(type, question, src, dst, params, f = 2):
 def get_hint(request):
     if request.method == "POST" and request.is_ajax():
         post = request.POST
-
+        
         res = decider(post.get('type'), 1, post.get('p1'), post.get('p2'), post.get('par'),5)
+        print "" 
         return HttpResponse(res)
 
 def median(lst):
@@ -525,8 +526,7 @@ class Finish(TemplateView):
         ctx = super(Finish,self).get_context_data(*args,**kwargs)
         url = kwargs.get("url",None)
         ctx["url"] = self.url
-        ctx["score"] = self.s
-        ctx["userScore"] = self.uS
+        ctx["score"] = self.uS
         ctx["answers"] = json.dumps(self.out)
         ctx["best"] = self.best
         ctx["fastest"] = self.fastest
@@ -558,7 +558,6 @@ class Finish(TemplateView):
             loggUser = get_user(request).id
         else: 
             raise Exception("please log in")
-        concepts = Concept.objects.filter(type__in = types)
         s=0;
         f = []
         if request.session["test"] == "time":
@@ -583,15 +582,16 @@ class Finish(TemplateView):
             clear_session_params(request,["rev","pieTimer","p1","question",
                                            "p2","setParam","test","type","timeParam",
                                            "types"])
-        uS = UserSkill.objects.filter(user = loggUser, concept__in = concepts)
-        uS = (sum([x.skill for x in uS]))/float(len(uS))
-        
+        concepts = [x.conceptQuestion.concept for x in f]
+        self.uS = list(set([(x.concept.type, round(x.skill,2)*100) for x in 
+                            UserSkill.objects.filter(concept__in = concepts) ]))
+        print self.uS
         if len(f) != 0:
             scores = []
             for x in f:
                 if x.skipped == False:
                     scores.append((1-x.label,x.time,x.id))
-
+            
             if len(scores) != 0:
                 self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
                 self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
@@ -604,9 +604,9 @@ class Finish(TemplateView):
             self.out = []
             self.fastest = []
             self.best = []
-        self.s = s
-        self.uS = uS
         
+
+
 def clearSession(request):
     if request.method == "POST" and request.is_ajax():
         clear_session_params(request)
