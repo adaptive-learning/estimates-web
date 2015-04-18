@@ -35,20 +35,20 @@ $(document).ready(function(){
 
 	var csrftoken = getCookie('csrftoken');
 	$('#assigForm').on('submit', function(event){
- 		clearInterval(t);
-		var doc = document.getElementById("assigForm");
-
     	event.preventDefault();
+		submit_post(false);
+	});
+	function submit_post(skipped){
+		clearInterval(t);
 
-
-    	create_post(JSON.stringify({
+		create_post(JSON.stringify({
 			p1:"{{request.session.p1|escapejs|safe}}",
 			p2:"{{request.session.p2|escapejs|safe}}",
 			question:"{{request.session.question}}",
 			par:"{{param}}",
 			testP:"{{request.session.setParam}}",
-		}),"{{request.session.type}}");
-	});
+		}),"{{request.session.type}}",skipped);
+	}
 	
 	
 </script>

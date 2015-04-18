@@ -22,7 +22,6 @@ function createName(param,  question, answer, rightAnswer, type){
 function scatterPlot(data,best,fastest,test){
 	dat = JSON.parse(data);
 	var series=[];
-	alert(test);
 	if (test == "set"){
 		for (var e=0; e < dat.length;e++){
 			var d = dat[e];
@@ -38,9 +37,11 @@ function scatterPlot(data,best,fastest,test){
 				var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
 			}
 			
-	
-				if (best.indexOf(e) != -1){
-					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',
+				if( d.skipped ==  true)	{
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(250, 10, 10, .9)',
+								data:[[dat[e].time,(1-dat[e].label)*100]]});
+				} else if (best.indexOf(e) != -1){
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(50, 200, 50, .9)',
 								data:[[dat[e].time,(1-dat[e].label)*100]]});
 				}else if (fastest.indexOf(e) != -1 ){
 					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(0, 13, 119, .9)',
@@ -65,9 +66,12 @@ function scatterPlot(data,best,fastest,test){
 				}
 				var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
 			}
-			alert(d.inTime);
+			if( d.skipped ==  true)	{
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(10, 10, 10, .9)',
+								data:[[dat[e].time,(1-dat[e].label)*100]]});
+						} else
 			if (d.inTime == true){
-				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(10, 255, 10, .9)',
+				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(50, 200, 50, .9)',
 							data:[[dat[e].time,(1-dat[e].label)*100]]});
 			}else if (d.inTime == false ){
 				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',

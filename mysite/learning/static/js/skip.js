@@ -17,48 +17,33 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
 var csrftoken = getCookie('csrftoken');
 
-function getHint(ele, type, p1,p2,param){
-
-	if (type == "temp"){
-		var label = $("#"+ele);
-		if (reverse){
-			fr = p2;
-			to = p1;
-		} else {
-			fr = p1;
-			to = p2;
-		}
-			
-		
-		if (fr == "degF" && to == "degC"){
-			label.text("°C = (°F - 32) × 5/9");		
-		} else if(fr == "degC" && to == "degF"){
-			label.text("°F = °C × 9/5 + 32");
-		} else if(fr == "degF" && to == "kelvin"){
-			label.text("Kelvin = (°F + 459.67) x 5/9");	
-		} else if(fr == "kelvin" && to == "degF"){
-			label.text("K = 5/9 (°F - 32) + 273");
-		} else if(fr == "degC" && to == "kelvin"){
-			label.text("Kelvin = °C + 273.15");
-		} else if(fr == "kelvin" && to == "degC"){
-			label.text("°C = Kelvin - 273.15");
-		}
+function skipQuestion(){
+	alert("q");
+	if (sessionStorage.getItem("sended") == "true") {
+    	return ;
 	} else {
-$.ajax({
+    	sessionStorage.setItem("sended", true);
+	}
+	// $("#pie-countdown").hide();
+	start = 0;	
+	$("#sub").attr("disabled", "disabled");
+	timer_is_on = 0;
+    $.ajax({
 		beforeSend: function(xhr, settings) {
     	    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
         	    xhr.setRequestHeader("X-CSRFToken", csrftoken);
         	}
     	},    
-    	url : "/learning/get_hint", // the endpoint
+    	url : "/learning/skip_question", // the endpoint
         type : "POST", // http method
-        data : { type:type, p1 : p1, p2 : p2, par : param }, // data sent with the post request
+        data : { }, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {
-        	$("#"+ele).html(deciderType(type,"False",1,p1,p2,response));
+        	alert(response);
         },
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
@@ -67,5 +52,4 @@ $.ajax({
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
     });
-   }
 }

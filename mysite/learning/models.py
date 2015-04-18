@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 
     
 class FloatModel(models.Model):
-    result = models.FloatField()
-    answer = models.FloatField()
+    result = models.FloatField(null = True)
+    answer = models.FloatField(null = True)
     conceptQuestion = models.ForeignKey('ConceptQuestion')
     type = models.ForeignKey('Type')
     time = models.IntegerField()

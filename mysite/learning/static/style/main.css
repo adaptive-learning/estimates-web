@@ -23,6 +23,20 @@ transform: rotate(-90deg);
 -moz-transform: rotate(90deg); /* Firefox */
 }
 	
+button{
+	background-color:#333333;
+}
+button:focus, button:hover{
+	background-color:#464653;
+}
+
+input.button{
+	background-color:#333333;
+}
+input.button:focus, input.button:hover{
+	background-color:#464653;
+}
+
 .silverText{
 	color:silver
 }

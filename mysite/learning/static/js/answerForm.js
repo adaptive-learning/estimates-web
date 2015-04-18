@@ -21,7 +21,7 @@ function getCookie(name) {
 var csrftoken = getCookie('csrftoken');
 
 // function create_post(mId,urlPath) {
-function create_post(data,t) {
+function create_post(data,t,skipped) {
 	if (sessionStorage.getItem("sended") == "true") {
     	return ;
 	} else {
@@ -39,7 +39,7 @@ function create_post(data,t) {
     	},    
     	url : "", // the endpoint
         type : "POST", // http method
-        data : { answer : $('#input').val(), time:  time, data: data, type: t}, // data sent with the post request
+        data : { skip: skipped, answer : $('#input').val(), time:  time, data: data, type: t}, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {

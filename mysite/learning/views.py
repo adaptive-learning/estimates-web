@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 1
+SET_TEST = 10
 
 def index(request):
     clear_session_params(request)
@@ -225,7 +225,16 @@ class QuestionFunctions():
 class AjaxableResponseMixin():
     def form_invalid(self, form):
         if self.request.is_ajax():
-            return HttpResponseBadRequest(json.dumps(form.errors))
+            if self.request.POST.get("skip") == "true":
+               self.form_validate() 
+               self.model.label = 1
+               self.model.save()
+               self.update_skill()
+               clear_session_params(self.request,["p1","question","p2"]);
+               return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
+           
+            else:
+                return HttpResponseBadRequest(json.dumps(form.errors))
     def update_skill(self):
         if self.request.user.is_authenticated():
             user = get_user(self.request)
@@ -264,14 +273,7 @@ class AjaxableResponseMixin():
 
     def form_valid(self, form):
         if self.request.is_ajax():
-            self.model = FloatModel()
-            self.post = self.request.POST
-            self.parse_to_model()
-            self.model.result = decider(self.model.type.type,
-                                         self.model.conceptQuestion.number.number, 
-                                         self.model.conceptQuestion.concept.p1, 
-                                         self.model.conceptQuestion.concept.p2,
-                                         self.model.conceptQuestion.params)
+            self.form_validate()
             self.model.label = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
@@ -279,6 +281,16 @@ class AjaxableResponseMixin():
             clear_session_params(self.request,["p1","question","p2"]);
 
             return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
+        
+    def form_validate(self):
+        self.model = FloatModel()
+        self.post = self.request.POST
+        self.parse_to_model()
+        self.model.result = decider(self.model.type.type,
+                                     self.model.conceptQuestion.number.number, 
+                                     self.model.conceptQuestion.concept.p1, 
+                                     self.model.conceptQuestion.concept.p2,
+                                     self.model.conceptQuestion.params)
 
 class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     model = FloatModel
@@ -309,7 +321,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                                        params = js["par"], 
                                                        hint = self.request.session["hint"])
         
-        self.model.answer = self.post.get('answer')
+        ans = self.post.get("answer")
+        if ans == "":
+            ans = None
+        self.model.answer = ans
         self.model.time = self.post.get('time')
         if self.request.session["test"] == "set":
             inTime = False
@@ -319,10 +334,16 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             if int(self.request.session["medTime"]) > int(self.model.time):
                 inTime = True
             else: inTime = False
-        self.model.skipped = False
+            
+        if self.post.get("skip") == "true":
+            self.model.skipped = True
+        elif self.post.get("skip") == "false":
+            self.model.skipped = False
+        else:
+            raise Exception("wrong param for skip %s"%self.post.get("skip"))
+            
                 
         self.model.inTime = inTime
-
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
@@ -566,10 +587,17 @@ class Finish(TemplateView):
         uS = (sum([x.skill for x in uS]))/float(len(uS))
         
         if len(f) != 0:
-            scores = [(1-x.label,x.time,x.id) for x in f]
+            scores = []
+            for x in f:
+                if x.skipped == False:
+                    scores.append((1-x.label,x.time,x.id))
 
-            self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
-            self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
+            if len(scores) != 0:
+                self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
+                self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
+            else:
+                self.best = -1
+                self.fastest = -1
             results = [ob.as_json() for ob in f]
             self.out = results
         else:
@@ -701,4 +729,3 @@ def send_email(request):
         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
                   ["priblizne@googlegroups.com"], fail_silently=False)
         return HttpResponse("1");
-

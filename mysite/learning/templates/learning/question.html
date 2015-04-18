@@ -16,7 +16,7 @@
 			{% if request.session.hint == True %}
 				<br/>
 				<span class="silverText">{% trans "nápoveda:" %}</span>
-				<label id="hint" class="small-9 collumns silverText" style=""></label>
+				<label id="hint" class="small-9 collumns silverText" ></label>
 				<script src="{% static "js/hint.js" %}"></script>
 				<script>
 					getHint("hint","{{request.session.type}}","{{request.session.p1}}",
@@ -50,10 +50,11 @@
 		<div id="userControl">
 				<div class="round progress success" id="testCounter">
 				</div>
-
 	  		<div class="large-12 columns" id="next">
-				<input id="sub" type="submit" class="button" value='{% trans "Odpovedať" %}' />
+				<input type="submit" class="button" value='{% trans "Odpovedať" %}' />
+				<button type="button" onclick="submit_post(true)" align="right">{% trans "Preskočiť" %}</button>
 			</div>
+				
 		</div>
 	</div>
 </form>
