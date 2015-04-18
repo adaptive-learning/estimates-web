@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10
+SET_TEST = 3
 
 def index(request):
     clear_session_params(request)
