@@ -58,6 +58,8 @@ function home(a){
 		$('#back').show();
 		$("#labelAbout").hide();
 		headerTitle = nameReal[a][1];
+		h = "/learning/all/settings/"+a;
+		createButton('a',typeReal["all"],function(j) {return function() {chooseType(j);};}(h),choice,false);
 	}
 	document.getElementById("header").innerHTML = headerTitle;
 }

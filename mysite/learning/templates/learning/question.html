@@ -13,7 +13,7 @@
 		<div class="row center" id="QuestionDiv" align="center">
 			<label class="small-9 collumns" id="label" for="input"></label>
 			
-			{% if request.session.param == True %}
+			{% if request.session.hint == True %}
 				<br/>
 				<span class="silverText">{% trans "nápoveda:" %}</span>
 				<label id="hint" class="small-9 collumns silverText" style=""></label>

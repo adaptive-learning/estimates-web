@@ -7,5 +7,30 @@
 {% load learning_filters %}
 {% load i18n %}
 
-
+<div class="mainStyle">
+<div class="row centered silverText">
+	<h3 class="silverText">O projekte Priblizne.cz</h3>
+	<div>
+	<span>
+		<span>{% trans "Projekt je vyvíjaný v rámci bakalárskej práce Romana Orlíčka." %}</span>
+	</span>
+	</div>
+	<br/>
+	<div>
+		<span>{% trans "Námety na zlepšenie, prípadne nájdenie chýb zasielajte prosím na" %}<a href="mailto:priblizne@googlegroups.cz">
+			priblizne@googlegroups.com</a>.</span>
+		
+		
+	</div>
+	<br/>
+	<div>
+		{% trans "Dáta o odpovediach sa ukladajú pre výber nasledovných otázok a pre výzkumné účely." %}
+	</div>
+	<div>
+		{% trans "Prihlasovacie údaje z facebooku a gmailu sa používajú iba na overenie identity pri nasledujúcej návšteve. Inak sa s nimi nepracuje." %}
+	</div>
+</div>
+</div>
+{% include "learning/footer.html" %}
 {% endblock base_body%}
+</html>

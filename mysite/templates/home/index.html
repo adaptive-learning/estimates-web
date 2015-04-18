@@ -3,7 +3,8 @@
 <html>
 {% block base_body %}
 {%include "navBar/bar.html" %}
-{%include "learning/home.html"%}
+{% include "learning/home.html" %}
+
 {% load staticfiles %}
 {% load i18n %}
 
@@ -62,25 +63,17 @@
 	<br/><br/><br/>
 </div>
 </div>
-<div align="left" id="bottom" class=" footer">
+
 	
 
-<div class="row">	
-<div align="left" id="bottom" class="large-6 footer silverText">
-	<a href="http://fi.muni.cz/"><img src="{% static 'img/logoFi.png' %}"/></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-	<a href="/about">{% trans "O projekte" %}</a>   &nbsp;&nbsp;|&nbsp;&nbsp;
-	<span class="silverText bottomText">{% trans "Vyskúšajte taktiež:" %}</span>
-	<span><a href="http://slepemapy.cz/">slepemapy.cz</a></span>,		
-	<span><a href="http://www.slepaanatomie.cz/">slepaanatomie.cz</a></span>		
-</div>
-</div>
+
 <div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
   <h3 id="modalTitle">{% trans "Máte návrhy na zlepšenie? Napíšte nám." %}</h3>
   <form id="sendFeedback">
   	<span>{% trans "Vaša správa:" %}</span>
   	<textarea id="userMessage" placeholder="" required></textarea>
   	<span>{% trans "Váš email:" %}</span>
-  	<input id="email" type="email" ></input>
+  	<input id="email" type="email" />
   	<input id="sub" type="submit" class="small button" value='{% trans "Odoslať" %}' onclick="sendFeedback"/>
   	<a class="close-reveal-modal" aria-label="Close">&#215;</a>
   </form>
@@ -92,8 +85,9 @@
     	sendFeedback();
 	});
 </script>
+{% include "learning/footer.html" %}
 {% endblock base_body %}
 
-
 </html>
+
  

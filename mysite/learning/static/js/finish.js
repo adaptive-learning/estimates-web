@@ -33,7 +33,7 @@ function scatterPlot(data,best,fastest){
 			if (d.p2 == null){
 				d.p2 = "";
 			}
-			var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a);
+			var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
 		}
 		
 		if (best.indexOf(e) != -1){

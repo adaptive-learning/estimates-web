@@ -60,7 +60,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10
+SET_TEST = 1
 
 def index(request):
     clear_session_params(request)
@@ -135,14 +135,16 @@ def decider(type, question, src, dst, params, f = 2):
         concept = get_object_or_404(Concept, p1 = src, p2 = dst,
                                     type = get_object_or_404(Type,type = type))
 
+        print "params in decider",params
         if params == "1":
             rev = True
         elif params == "0":
             rev = False
+        print rev
         rate = CurrTable.objects.get(concept = concept, reversed = rev).rate
         return round(rate * question,f)
     elif type  == 'temp':
-        if params == True:
+        if params == "1":
             print "temp True"
             print params
             return round(converter(question, dst, src),f)
@@ -247,7 +249,7 @@ class AjaxableResponseMixin():
         if model.type.type == "temp" :
             src = question.concept.p1
             dst = question.concept.p2
-            if question.params == True:
+            if question.params == "1":
                 print src,dst
                 src, dst = dst, src
             if dst != "degC" and src == "degC":
@@ -366,7 +368,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         print "p2",self.request.session["p2"]
         print "par",self.request.session["par"]
         print self.request.session["type"]
-        if self.request.session["par"] == True:
+        if self.request.session["par"] == "1":
             ctx["pa1"]= self.request.session["p2"]
             ctx["pa2"] = self.request.session["p1"]
         else:
@@ -382,6 +384,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         question = ConceptQuestion.objects.get(params = self.request.session["par"],
                                                number = num,hint = self.request.session["hint"],
                                                concept = concept)
+        print "hint",question.hint
         if 'medTime' not in self.request.session and self.request.session["test"] == "time":
             l = [x.time for x in FloatModel.objects.filter(conceptQuestion = question)]
             
