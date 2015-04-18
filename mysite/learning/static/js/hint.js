@@ -19,7 +19,7 @@ function getCookie(name) {
 }
 var csrftoken = getCookie('csrftoken');
 
-function getHint(ele, type, p1,p2,reverse){
+function getHint(ele, type, p1,p2,param){
 	
 	if (type == "temp"){
 		var label = $("#"+ele);
@@ -55,7 +55,7 @@ $.ajax({
     	},    
     	url : "/learning/get_hint", // the endpoint
         type : "POST", // http method
-        data : { type:type, p1 : p1, p2 : p2, rev : reverse }, // data sent with the post request
+        data : { type:type, p1 : p1, p2 : p2, par : param }, // data sent with the post request
 		
         // handle a successful response
         success : function(response) {

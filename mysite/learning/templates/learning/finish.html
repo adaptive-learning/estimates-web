@@ -19,7 +19,7 @@
            	$("#labelFinish").text("");
         	$("#labelFinish").append("vas priemerny odhad je: "+((1-parseFloat("{{score}}").toFixed(2))*100).toString()+" %\n");
 	         	$("#scatterPlot").show();
-         		scatterPlot("{{answers|escapejs}}","{{best}}","{{fastest}}");
+         		scatterPlot("{{answers|escapejs}}","{{best}}","{{fastest}}","{{test}}");
        		sessionStorage.clear();
 </script>
 <button class="button" id="sub" onclick="

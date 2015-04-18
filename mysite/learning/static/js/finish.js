@@ -19,12 +19,12 @@ function createName(param,  question, answer, rightAnswer, type){
 	}
 }
 
-function scatterPlot(data,best,fastest){
+function scatterPlot(data,best,fastest,test){
 	dat = JSON.parse(data);
 	var series=[];
 	for (var e=0; e < dat.length;e++){
 		var d = dat[e];
-		if (escape.indexOf(d.type)){
+		if (escape.indexOf(d.type) != -1){
 			var name = createName(d.params, d.q, d.a, d.right, d.type);
 		} else {
 			if (d.p1 == null){

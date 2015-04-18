@@ -494,6 +494,7 @@ class Finish(TemplateView):
         ctx["answers"] = json.dumps(self.out)
         ctx["best"] = self.best
         ctx["fastest"] = self.fastest
+        ctx["test"] = self.test
         return ctx
 
     def get(self,*args,**kwargs):
@@ -539,6 +540,7 @@ class Finish(TemplateView):
                 s = sum([x.label for x in f])/len(f);
             else:
                 raise Exception("f is 0")
+        self.test = request.session["test"]
         if toDelete:
             clear_session_params(request)
         else:
