@@ -105,34 +105,4 @@ class Command(BaseCommand):
                         print "wrong"
         
 
-#         reversed = []
-#         for x in Concept.objects.all():
-#             if x.type_id not in [dictType['9'],dictType['7'],dictType['11']
-#                                  ,dictType['12'],dictType['8'],dictType['10'],dictType['13']]:
-#                 pa2 = x.p2
-#                 pa1 = x.p1
-#                 try:
-#                     reverseConcept = Concept.objects.get(p1=pa2,p2=pa1)
-#                     if x not in reversed:
-#                         o1,c1 = Params.objects.get_or_create(concept_id = x.id,reverse = True)
-#                         o,c = Params.objects.get_or_create(concept_id = x.id,reverse = False)
-#                         reversed.append(reverseConcept)
-#                         dictP[dictC[reverseConcept.id]] = o1.id
-#                         dictP[dictC[x.id]] = o.id
-#                 except Concept.DoesNotExist:
-#                     o,c = Params.objects.get_or_create(concept = x, reverse = False)
-#                     dictP[dictC[x.id]] = o.id
-#             else:
-#                 o,c = Params.objects.get_or_create(concept = x, reverse = False)
-#                 dictP[dictC[x.id]] = o.id
-#             
-# 
-#         for x in reversed:
-#             x.delete()
-#         with open('./raw_database_data/learning_concept.csv', 'rb') as csvfile:
-#             concept = csv.reader(csvfile, delimiter=',')
-#             for row in concept:
-#                 ConceptQuestion.objects.get_or_create(number_id = dictQ[row[1]], type_id = dictType[row[2]], 
-#                                                   params_id = dictP[row[3]],
-#                                                   label = float(row[4]), updatedTimes = int(row[5]), hint = False)        
         print "success"

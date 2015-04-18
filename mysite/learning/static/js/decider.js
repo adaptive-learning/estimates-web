@@ -29,7 +29,10 @@ function decider(curr){
 }
 
 
-function createQuestion(element,type,translated,question, p1,p2){
+function createQuestion(element,type,translated,question, p1,p2,param){
+	if (p1 == "None" && p2 == "None"){
+		p1 = param;	
+	}
 	$("#"+element).append(deciderType(type,translated,question, p1,p2,"?"));
 }
 

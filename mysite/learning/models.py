@@ -14,6 +14,8 @@ class FloatModel(models.Model):
     user = models.ForeignKey(User, null = True)
     label = models.FloatField(null = True)
     date = models.DateTimeField(auto_now=True)
+    inTime = models.BooleanField()
+    skipped = models.BooleanField()
     
     def as_json(self):
         n = get_object_or_404(Number,id = self.conceptQuestion.number.id)
@@ -31,7 +33,9 @@ class FloatModel(models.Model):
             params = self.conceptQuestion.params,
             q = n.number,
             type = t.type, 
-            right = self.result
+            right = self.result,
+            skipped = self.skipped,
+            inTime = self.inTime,
             )
             
 class ConceptQuestion(models.Model):

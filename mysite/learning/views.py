@@ -158,6 +158,7 @@ def decider(type, question, src, dst, params, f = 2):
 def get_hint(request):
     if request.method == "POST" and request.is_ajax():
         post = request.POST
+
         res = decider(post.get('type'), 1, post.get('p1'), post.get('p2'), post.get('par'),5)
         return HttpResponse(res)
 
@@ -285,6 +286,9 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     fields = ['answer']            
     def parse_to_model(self):
         js = json.loads(self.post.get('data'))
+
+                
+
         self.request.session['setParam'] += 1
         t = self.post.get('type')
         type = get_object_or_404(Type, type=t)
@@ -298,7 +302,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.model.user = get_user(self.request)
         else :
             self.model.user = None
-
         print js["par"]
         print c.id
         print n.id
@@ -308,6 +311,18 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         
         self.model.answer = self.post.get('answer')
         self.model.time = self.post.get('time')
+        if self.request.session["test"] == "set":
+            inTime = False
+        elif self.request.session["test"] == "time":
+            print "medtime",self.request.session["medTime"] 
+            print self.model.time
+            if int(self.request.session["medTime"]) > int(self.model.time):
+                inTime = True
+            else: inTime = False
+        self.model.skipped = False
+                
+        self.model.inTime = inTime
+
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):

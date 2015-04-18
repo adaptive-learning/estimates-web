@@ -22,29 +22,60 @@ function createName(param,  question, answer, rightAnswer, type){
 function scatterPlot(data,best,fastest,test){
 	dat = JSON.parse(data);
 	var series=[];
-	for (var e=0; e < dat.length;e++){
-		var d = dat[e];
-		if (escape.indexOf(d.type) != -1){
-			var name = createName(d.params, d.q, d.a, d.right, d.type);
-		} else {
-			if (d.p1 == null){
-				d.p1 = "";
+	alert(test);
+	if (test == "set"){
+		for (var e=0; e < dat.length;e++){
+			var d = dat[e];
+			if (escape.indexOf(d.type) != -1){
+				var name = createName(d.params, d.q, d.a, d.right, d.type);
+			} else {
+				if (d.p1 == null){
+					d.p1 = "";
+				}
+				if (d.p2 == null){
+					d.p2 = "";
+				}
+				var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
 			}
-			if (d.p2 == null){
-				d.p2 = "";
-			}
-			var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
+			
+	
+				if (best.indexOf(e) != -1){
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',
+								data:[[dat[e].time,(1-dat[e].label)*100]]});
+				}else if (fastest.indexOf(e) != -1 ){
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(0, 13, 119, .9)',
+								data:[[dat[e].time,(1-dat[e].label)*100]]});
+				} else {
+					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(51, 51, 51, .9)',
+								data:[[dat[e].time,(1-dat[e].label)*100]]});
+				}
+				
 		}
-		
-		if (best.indexOf(e) != -1){
-			series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',
-						data:[[dat[e].time,(1-dat[e].label)*100]]});
-		}else if (fastest.indexOf(e) != -1 ){
-			series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(0, 13, 119, .9)',
-						data:[[dat[e].time,(1-dat[e].label)*100]]});
-		} else {
-			series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(51, 51, 51, .9)',
-						data:[[dat[e].time,(1-dat[e].label)*100]]});
+	} else if(test == "time"){
+		for (var e=0; e < dat.length;e++){
+			var d = dat[e];
+			if (escape.indexOf(d.type) != -1){
+				var name = createName(d.params, d.q, d.a, d.right, d.type);
+			} else {
+				if (d.p1 == null){
+					d.p1 = "";
+				}
+				if (d.p2 == null){
+					d.p2 = "";
+				}
+				var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
+			}
+			alert(d.inTime);
+			if (d.inTime == true){
+				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(10, 255, 10, .9)',
+							data:[[dat[e].time,(1-dat[e].label)*100]]});
+			}else if (d.inTime == false ){
+				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(255, 10, 10, .9)',
+							data:[[dat[e].time,(1-dat[e].label)*100]]});
+			} else {
+				series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(51, 51, 51, .9)',
+							data:[[dat[e].time,(1-dat[e].label)*100]]});
+			}
 		}
 		
 
