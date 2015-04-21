@@ -153,5 +153,12 @@ function timerTime(response,fullTime){
 	timer('testTimer',fullTime,"#0F482D",true,get_result,start,end,start);
 }
 
-
+function resizeCounter(min){
+	alert("k");	
+	 	var newWidth = $(window).width()/25;
+	 	if (newWidth < min){
+ 			newWidth = min;
+	 	}
+		$("#pie-countdown").css("width",newWidth);
+}
 
