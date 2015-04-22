@@ -27,7 +27,7 @@ function create_post(data,t,skipped) {
 	} else {
     	sessionStorage.setItem("sended", true);
 	}
-	// $("#pie-countdown").hide();
+	$("#divPie").hide();
 	start = 0;	
 	$("#sub").attr("disabled", "disabled");
 	timer_is_on = 0;

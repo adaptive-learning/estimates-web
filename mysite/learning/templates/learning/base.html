@@ -15,10 +15,11 @@ $(document).ready(function(){
 					"{{request.session.question|stringformat:'2.f'}}","{{pa1}}","{{pa2}}", "{{param}}");
 	handleNextQuestion("{{request.session.type}}","{{request.session.setParam}}","{{numQuestion}}");
 	drawPieTimer(fTime,"{{request.session.medTime|stringformat:'2.f'}}","{{request.session.test}}");
-					resizeCounter(40);
-				$("#pie-countdown").css("width",$(window).width()/25);
+					resizeCanvas("pie-countdown",40,25);
+				resizeCanvas("myCanvas",150,8);
 				 $(window).resize(function(){
-					resizeCounter(40);
+				 	resizeCanvas("myCanvas",150,8);
+					resizeCanvas("pie-countdown",40,25);
 				 } );
 });
 	sessionStorage.setItem("sended",false); 

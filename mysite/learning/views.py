@@ -582,9 +582,23 @@ class Finish(TemplateView):
             clear_session_params(request,["rev","pieTimer","p1","question",
                                            "p2","setParam","test","type","timeParam",
                                            "types"])
-        concepts = [x.conceptQuestion.concept for x in f]
-        self.uS = list(set([(x.concept.type, round(x.skill,2)*100) for x in 
-                            UserSkill.objects.filter(concept__in = concepts) ]))
+        types = [x.type for x in f]
+        concepts = Concept.objects.filter(type__in = types)
+        conceptDict = {}
+        for con in concepts:
+            conceptDict[con.type.type] = []
+#         for con in concepts:
+#             conceptdict[con.type.type].append(con)
+        uS = list([(x.concept.type.type, round(x.skill,2)*100) for x in 
+                            UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
+        
+        for us in uS:
+            conceptDict[us[0]].append(us[1])
+            print us
+            print "skill", us[1]
+        for key in conceptDict.keys():
+            conceptDict[key] = sum(conceptDict[key])/len(conceptDict[key])
+        self.uS = [(x,conceptDict[x]) for x in conceptDict]
         print self.uS
         if len(f) != 0:
             scores = []

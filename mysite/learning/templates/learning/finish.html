@@ -18,10 +18,10 @@
 	<script src="http://code.highcharts.com/modules/exporting.js"></script>
 <h4>{% trans "Vaše skóre" %}</h4><br/>
 {% for x in score %}
-{{x.0.type|get_from_dict:'typeReal' }} <div class="round progress">
-	<span id='{{x.0.type}}' style='width:0%;' class="meter"></span>
+{{x.0|get_from_dict:'typeReal' }} <div class="round progress">
+	<span id='{{x.0}}' style='width:0%;' class="meter"></span>
 	<script>
-		$("#"+"{{x.0.type}}").animate({width:"{{x.1}}"+"%"});
+		$("#"+"{{x.0}}").animate({width:"{{x.1}}"+"%"});
 	</script>
 				</div> 
 		
