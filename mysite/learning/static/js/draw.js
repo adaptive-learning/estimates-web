@@ -243,10 +243,8 @@ function drawObjsVol(ctx,a,b){
 		var objA = JSON.parse(a);
 		var objB = JSON.parse(b);
 		
-		alert(objA["r"]+" "+objB["r"]);
 		
 		objs = normalizeObjects(ctx,[objA,objB]);
-		alert(objA["r"]+" n "+objB["r"]);
 		objA = objs[0];
 		objB = objs[1];
 
@@ -288,8 +286,6 @@ function normalizeObjects(ctx,objs){
 			}
 		}
 	} else if (ctx.canvas.height < y+20){
-		alert(ctx.canvas.height);
-		alert(y+20);
 		var n = ctx.canvas.height - 20;
 		if (objs[0]["t"] == "c"){
 			var change = n / (2*objs[0]["r"]);
