@@ -3,10 +3,13 @@
     
 Create your own mysql:
     mysql -u root -p
-    CREATE database estimation_db
-    USE estimation_db
-    SOURCE path/to/mysite/estimation_db_dump1.sql
+    CREATE database estimation_db;
+    USE estimation_db;
     GRANT ALL ON estimation_db.* TO 'admin'@'localhost' IDENTIFIED BY 'estimate';
+
+Then run:
+    python manage.py syncdb
+    python manage.py migrate
  
  dependencies: 
     django 1.6 and higher
