@@ -9,9 +9,14 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
 import os
 from django.utils.translation import ugettext_lazy as _
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
+STATIC_URL = '/static/'
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -21,11 +26,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '79413j8ek-6t-qt8_1--e*yasmxu2lvlbtzvcd8j_*wt&nuwmr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ON_SERVER = os.getenv('ON_AL', "False") == "True"
+DEBUG = os.getenv('DJANGO_DEBUG', "False") == "True"
+if not ON_SERVER:
+    DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 SESSION_SAVE_EVERY_REQUEST = True
 # Application definition
@@ -41,7 +49,7 @@ INSTALLED_APPS = (
     'foundation',
     'compressor',
     'learning',
-    'lazysignup', 
+    'lazysignup',
     'social_auth',
     'users',
 )
@@ -66,17 +74,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-
-         'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'estimation_db',
-         'USER': 'admin',
-         'PASSWORD': 'estimate',
-         'HOST': '', 
-         'PORT': '',
-    }
-}
+DATABASES = {"default": dj_database_url.config(default='mysql://admin:estimate@localhost/estimation_db')}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -129,7 +127,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 COMPRESS_ROOT = (
     'static'
 )
-STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/learning'
 
 AUTHENTICATION_BACKENDS = (
