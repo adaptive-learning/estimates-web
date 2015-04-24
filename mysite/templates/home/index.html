@@ -7,7 +7,14 @@
 
 {% load staticfiles %}
 {% load i18n %}
-
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.3&appId=1428279880801074";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 <script src="{% static 'js/feedback.js' %}"></script>
 <script src="{% static 'js/answerForm.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static "style/main.css" %}" />
@@ -32,7 +39,8 @@
 	<span>
 		{% trans "Zábavná aplikácia na testovanie vašich schopností na odhady." %}
 	</span><br>
-	<div class="fb-like" data-href="http://localhost:8000/learning/" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+
+		<div class="fb-like" data-href="http://priblizne.cz/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
 </div>
 <button class="rotatedText secondary radius edgeButton small" data-reveal-id="feedback" >{% trans "Napíšte nám" %}</button>	
 </div>

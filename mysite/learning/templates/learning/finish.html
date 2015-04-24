@@ -10,6 +10,16 @@
 <div id="progressScores">
 
 </div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/cs_CZ/sdk.js#xfbml=1&version=v2.3&appId=1428279880801074";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 
 <script src="{% static 'js/finish.js' %}"></script>
 <script src="{% static 'js/decider.js' %}"></script>
@@ -42,7 +52,6 @@
 	window.location.href = '/learning/{{url}}';
 ">{% trans "Znova" %}</button>
 
-<div align="center" class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
 </div>
 </div>
 </div>

@@ -55,12 +55,12 @@ function create_post(data,t,skipped) {
         }
     });
 };
-function createImgPack(number,toAppend){
+function createImgPack(number,toAppend,maxHeight){
 	var img = [];
 	for(var i=0;i<number;i++){	
 		var x = document.createElement('img');
 		img.push(x);
-		resize(img[i]);
+		resize(img[i],maxHeight);
 		toAppend.appendChild(img[i]);
 	}
 	return img;
@@ -72,8 +72,8 @@ function answer(diff,result,percentil){
 	var timeDiv = document.getElementById("timeAssig");
 	delet(div);
 	delet(document.getElementById("hint"));
-	var stars = createImgPack(5,div);
-	var lights = createImgPack(5,timeDiv);
+	var stars = createImgPack(5,div,35);
+	var lights = createImgPack(5,timeDiv,20);
 	var d = document.getElementById("next");
 	delet(d);
 	if (diff < 0.03){
@@ -126,14 +126,14 @@ function delet(div){
 	}
 }
 
-function resize(img){
+function resize(img,max){
 	var byWindow = ((5*$(window).height())/100);
-	if (byWindow < 35){
+	if (byWindow < max){
 		img.setAttribute("width",byWindow);
 		img.setAttribute("height",byWindow);
 	} else {
-		img.setAttribute("width","35");
-		img.setAttribute("height","35");
+		img.setAttribute("width",max);
+		img.setAttribute("height",max);
 	}
 }
 
