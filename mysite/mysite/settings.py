@@ -144,10 +144,9 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details'
 )
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_NAME", '')
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASS", '')
-EMAIL_PORT = 587
+EMAIL_HOST = 'localhost'
+
+EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 
 SESSION_SERIALIZER= 'django.contrib.sessions.serializers.PickleSerializer'

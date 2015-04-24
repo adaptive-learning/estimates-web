@@ -44,7 +44,7 @@ function create_post(data,t,skipped) {
         // handle a successful response
         success : function(response) {
         	response = response.split("//");
-            answer(response[0],response[1]);
+            answer(response[0],response[1],response[2]);
             return false;
         },
         // handle a non-successful response
@@ -55,33 +55,50 @@ function create_post(data,t,skipped) {
         }
     });
 };
-
-function answer(diff,result){
-
-	var div = document.getElementById("assigment");
-	delet(div);
-	delet(document.getElementById("hint"));
+function createImgPack(number,toAppend){
 	var img = [];
-	for(var i=0;i<5;i++){	
+	for(var i=0;i<number;i++){	
 		var x = document.createElement('img');
 		img.push(x);
 		resize(img[i]);
-		div.appendChild(img[i]);
+		toAppend.appendChild(img[i]);
 	}
+	return img;
+}
+
+function answer(diff,result,percentil){
+
+	var div = document.getElementById("assigment");
+	var timeDiv = document.getElementById("timeAssig");
+	delet(div);
+	delet(document.getElementById("hint"));
+	var stars = createImgPack(5,div);
+	var lights = createImgPack(5,timeDiv);
 	var d = document.getElementById("next");
 	delet(d);
 	if (diff < 0.03){
-		setStars(img,5);	
+		setStars(stars,5);	
 	} else if (diff < 0.06){
-		setStars(img,4);	
+		setStars(stars,4);	
 	} else if (diff < 0.09){
-		setStars(img,3);	
+		setStars(stars,3);	
 	} else if (diff < 0.12){
-		setStars(img,2);	
+		setStars(stars,2);	
 	} else if (diff < 0.15){
-		setStars(img,1);	
+		setStars(stars,1);	
 	} else{
-		setStars(img,0);	
+		setStars(stars,0);	
+	}
+	if (percentil < 20){
+		setLight(lights,5);
+	} else if(percentil < 40 ){
+		setLight(lights,4);
+	} else if(percentil < 60){
+		setLight(lights,3);
+	} else if (percentil < 80){
+		setLight(lights,2);
+	} else {
+		setLight(lights,1);
 	}
 	var txt_message = "spravna odpoved bola: "+result;
 	$("#answer").append(document.createTextNode(txt_message));
@@ -123,3 +140,9 @@ function resize(img){
 Number.prototype.round = function(places) {
   return +(Math.round(this + "e+" + places)  + "e-" + places);
 };
+
+function setLight(img, number){
+	for (var p=0; p < number; p++){
+		img[p].src = "/static/img/light.png";
+	}
+}

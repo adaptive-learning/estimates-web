@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 import os
 from django.core.mail import send_mail
 from lazysignup.decorators import allow_lazy_user
+from django.core.mail import EmailMultiAlternatives
 from django.utils.decorators import method_decorator
 from datetime import datetime
 import time
@@ -75,6 +76,9 @@ def converter(amount, src, dst):
     Q_ = UnitRegistry(autoconvert_offset_to_baseunit=True).Quantity
     src = str(amount) + src
     return Q_(src).to(dst).magnitude
+
+def get_percentile(listLen,below,same):
+    return ((below + same*0.5)/listLen)*100
 
 def arrayToType(type):
     if type == None :
@@ -280,8 +284,16 @@ class AjaxableResponseMixin():
             self.update_skill()
             print "diff to send",self.model.label
             clear_session_params(self.request,["p1","question","p2"]);
+            allTimes = sorted ([int(x.time) for x in FloatModel.objects.all() if x.skipped == False])
+            print allTimes
+            below = allTimes.index(int(self.model.time))
+            counter = 0;
+            for tim in allTimes:
+                if tim == self.model.time:
+                    counter += 1
 
-            return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
+            percentiles = get_percentile(len(allTimes), below, counter)
+            return HttpResponse("%s//%s//%s"%(str(self.model.label),str(self.model.result),str(percentiles)))
         
     def form_validate(self):
         self.model = FloatModel()
@@ -423,7 +435,7 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                                                concept = concept)
         print "hint",question.hint
         if 'medTime' not in self.request.session and self.request.session["test"] == "time":
-            l = [x.time for x in FloatModel.objects.filter(conceptQuestion = question)]
+            l = [x.time for x in FloatModel.objects.filter(conceptQuestion = question) if x.skipped == False]
             
             if len(l) == 0:
                 self.request.session['medTime']=15
@@ -740,6 +752,12 @@ def save_time(request):
     
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
-        send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
-                  ["priblizne@googlegroups.com"], fail_silently=False)
+#         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
+#                   ["priblizne@googlegroups.com"], fail_silently=False)
+#         return HttpResponse("1");
+        to = "priblizne@googlegroups.com"
+        from_email = request.POST.get("email")
+        text_content = request.POST.get("data")
+        msg = EmailMultiAlternatives("priblizne.cz - feedback", text_content, from_email, [to])
+        msg.send()
         return HttpResponse("1");

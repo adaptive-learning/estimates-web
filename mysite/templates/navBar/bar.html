@@ -89,19 +89,13 @@
 
               <a href="#">{% trans "Prihlásenie" %}</a>
 		<ul class="dropdown">
-     	<li><a href="{% url 'socialauth_begin' 'google-oauth2' %}"><img src="/static/img/gmail.png" width="20" height="20"> {% trans "Prihlásenie cez Google" %}</a></li>
-     	<li><a href="{% url 'socialauth_begin' 'facebook'  %}"><img src="/static/img/fb.png" width="20" height="20"> {% trans "Prihlásenie cez Facebook" %}</a></li> 
+     	<li><a href="/users/logout-login/google-oauth2"><img src="/static/img/gmail.png" width="20" height="20"> {% trans "Prihlásenie cez Google" %}</a></li>
+     	<li><a href="/users/logout-login/facebook"><img src="/static/img/fb.png" width="20" height="20"> {% trans "Prihlásenie cez Facebook" %}</a></li> 
        </ul>
           {% else %}
 
       <a href="#">{{ user.get_full_name }}</a>
       <ul class="dropdown">
-		<li>
-			<div class="switch round">
-  			<input id="exampleCheckboxSwitch" type="checkbox">
-  			<label for="exampleCheckboxSwitch"></label>
-			</div> 
-		</li>	
        <li><a href="/users/logout">Odhlásiť sa</a></li> 
 	  </ul>
           {% endif %}
