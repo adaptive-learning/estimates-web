@@ -284,7 +284,9 @@ class AjaxableResponseMixin():
             self.update_skill()
             print "diff to send",self.model.label
             clear_session_params(self.request,["p1","question","p2"]);
-            allTimes = sorted ([int(x.time) for x in FloatModel.objects.all() if x.skipped == False])
+            allTimes = sorted ([int(x.time) for x in 
+                                FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
+                                 if x.skipped == False])
             print allTimes
             below = allTimes.index(int(self.model.time))
             counter = 0;
