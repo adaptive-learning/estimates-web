@@ -31,7 +31,6 @@ function getHint(ele, type, p1,p2,param){
 			to = p2;
 		}
 			
-		
 		if (fr == "degF" && to == "degC"){
 			label.text("°C = (°F - 32) × 5/9");		
 		} else if(fr == "degC" && to == "degF"){
@@ -60,7 +59,13 @@ $.ajax({
         success : function(response) {
         	$(document).ready(function(){
         		$("#"+ele).empty();
-        		$("#"+ele).append(deciderType(type,"False",1,p1,p2,response));
+        		var pa1 = p1;
+        		var pa2 = p2;
+        		if (param == "1"){
+        			var pa1 = p2;
+        			var pa2 = p1;
+        		}
+        		$("#"+ele).append(deciderType(type,"False",1,pa1,pa2,response));
         	});
         },
         // handle a non-successful response

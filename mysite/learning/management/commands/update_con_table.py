@@ -34,8 +34,8 @@ class Command(BaseCommand):
         physQuestions = list(set([(l.concept,l.params) for l in physQuestions]))
         for x in physQuestions:
             pa1 = x[0].p1 
-            pa2 = x[0].p2
-            if x[1] == True:
+            pa2 = x[0].p2 
+            if x[1] == "1":
                 pa1, pa2 = pa2, pa1
             raw.append((round(converter(1, pa1, pa2),5),x[0].id,
                        True if x[1] == "1" else False))

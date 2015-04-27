@@ -146,6 +146,7 @@ def decider(type, question, src, dst, params, f = 2):
         elif params == "0":
             rev = False
         print rev
+        print concept.id
         rate = CurrTable.objects.get(concept = concept, reversed = rev).rate
         return round(rate * question,f)
     elif type  == 'temp':
@@ -289,13 +290,18 @@ class AjaxableResponseMixin():
                                 FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
                                  if x.skipped == False])
             print allTimes
-            below = allTimes.index(int(self.model.time))
-            counter = 0;
-            for tim in allTimes:
-                if tim == self.model.time:
-                    counter += 1
+            if len(allTimes) == 0:
+                print "okej MF"
+                percentiles = 0;
+            else:
+                below = allTimes.index(int(self.model.time))
+                counter = 0;
+                for tim in allTimes:
+                    if tim == self.model.time:
+                        counter += 1
 
-            percentiles = get_percentile(len(allTimes), below, counter)
+                percentiles = get_percentile(len(allTimes), below, counter)
+                
             return HttpResponse("%s//%s//%s"%(str(self.model.label),str(self.model.result),str(percentiles)))
         
     def form_validate(self):
@@ -555,11 +561,6 @@ class Finish(TemplateView):
         self.get_finish_result(self.request)
         return super(Finish,self).get(*args,**kwargs)
     
-#     def post(self,*args,**kwargs):
-#         if self.request.session["test"] == "time" and self.request.is_ajax():
-#             print self.request.path
-#             return redirect("/%sfinish"%self.request.path)
-    
     def get_finish_result(self,request):
 
         if "pref" in request.session and request.session["pref"] != None:
@@ -577,12 +578,6 @@ class Finish(TemplateView):
         f = []
         if request.session["test"] == "time":
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
-#             pass
-#             count = int(request.session["setParam"])
-#             if count == 0:
-#                 s = 1
-#             else:
-#                 f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:count]
         elif request.session["test"] == "set":
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
         if s != 1:    
@@ -602,8 +597,6 @@ class Finish(TemplateView):
         conceptDict = {}
         for con in concepts:
             conceptDict[con.type.type] = []
-#         for con in concepts:
-#             conceptdict[con.type.type].append(con)
         uS = list([(x.concept.type.type, round(x.skill,2)*100) for x in 
                             UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
         
