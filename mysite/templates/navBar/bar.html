@@ -83,6 +83,7 @@
       </li>
       <li>
       	<a href="/learning/own-all">{% trans "Vlastný set" %}</a>
+      	{{user.id}}
       </li>
       <li class="has-dropdown">
       {% if user|is_lazy_user or user.is_anonymous%}

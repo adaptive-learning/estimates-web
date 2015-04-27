@@ -121,7 +121,6 @@ def decider(type, question, src, dst, params, f = 2):
     elif type == "line":
         return round(float(params)/float(question),f)
     elif type == "angle":
-        print "params",params
         if params == "inn":
             return question
         elif params == "out":
@@ -140,23 +139,17 @@ def decider(type, question, src, dst, params, f = 2):
         concept = get_object_or_404(Concept, p1 = src, p2 = dst,
                                     type = get_object_or_404(Type,type = type))
 
-        print "params in decider",params
         if params == "1":
             rev = True
         elif params == "0":
             rev = False
-        print rev
         print concept.id
         rate = CurrTable.objects.get(concept = concept, reversed = rev).rate
         return round(rate * question,f)
     elif type  == 'temp':
         if params == "1":
-            print "temp True"
-            print params
             return round(converter(question, dst, src),f)
         else:
-            print "temp False"
-            print params
             return round(converter(question, src, dst),f)
     else :
         raise Exception('type is unknow command %s' % (type))      
@@ -166,7 +159,6 @@ def get_hint(request):
         post = request.POST
         
         res = decider(post.get('type'), 1, post.get('p1'), post.get('p2'), post.get('par'),5)
-        print "" 
         return HttpResponse(res)
 
 def median(lst):
@@ -188,7 +180,6 @@ class QuestionFunctions():
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
         for q in query:
-            print q
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
                 try:
@@ -220,7 +211,6 @@ class QuestionFunctions():
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
         e = get_object_or_404(ConceptQuestion,id = maximum[0])
-        print e.concept.p1
         return e
         
     def check_type(self,*args,**kwargs):
@@ -248,8 +238,8 @@ class AjaxableResponseMixin():
             question = get_object_or_404(ConceptQuestion, id = self.model.conceptQuestion.id)
             userSkill = get_object_or_404(UserSkill,user = user, concept = question.concept)
             question.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,
-                                                            question.updatedTimes,1-question.label,
-                                                            5,0.03,self.model.time)
+                                                            1-question.label,question.updatedTimes,
+                                                            10,0.04,self.model.time)
             if question.label < 0: question.label = 0
             question.updatedTimes += 1;  
             question.save()
@@ -267,7 +257,6 @@ class AjaxableResponseMixin():
             src = question.concept.p1
             dst = question.concept.p2
             if question.params == "1":
-                print src,dst
                 src, dst = dst, src
             if dst != "degC" and src == "degC":
                 res = converter(model.result, dst,"degC")
@@ -289,9 +278,7 @@ class AjaxableResponseMixin():
             allTimes = sorted ([int(x.time) for x in 
                                 FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
                                  if x.skipped == False])
-            print allTimes
             if len(allTimes) == 0:
-                print "okej MF"
                 percentiles = 0;
             else:
                 below = allTimes.index(int(self.model.time))
@@ -336,9 +323,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             self.model.user = get_user(self.request)
         else :
             self.model.user = None
-        print js["par"]
-        print c.id
-        print n.id
         self.model.conceptQuestion = get_object_or_404(ConceptQuestion, type=type, concept = c,number=n,
                                                        params = js["par"], 
                                                        hint = self.request.session["hint"])
@@ -352,7 +336,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             inTime = False
         elif self.request.session["test"] == "time":
             print "medtime",self.request.session["medTime"] 
-            print self.model.time
             if int(self.request.session["medTime"]) > int(self.model.time):
                 inTime = True
             else: inTime = False
@@ -382,9 +365,9 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 raise Exception("type is None in CreateQuestion")
             preffered = None
             isSettingsOn = False
-        print "pref",preffered
         question = self.get_question(types,preffered)
-
+        print question.params
+        print "number",question.number.number
         self.type = question.type.type
         test = self.kwargs.get("test",None)
         if test is None : raise Exception("no test param in url")
@@ -395,8 +378,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         par = question.params
 
         self.request.session["type"] = self.type
-        print "self.type",self.type
-        print "hint",question.hint
         if isSettingsOn == False and self.is_new_test({"types":types,
                                "test":test,
                                "type":self.type,
@@ -419,13 +400,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                               "p2":pa2,
                               "hint":question.hint,
                               "par":par,
+                              "type": self.type,
                               "question":q,
                               "test":test,})
         
-        print "p1",self.request.session["p1"]
-        print "p2",self.request.session["p2"]
-        print "par",self.request.session["par"]
-        print self.request.session["type"]
         if self.request.session["par"] == "1":
             ctx["pa1"]= self.request.session["p2"]
             ctx["pa2"] = self.request.session["p1"]
@@ -434,15 +412,20 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             ctx['pa2'] = self.request.session["p2"]
             
         num = Number.objects.get(number = self.request.session["question"])
+        print "**** in get_context ******"
+        print "p1",self.request.session["p1"]
+        print "p2",self.request.session["p2"]
+        print "type",self.request.session['type']
+        print "******************************"
         concept = Concept.objects.get(p1 = self.request.session["p1"],
                                      p2 = self.request.session["p2"],
                                      type = Type.objects.get(type = self.request.session["type"])
                                      )
-        print concept.type.type
+        print concept.id
+        print num.number
         question = ConceptQuestion.objects.get(params = self.request.session["par"],
                                                number = num,hint = self.request.session["hint"],
                                                concept = concept)
-        print "hint",question.hint
         if 'medTime' not in self.request.session and self.request.session["test"] == "time":
             l = [x.time for x in FloatModel.objects.filter(conceptQuestion = question) if x.skipped == False]
             
@@ -528,17 +511,26 @@ class PreffQuestion(CreateQuestion):
 class AllFromCategory(CreateQuestion):
     @method_decorator(allow_lazy_user)
     def get(self,*args,**kwargs):
-        clear_session_params(self.request)
         cat = kwargs.get("cat",None)
         if kwargs.get("type") != "settings":
             raise Exception("no page found")
         if cat == None or cat == "home":
             raise Exception("no valid category %s"%cat)
-        print "cat",cat
+        
+        if "cat" in self.request.session and self.request.session["cat"] != cat:
+            clear_session_params(self.request)
+            clear_session_params(self.request, ["cat"])
+
+        elif "cat" not in self.request.session:
+            clear_session_params(self.request)
+            
         typeNames = variables.mainDict['nameTypesInDb'][cat]
         types = Type.objects.filter(type__in  = typeNames)
         concepts = Concept.objects.filter(type__in = types)
         self.request.session["pref"] = concepts
+        for x in concepts:
+            print x.type.type
+        self.request.session["cat"] = cat
         return super(AllFromCategory,self).get(*args,**kwargs)
 
 class Finish(TemplateView):
@@ -574,17 +566,15 @@ class Finish(TemplateView):
             loggUser = get_user(request).id
         else: 
             raise Exception("please log in")
-        s=0;
-        f = []
         if request.session["test"] == "time":
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
         elif request.session["test"] == "set":
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
-        if s != 1:    
-            if len(f) != 0:
-                s = sum([x.label for x in f])/len(f);
-            else:
-                raise Exception("f is 0")
+        if len(f) != 0:
+            s = sum([x.label for x in f])/len(f);
+        else:
+            raise Exception("f is 0")
+
         self.test = request.session["test"]
         if toDelete:
             clear_session_params(request)
@@ -675,7 +665,6 @@ class OwnChoice(ListView):
 
     @method_decorator(allow_lazy_user)
     def post(self,*args,**kwargs):
-        print self.request.POST
         self.request.session["pref"] = []
         type = kwargs.get("type",None)
         if type == "all":

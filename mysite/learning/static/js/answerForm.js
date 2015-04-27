@@ -76,15 +76,16 @@ function answer(diff,result,percentil){
 	var lights = createImgPack(5,timeDiv,20);
 	var d = document.getElementById("next");
 	delet(d);
-	if (diff < 0.03){
+	var offset = 0.04;
+	if (diff < 1*offset){
 		setStars(stars,5);	
-	} else if (diff < 0.06){
+	} else if (diff < 2*offset){
 		setStars(stars,4);	
-	} else if (diff < 0.09){
+	} else if (diff < 3*offset){
 		setStars(stars,3);	
-	} else if (diff < 0.12){
+	} else if (diff < 4*offset){
 		setStars(stars,2);	
-	} else if (diff < 0.15){
+	} else if (diff < 5*offset){
 		setStars(stars,1);	
 	} else{
 		setStars(stars,0);	
