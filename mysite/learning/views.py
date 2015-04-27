@@ -179,6 +179,9 @@ class QuestionFunctions():
         else:
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
+        print now
+        print "*-*****************"
+
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
@@ -203,10 +206,18 @@ class QuestionFunctions():
                 Scount = 1/sqrt(1+len(floatmodels))
                 try:
                     lastModel = floatmodels.latest('date')
+                    print [x.type.type for x in floatmodels]
+
+                    print now," - ",lastModel.date
                     Stime = -1/( now - lastModel.date).total_seconds()
+                    print "STIME",Stime
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,PROB_MOD*Sprob+COUNT_MOD*Scount+TIME_MOD*Stime))
+        for x in score:
+            print x[0]
+            print ConceptQuestion.objects.get(id = int(x[0])).type.type
+        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
         print maximum
@@ -523,7 +534,11 @@ class AllFromCategory(CreateQuestion):
 
         elif "cat" not in self.request.session:
             clear_session_params(self.request)
-            
+        if self.is_new_test({
+                               "test":kwargs.get("test",None),
+                               "type":kwargs.get("type",None),
+                               }) :
+                clear_session_params(self.request,["rev","p1","p2","question","test","type","pref","cat"]) 
         typeNames = variables.mainDict['nameTypesInDb'][cat]
         types = Type.objects.filter(type__in  = typeNames)
         concepts = Concept.objects.filter(type__in = types)
