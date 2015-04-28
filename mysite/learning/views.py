@@ -143,7 +143,6 @@ def decider(type, question, src, dst, params, f = 2):
             rev = True
         elif params == "0":
             rev = False
-        print concept.id
         rate = CurrTable.objects.get(concept = concept, reversed = rev).rate
         return round(rate * question,f)
     elif type  in ['temp',"vol","surf","len"]:
@@ -179,8 +178,6 @@ class QuestionFunctions():
         else:
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
-        print now
-        print "*-*****************"
 
         for q in query:
             if self.request.user.is_authenticated():
@@ -206,17 +203,10 @@ class QuestionFunctions():
                 Scount = 1/sqrt(1+len(floatmodels))
                 try:
                     lastModel = floatmodels.latest('date')
-                    print [x.type.type for x in floatmodels]
-
-                    print now," - ",lastModel.date
                     Stime = -1/( now - lastModel.date).total_seconds()
-                    print "STIME",Stime
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,PROB_MOD*Sprob+COUNT_MOD*Scount+TIME_MOD*Stime))
-        for x in score:
-            print x[0]
-            print ConceptQuestion.objects.get(id = int(x[0])).type.type
         print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
@@ -423,17 +413,10 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             ctx['pa2'] = self.request.session["p2"]
             
         num = Number.objects.get(number = self.request.session["question"])
-        print "**** in get_context ******"
-        print "p1",self.request.session["p1"]
-        print "p2",self.request.session["p2"]
-        print "type",self.request.session['type']
-        print "******************************"
         concept = Concept.objects.get(p1 = self.request.session["p1"],
                                      p2 = self.request.session["p2"],
                                      type = Type.objects.get(type = self.request.session["type"])
                                      )
-        print concept.id
-        print num.number
         question = ConceptQuestion.objects.get(params = self.request.session["par"],
                                                number = num,hint = self.request.session["hint"],
                                                concept = concept)
@@ -607,12 +590,10 @@ class Finish(TemplateView):
         
         for us in uS:
             conceptDict[us[0]].append(us[1])
-            print us
             print "skill", us[1]
         for key in conceptDict.keys():
             conceptDict[key] = sum(conceptDict[key])/len(conceptDict[key])
         self.uS = [(x,conceptDict[x]) for x in conceptDict]
-        print self.uS
         if len(f) != 0:
             scores = []
             for x in f:

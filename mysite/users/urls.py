@@ -24,5 +24,5 @@ urlpatterns = patterns('',
     url(r'^logout-login/(?P<backend>.+)',AuthComplete.as_view()),
     url(r'^login-error/$', LoginError.as_view()),
     url(r'^logout/$', 'django.contrib.auth.views.logout',{'template_name': 'registration/logout.html'}),
-    url(r'', include('social_auth.urls')),
+#     url(r'', include('social_auth.urls')),
 )
