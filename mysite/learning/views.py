@@ -135,7 +135,7 @@ def decider(type, question, src, dst, params, f = 2):
             raise Exception("logic error in volume of objects")
         return round(volA / volB,f)
             
-    elif type in  ['curr','vol','surf', 'len']:
+    elif type in  ['curr']:
         concept = get_object_or_404(Concept, p1 = src, p2 = dst,
                                     type = get_object_or_404(Type,type = type))
 
@@ -146,7 +146,7 @@ def decider(type, question, src, dst, params, f = 2):
         print concept.id
         rate = CurrTable.objects.get(concept = concept, reversed = rev).rate
         return round(rate * question,f)
-    elif type  == 'temp':
+    elif type  in ['temp',"vol","surf","len"]:
         if params == "1":
             return round(converter(question, dst, src),f)
         else:

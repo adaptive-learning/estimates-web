@@ -13,10 +13,11 @@ from django.contrib.messages.api import get_messages
 class AuthComplete(View):
     def get(self, request, *args, **kwargs):
 
-        print "ok?"
         backend = kwargs.pop('backend')
+        if backend not in ["facebook","google-oauth2"]:
+            raise Exception("wrong backend")
         logout(request) 
-        return redirect("/users/login/%s"%backend)
+        return redirect("/learning/login/%s/"%backend)
  
 class LoginError(View):
     def get(self, request, *args, **kwargs):
