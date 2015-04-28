@@ -519,7 +519,6 @@ class AllFromCategory(CreateQuestion):
             clear_session_params(self.request)
         if self.is_new_test({
                                "test":kwargs.get("test",None),
-                               "type":kwargs.get("type",None),
                                }) :
                 clear_session_params(self.request,["rev","p1","p2","question","test","type","pref","cat"]) 
         typeNames = variables.mainDict['nameTypesInDb'][cat]
