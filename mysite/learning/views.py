@@ -62,7 +62,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 4
+SET_TEST = 10
 
 
 
