@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from django.utils import translation
 from django.utils.translation import ugettext as _
 import os
@@ -61,7 +62,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10
+SET_TEST = 4
 
 
 def index(request):
@@ -178,7 +179,6 @@ class QuestionFunctions():
         else:
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
-
 
         for q in query:
             if self.request.user.is_authenticated():
@@ -601,8 +601,17 @@ class Finish(TemplateView):
                     scores.append((1-x.label,x.time,x.id))
             
             if len(scores) != 0:
-                self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
-                self.fastest = [x.id for x in f].index(min(scores,key=lambda item:item[1])[2])
+#                 self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
+                idsInFloat = [x.id for x in f]
+
+                best = max(scores,key=lambda item:item[0])
+                print best
+                self.best = [idsInFloat.index(i[2]) for i in scores if i[0] == best[0]]
+                print self.best
+                fastest = min(scores,key=lambda item:item[1])
+                print fastest
+                self.fastest = [idsInFloat.index(i[2]) for i in scores if i[1] == fastest[1]]
+                print self.fastest
             else:
                 self.best = -1
                 self.fastest = -1

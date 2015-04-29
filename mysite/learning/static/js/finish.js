@@ -40,11 +40,10 @@ function scatterPlot(data,best,fastest,test){
 				}
 				var name = deciderType(d.type,"False",d.q,d.p1,d.p2,d.a,d.right);
 			}
-			
 				if( d.skipped ==  true)	{
 					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(150, 150, 150, .7)',
 								data:[[dat[e].time,(1-dat[e].label)*100]]});
-				} else if (best.indexOf(e) != -1){
+				} else if (best.indexOf() != -1){
 					series.push({name:name,marker:{symbol:"circle"}, color: 'rgba(50, 200, 50, .9)',
 								data:[[dat[e].time,(1-dat[e].label)*100]]});
 				}else if (fastest.indexOf(e) != -1 ){

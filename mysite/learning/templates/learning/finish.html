@@ -39,13 +39,12 @@
 <div id="scatterPlot" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto; display:none"></div>
 {% if test == "set" %}
 	<img src="{% static 'img/blueCircle.png'%}"/>{% trans " Najrýchlejšia odpoveď" %}
-	<img src="{% static 'img/redCircle.png'%}"/>{% trans " Preskočená odpoveď" %}
 	<img src="{% static 'img/greenCircle.png'%}"/>{% trans " Najsprávnejšia odpoveď" %}
 {% elif test == "time" %}	
 	<img src="{% static 'img/redCircle.png'%}"/>{% trans " Nestihnutá odpoveď" %}
-	<img src="{% static 'img/blackCircle.png'%}"/>{% trans " Preskočená odpoveď" %}
 	<img src="{% static 'img/greenCircle.png'%}"/>{% trans " Stihnutá odpoveď" %}
 {% endif %}
+	<img src="{% static 'img/greyCircle.png'%}"/>{% trans " Preskočená odpoveď" %}
 <br/>
 <div class="large-12 columns">
 <button class="button" id="sub" onclick="
