@@ -65,6 +65,7 @@ TIME_TEST = 150
 SET_TEST = 10
 
 
+
 def index(request):
     clear_session_params(request)
     return TemplateResponse(request, 'home/index.html')

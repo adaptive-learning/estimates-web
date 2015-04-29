@@ -2,7 +2,7 @@ from django.utils.translation import ugettext as _
 # -*- coding: utf-8 -*-
 mainDict = {
             'nameReal' : {
-                          'math': [_('Matematika'),_('Odhady matematickych prikladov'.decode("utf-8"))],
+                          'math': [_('Matematika'),_('Odhady matematických príkladov'.decode("utf-8"))],
                           'curr': [_('Mena'), _("Odhady meny")],
                           'phys': [_('Jednotky'), _("Odhady jednotiek")],
                           'grap': [_('Grafické'.decode("utf-8")),_("Odhady grafických príkladov".decode("utf-8"))],
@@ -55,7 +55,7 @@ mainDict = {
                             'grap': ["angle","water","line","obj","objsVol"],
                             },
             'typeQuestions' : {
-                                      "water":_("Koľko percent vody je v pohari?".decode("utf-8")),
+                                      "water":_("Koľko percent vody je v pohári?".decode("utf-8")),
                                       "angle":_("Koľko ° má uhol?".decode("utf-8")),
                                       "line": _("Koľko krát je spodná priamka väčšia ako vrchná?".decode("utf-8")),
                                       "obj" : _("koľko je na obrázku objektov?".decode("utf-8")),

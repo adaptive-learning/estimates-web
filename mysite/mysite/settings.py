@@ -79,11 +79,9 @@ DATABASES = {"default": dj_database_url.config(default='mysql://admin:estimate@l
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'sk-sk'
 LANGUAGES = (
-
   ('sk', ('Slovak')),
-
   ('cs', ('Czech')),
   ('en', ('English')),
 )

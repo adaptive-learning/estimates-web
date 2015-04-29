@@ -23,16 +23,16 @@ msgstr "Matematika"
 
 #: learning/static/python/variables.py:5
 msgid "Odhady matematickych prikladov"
-msgstr "Odhady matematických příkladů"
+msgstr "Odhady matematickych prikladov"
 
 #: learning/static/python/variables.py:6
 #: learning/static/python/variables.py:30
 msgid "Mena"
-msgstr "Měna"
+msgstr "Mena"
 
 #: learning/static/python/variables.py:6
 msgid "Odhady meny"
-msgstr "Odhady měny"
+msgstr "Odhady meny"
 
 #: learning/static/python/variables.py:7
 msgid "Jednotky"
@@ -40,7 +40,7 @@ msgstr "Jednotky"
 
 #: learning/static/python/variables.py:7
 msgid "Odhady jednotiek"
-msgstr "Odhady jednotek"
+msgstr "Odhady jednotiek"
 
 #: learning/static/python/variables.py:8
 msgid "Grafické"
@@ -48,11 +48,11 @@ msgstr "Grafické"
 
 #: learning/static/python/variables.py:8
 msgid "Odhady grafických príkladov"
-msgstr "Odhady grafických příkladů"
+msgstr "Odhady grafických príkladov"
 
 #: learning/static/python/variables.py:29
 msgid "Dĺžka"
-msgstr "Délka"
+msgstr "Dĺžka"
 
 #: learning/static/python/variables.py:31
 msgid "Odmocniny"
@@ -60,11 +60,11 @@ msgstr "Odmocniny"
 
 #: learning/static/python/variables.py:32
 msgid "Príklady"
-msgstr "Příklady"
+msgstr "Príklady"
 
 #: learning/static/python/variables.py:33
 msgid "Uhly"
-msgstr "Úhly"
+msgstr "Uhly"
 
 #: learning/static/python/variables.py:34
 #: learning/static/python/variables.py:35
@@ -86,52 +86,51 @@ msgstr "Povrch"
 
 #: learning/static/python/variables.py:40
 msgid "Vlastný výber"
-msgstr "Vlastní výběr"
+msgstr "Vlastný výber"
 
 #: learning/static/python/variables.py:41
 msgid "Teplota"
-msgstr "Teplota"
+msgstr ""
 
 #: learning/static/python/variables.py:42
 msgid "Voda v pohári"
-msgstr "Voda ve sklenici"
+msgstr ""
 
 #: learning/static/python/variables.py:43
 msgid "Dĺžka priamky"
-msgstr "Délka přímky"
+msgstr ""
 
 #: learning/static/python/variables.py:44
 msgid "Počet objektov"
-msgstr "Počet objektů"
+msgstr ""
 
 #: learning/static/python/variables.py:45
 msgid "Mocniny"
-msgstr "Mocniny"
+msgstr ""
 
 #: learning/static/python/variables.py:46
-#, fuzzy
 msgid "Obsah objektov"
-msgstr "Počet objektů"
+msgstr ""
 
 #: learning/static/python/variables.py:47
 msgid "Všetko"
-msgstr "Vše"
+msgstr ""
 
 #: learning/static/python/variables.py:58
 msgid "Koľko percent vody je v pohari?"
-msgstr "Kolik procent vody je ve sklenici?"
+msgstr ""
 
 #: learning/static/python/variables.py:59
 msgid "Koľko ° má uhol?"
-msgstr "Kolik ° má úhel?"
+msgstr ""
 
 #: learning/static/python/variables.py:60
 msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
-msgstr "Kolikrát je spodní přímka větší než vrchní?"
+msgstr ""
 
 #: learning/static/python/variables.py:61
 msgid "koľko je na obrázku objektov?"
-msgstr "Kolik je na obrázku objektů?"
+msgstr ""
 
 #: learning/static/python/variables.py:62
 msgid "Koľko krát sa obsah objektu B zmestí do objektu A?"
@@ -167,11 +166,11 @@ msgstr ""
 
 #: learning/templates/learning/footer.html:7
 msgid "O projekte"
-msgstr "O projektu"
+msgstr ""
 
 #: learning/templates/learning/footer.html:8
 msgid "Vyskúšajte taktiež:"
-msgstr "Vyzkoušejte také:"
+msgstr ""
 
 #: learning/templates/learning/question.html:18
 msgid "nápoveda:"
@@ -187,7 +186,7 @@ msgstr ""
 
 #: learning/templates/learning/selectOwn.html:34
 msgid "Vyber si vlastný typ"
-msgstr "Vyber si vlastní typ"
+msgstr ""
 
 #: learning/templates/learning/selectOwn.html:36
 msgid "Označte aspoň jeden typ"
@@ -195,7 +194,7 @@ msgstr ""
 
 #: learning/templates/learning/selectOwn.html:62
 msgid "Označ všetko"
-msgstr "Označ vše"
+msgstr ""
 
 #: learning/templates/learning/selectOwn.html:92
 msgid "vytvoriť test"
@@ -227,16 +226,16 @@ msgstr ""
 
 #: templates/admin/base_site.html:4
 msgid "Django site admin"
-msgstr "Django site admin"
+msgstr ""
 
 #: templates/admin/base_site.html:7
 msgid "Mysite administration"
-msgstr "Mysite administration"
+msgstr ""
 
 #: templates/admin/index.html:20
 #, python-format
 msgid "Models in the %(name)s application"
-msgstr "Models in the %(name)s application"
+msgstr ""
 
 #: templates/admin/index.html:21
 #, python-format
@@ -273,43 +272,39 @@ msgstr ""
 
 #: templates/home/index.html:26
 msgid "vyber si kategóriu"
-msgstr "vyber kategorii"
+msgstr ""
 
 #: templates/home/index.html:40
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
-msgstr "Zábavná aplikace na testování vašich schopností na odhady."
+msgstr ""
 
 #: templates/home/index.html:45
 msgid "Napíšte nám"
-msgstr "Napište nám"
+msgstr ""
 
 #: templates/home/index.html:50
 msgid "Otázky na mieru:"
-msgstr "Otázky na míru:"
+msgstr ""
 
 #: templates/home/index.html:52
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností"
 msgstr ""
-"Aplikace využíva adaptibilní systém, který vybere otázky přesne podle vašich "
-"schopností"
 
 #: templates/home/index.html:55
 msgid "Široká škála úloh:"
-msgstr "Široká škála úloh:"
+msgstr ""
 
 #: templates/home/index.html:57
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
 msgstr ""
-"Vyzkoušejte si své odhady na různých typech úloh. Od převodu měn přes "
-"obrázky až po převody mezi imperiálním a metrickým systémem..."
 
 #: templates/home/index.html:60
 msgid "Dva typy testov:"
-msgstr "Dva typy testů"
+msgstr ""
 
 #: templates/home/index.html:63
 msgid ""
@@ -319,23 +314,23 @@ msgstr ""
 
 #: templates/home/index.html:66
 msgid "Facebook"
-msgstr "Facebook"
+msgstr ""
 
 #: templates/home/index.html:68
 msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
-msgstr "Dejte vědět svým známým o vašich skvělých výsledcích v testu"
+msgstr ""
 
 #: templates/home/index.html:79
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
-msgstr "Máte návrhy na zlepšení? Napište nám."
+msgstr ""
 
 #: templates/home/index.html:81
 msgid "Vaša správa:"
-msgstr "Vaše zpráva:"
+msgstr ""
 
 #: templates/home/index.html:83
 msgid "Váš email:"
-msgstr "Váš email:"
+msgstr ""
 
 #: templates/home/index.html:85
 msgid "Odoslať"
@@ -343,7 +338,7 @@ msgstr ""
 
 #: templates/navBar/bar.html:12
 msgid "Priblizne.cz"
-msgstr "Priblizne.cz"
+msgstr ""
 
 #: templates/navBar/bar.html:21
 msgid "Kategórie"
@@ -351,41 +346,28 @@ msgstr ""
 
 #: templates/navBar/bar.html:33 templates/navBar/bar.html.py:47
 msgid "test"
-msgstr "test"
+msgstr ""
 
 #: templates/navBar/bar.html:36 templates/navBar/bar.html.py:50
 msgid "na čas"
-msgstr "na čas"
+msgstr ""
 
 #: templates/navBar/bar.html:81
-#, fuzzy
 msgid "Tabuľka prevodov"
-msgstr "Tabulka převodů"
+msgstr ""
 
 #: templates/navBar/bar.html:85
 msgid "Vlastný set"
-msgstr "Vlastní set"
+msgstr ""
 
 #: templates/navBar/bar.html:90
 msgid "Prihlásenie"
-msgstr "Přihlášení"
+msgstr ""
 
 #: templates/navBar/bar.html:92
-#, fuzzy
 msgid "Prihlásenie cez Google"
-msgstr "Přihlášení"
+msgstr ""
 
 #: templates/navBar/bar.html:93
-#, fuzzy
 msgid "Prihlásenie cez Facebook"
-msgstr "Přihlášení"
-
-#~ msgid ""
-#~ "Zodpovedajte čo najviac otázok v priebehu 2 a pol minúty, alebo 10 otázok "
-#~ "v čo najkratšiom čase"
-#~ msgstr ""
-#~ "Odpovězte na co nejvíc otázek v průběhu 2 a půl minuty, nebo 10 otázek v "
-#~ "co nejkratším čase"
-
-#~ msgid "Počet zodpovedaných otázok:"
-#~ msgstr "Počet již zodpovězených otázek:"
+msgstr ""

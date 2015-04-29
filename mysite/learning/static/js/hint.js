@@ -23,7 +23,7 @@ function getHint(ele, type, p1,p2,param){
 
 	if (type == "temp"){
 		var label = $("#"+ele);
-		if (reverse){
+		if (param == "1"){
 			fr = p2;
 			to = p1;
 		} else {

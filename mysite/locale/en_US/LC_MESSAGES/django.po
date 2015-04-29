@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-24 14:18+0200\n"
+"POT-Creation-Date: 2015-04-29 22:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,182 +36,181 @@ msgstr "Currency estimation"
 
 #: learning/static/python/variables.py:7
 msgid "Jednotky"
-msgstr ""
+msgstr "Units"
 
 #: learning/static/python/variables.py:7
 msgid "Odhady jednotiek"
-msgstr ""
+msgstr "Estimates units"
 
 #: learning/static/python/variables.py:8
 msgid "Grafické"
-msgstr ""
+msgstr "Graphical"
 
 #: learning/static/python/variables.py:8
 msgid "Odhady grafických príkladov"
-msgstr ""
+msgstr "Estimation of graphical questions"
 
 #: learning/static/python/variables.py:29
 msgid "Dĺžka"
-msgstr ""
+msgstr "Length"
 
 #: learning/static/python/variables.py:31
 msgid "Odmocniny"
-msgstr ""
+msgstr "Square root"
 
 #: learning/static/python/variables.py:32
 msgid "Príklady"
-msgstr ""
+msgstr "Equations"
 
 #: learning/static/python/variables.py:33
 msgid "Uhly"
-msgstr ""
+msgstr "Angles"
 
 #: learning/static/python/variables.py:34
 #: learning/static/python/variables.py:35
 msgid "Euro"
-msgstr ""
+msgstr "Euro"
 
 #: learning/static/python/variables.py:36
 #: learning/static/python/variables.py:37
 msgid "Česká koruna"
-msgstr ""
+msgstr "Czech Republic Koruna"
 
 #: learning/static/python/variables.py:38
 msgid "Objem"
-msgstr ""
+msgstr "Volume"
 
 #: learning/static/python/variables.py:39
 msgid "Povrch"
-msgstr ""
+msgstr "Area"
 
 #: learning/static/python/variables.py:40
 msgid "Vlastný výber"
-msgstr ""
+msgstr "Own choice"
 
 #: learning/static/python/variables.py:41
 msgid "Teplota"
-msgstr ""
+msgstr "Temperature"
 
 #: learning/static/python/variables.py:42
 msgid "Voda v pohári"
-msgstr ""
+msgstr "Water in glass"
 
 #: learning/static/python/variables.py:43
 msgid "Dĺžka priamky"
-msgstr ""
+msgstr "Length of line"
 
 #: learning/static/python/variables.py:44
 msgid "Počet objektov"
-msgstr ""
+msgstr "Number of objects"
 
 #: learning/static/python/variables.py:45
 msgid "Mocniny"
-msgstr ""
+msgstr "Square"
 
 #: learning/static/python/variables.py:46
 msgid "Obsah objektov"
-msgstr ""
+msgstr "Areas of objects"
 
 #: learning/static/python/variables.py:47
 msgid "Všetko"
-msgstr ""
+msgstr "All"
 
 #: learning/static/python/variables.py:58
 msgid "Koľko percent vody je v pohari?"
-msgstr ""
+msgstr "How many percent of water is in glass?"
 
 #: learning/static/python/variables.py:59
 msgid "Koľko ° má uhol?"
-msgstr ""
+msgstr "How many degrees is angle?"
 
 #: learning/static/python/variables.py:60
 msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
-msgstr ""
+msgstr "How many times is bottom line bigger than upper one?"
 
 #: learning/static/python/variables.py:61
 msgid "koľko je na obrázku objektov?"
-msgstr ""
+msgstr "How many objects is on the picture?"
 
 #: learning/static/python/variables.py:62
 msgid "Koľko krát sa obsah objektu B zmestí do objektu A?"
-msgstr ""
+msgstr "How many times does area of object B fit in object A?"
 
-#: learning/templates/learning/finish.html:19
+#: learning/templates/learning/finish.html:29
 msgid "Vaše skóre"
-msgstr ""
+msgstr "Your score"
 
-#: learning/templates/learning/finish.html:31
+#: learning/templates/learning/finish.html:41
 msgid " Najrýchlejšia odpoveď"
-msgstr ""
+msgstr " Fastest answer"
 
-#: learning/templates/learning/finish.html:32
-#: learning/templates/learning/finish.html:36
-msgid " Preskočená odpoveď"
-msgstr ""
-
-#: learning/templates/learning/finish.html:33
+#: learning/templates/learning/finish.html:42
 msgid " Najsprávnejšia odpoveď"
-msgstr ""
+msgstr " Most correct answer"
 
-#: learning/templates/learning/finish.html:35
+#: learning/templates/learning/finish.html:44
 msgid " Nestihnutá odpoveď"
-msgstr ""
+msgstr " Answer not made in time"
 
-#: learning/templates/learning/finish.html:37
+#: learning/templates/learning/finish.html:45
 msgid " Stihnutá odpoveď"
-msgstr ""
+msgstr " Answer made in time"
 
-#: learning/templates/learning/finish.html:43
+#: learning/templates/learning/finish.html:47
+msgid " Preskočená odpoveď"
+msgstr " Skippped answer"
+
+#: learning/templates/learning/finish.html:52
 msgid "Znova"
-msgstr ""
+msgstr "Again"
 
 #: learning/templates/learning/footer.html:7
 msgid "O projekte"
-msgstr ""
+msgstr "About"
 
 #: learning/templates/learning/footer.html:8
 msgid "Vyskúšajte taktiež:"
-msgstr ""
+msgstr "Try also:"
 
 #: learning/templates/learning/question.html:18
 msgid "nápoveda:"
-msgstr ""
+msgstr "hint:"
 
-#: learning/templates/learning/question.html:57
+#: learning/templates/learning/question.html:58
 msgid "Odpovedať"
-msgstr ""
+msgstr "Answer"
 
-#: learning/templates/learning/question.html:60
+#: learning/templates/learning/question.html:61
 msgid "Preskočiť"
-msgstr ""
+msgstr "Skip"
 
 #: learning/templates/learning/selectOwn.html:34
 msgid "Vyber si vlastný typ"
-msgstr ""
+msgstr "Choose your own type"
 
 #: learning/templates/learning/selectOwn.html:36
 msgid "Označte aspoň jeden typ"
-msgstr ""
+msgstr "Select at least one type"
 
 #: learning/templates/learning/selectOwn.html:62
 msgid "Označ všetko"
-msgstr ""
+msgstr "Select everything"
 
 #: learning/templates/learning/selectOwn.html:92
 msgid "vytvoriť test"
-msgstr ""
+msgstr "create test"
 
 #: learning/templates/learning/selectOwn.html:93
 msgid "vytvoriť na čas"
-msgstr ""
+msgstr "create test on time"
 
 #: templates/about.html:15
 msgid "Projekt je vyvíjaný v rámci bakalárskej práce Romana Orlíčka."
-msgstr ""
+msgstr "Project is developed as bachelor project of Roman Orlíček."
 
 #: templates/about.html:20
 msgid "Námety na zlepšenie, prípadne nájdenie chýb zasielajte prosím na"
-msgstr ""
+msgstr "Ideas for improvement or bugs send please on"
 
 #: templates/about.html:27
 msgid ""
@@ -271,69 +270,69 @@ msgstr "None available"
 msgid "Unknown content"
 msgstr "Unknown content"
 
-#: templates/home/index.html:19
+#: templates/home/index.html:26
 msgid "vyber si kategóriu"
 msgstr ""
 
-#: templates/home/index.html:33
+#: templates/home/index.html:40
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Funny application for testing your skills in estimation"
 
-#: templates/home/index.html:37
+#: templates/home/index.html:45
 msgid "Napíšte nám"
-msgstr ""
+msgstr "Feedback"
 
-#: templates/home/index.html:42
+#: templates/home/index.html:50
 msgid "Otázky na mieru:"
 msgstr ""
 
-#: templates/home/index.html:44
+#: templates/home/index.html:52
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností"
 msgstr ""
 
-#: templates/home/index.html:47
+#: templates/home/index.html:55
 msgid "Široká škála úloh:"
 msgstr ""
 
-#: templates/home/index.html:49
+#: templates/home/index.html:57
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
 msgstr ""
 
-#: templates/home/index.html:52
+#: templates/home/index.html:60
 msgid "Dva typy testov:"
 msgstr ""
 
-#: templates/home/index.html:55
+#: templates/home/index.html:63
 msgid ""
 "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou, alebo si "
 "vyskúšajte zodpovedať 10 otázok na čas"
 msgstr ""
 
-#: templates/home/index.html:58
+#: templates/home/index.html:66
 msgid "Facebook"
 msgstr ""
 
-#: templates/home/index.html:60
+#: templates/home/index.html:68
 msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
 msgstr ""
 
-#: templates/home/index.html:71
+#: templates/home/index.html:79
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr ""
 
-#: templates/home/index.html:73
+#: templates/home/index.html:81
 msgid "Vaša správa:"
 msgstr ""
 
-#: templates/home/index.html:75
+#: templates/home/index.html:83
 msgid "Váš email:"
 msgstr ""
 
-#: templates/home/index.html:77
+#: templates/home/index.html:85
 msgid "Odoslať"
 msgstr ""
 
