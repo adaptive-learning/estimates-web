@@ -179,6 +179,7 @@ class QuestionFunctions():
             query = Concept.objects.filter(type__in = t)
         now = datetime.now(utc)
 
+
         for q in query:
             if self.request.user.is_authenticated():
                 user = get_user(self.request)
