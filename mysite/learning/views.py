@@ -62,7 +62,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 4
+SET_TEST = 10
 
 
 def index(request):
@@ -609,6 +609,7 @@ class Finish(TemplateView):
                 self.best = [idsInFloat.index(i[2]) for i in scores if i[0] == best[0]]
                 print self.best
                 fastest = min(scores,key=lambda item:item[1])
+                
                 print fastest
                 self.fastest = [idsInFloat.index(i[2]) for i in scores if i[1] == fastest[1]]
                 print self.fastest
