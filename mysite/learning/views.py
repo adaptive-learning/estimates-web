@@ -62,7 +62,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10
+SET_TEST = 4
 
 
 
@@ -602,8 +602,8 @@ class Finish(TemplateView):
                     scores.append((1-x.label,x.time,x.id))
             
             if len(scores) != 0:
-#                 self.best = [x.id for x in f].index(max(scores,key=lambda item:item[0])[2])
                 idsInFloat = [x.id for x in f]
+                
 
                 best = max(scores,key=lambda item:item[0])
                 print best
