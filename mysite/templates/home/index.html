@@ -40,16 +40,29 @@
 		{% trans "Zábavná aplikácia na testovanie vašich schopností na odhady." %}
 	</span><br>
 
-		<div class="fb-like" data-href="http://priblizne.cz/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
+		<div data-colorscheme="dark" class="fb-like" data-href="http://priblizne.cz/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
 </div>
 <button class="rotatedText secondary radius edgeButton small" data-reveal-id="feedback" >{% trans "Napíšte nám" %}</button>	
 </div>
 <div class="row collapse" align="center">
 <div id="about" class="aboutStyle" class="large-6 collumns" align="left">
 	<h4>
+		{% trans "Precvičte si váš odhad" %}
+	</h4>
+	<span>{% trans "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. Takmer správny 
+		výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi týmito veličinami." %}</span>
+	<hr></hr>
+		
+	<h4>
+		{% trans "Porovnajte si čas s inými ľuďmi" %}
+	</h4>
+	<span>{% trans "Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš percentil v rýchlosti odpovede." %}</span>
+	<hr></hr>	
+		
+	<h4>
 		{% trans "Otázky na mieru:" %}
 	</h4>
-	<span>{% trans "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností" %}</span>
+	<span>{% trans "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky sú ťažké a ktoré ľahké." %}</span>
 	<hr></hr>
 	<h4>
 		{% trans "Široká škála úloh:" %}
@@ -60,19 +73,15 @@
 		{% trans "Dva typy testov:" %}
 	</h4>
 
-	<span>{% trans "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou, alebo si vyskúšajte zodpovedať 10 otázok na čas"  %}</span>
+	<span>{% trans "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom limite."  %}</span>
 		<hr></hr>
 	<h4>
 		{% trans "Facebook" %}
 	</h4>
 	<span>{% trans "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"  %}</span>
-	
-	
 	<br/><br/><br/>
 </div>
 </div>
-
-	
 
 
 <div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">

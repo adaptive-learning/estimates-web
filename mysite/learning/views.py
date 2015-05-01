@@ -266,6 +266,8 @@ class AjaxableResponseMixin():
                 ans = converter(model.answer, dst,"degC")
         if model.type.type == "equa": model.conceptQuestion.number.number = None
         diff = float(res) - float(ans)
+        if res == 0.0:
+            res = 0.000001;
         diff = abs(diff)/abs(float(res))
         if diff > 1: diff = 1.0
         return diff
@@ -289,7 +291,6 @@ class AjaxableResponseMixin():
                 for tim in allTimes:
                     if tim == self.model.time:
                         counter += 1
-
                 percentiles = get_percentile(len(allTimes), below, counter)
                 
             return HttpResponse("%s//%s//%s"%(str(self.model.label),str(self.model.result),str(percentiles)))
@@ -461,10 +462,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['setParam'] = 0 
             self.request.session[p] = dict[p]
 
-#             elif self.request.session["test"] == "time":
-#                 self.request.session['setParam'] = 0 
-#             else: 
-#                 return HttpResponse(status = 401)
             
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
@@ -729,24 +726,11 @@ def save_time(request):
             ok = "false"
             toSend=0
             request.session["pieTimer"] = time
-#         if request.session["test"] == "time":
-#             if "timeParam" in request.session:
-#                 Ttime = float(time) - float(request.session["timeParam"])
-#                 if Ttime > TIME_TEST:
-#                     #TODO: test this
-#                     raise Exception("user opened closed time_test after %s sec"%TIME_SET)
-#                     redirect("%s/finish"%request.path)
-#             else:
-#                 request.session["timeParam"] = float(time)
-            
         return HttpResponse("%s//%s"%(ok,toSend))
 
     
 def send_email(request):
     if request.method == 'POST' and request.is_ajax():
-#         send_mail('Feedback: priblizne.cz', request.POST.get("data"), request.POST.get("email"),
-#                   ["priblizne@googlegroups.com"], fail_silently=False)
-#         return HttpResponse("1");
         to = "priblizne@googlegroups.com"
         from_email = request.POST.get("email")
         text_content = request.POST.get("data")
