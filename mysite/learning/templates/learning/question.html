@@ -15,8 +15,8 @@
 			
 			{% if request.session.hint == True %}
 				<br/>
-				<span class="silverText">{% trans "nápoveda:" %}</span>
-				<label id="hint" class="small-9 collumns silverText" ></label>
+				<span class="mainPrimaryText">{% trans "nápoveda:" %}</span>
+				<label id="hint" class="small-9 collumns mainPrimaryText" ></label>
 				<script src="{% static "js/hint.js" %}"></script>
 				<script>
 					getHint("hint","{{request.session.type}}","{{request.session.p1}}",
@@ -49,6 +49,7 @@
 
 		</div>
 	</div>
+	<div class="secondaryStyle">
 	<div class="row center">
 
 		<div id="userControl">
@@ -63,6 +64,7 @@
 				
 		</div>
 	</div>
+	</div>	
 </form>
 {% include "learning/base.html" %}
 {% endblock base_body %}

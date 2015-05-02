@@ -20,12 +20,11 @@
 <link rel="stylesheet" type="text/css" href="{% static "style/main.css" %}" />
 <div id="main" class="mainStyle">
     <div class="large-12 columns">
-        <h1 id="header" align="center"></h1>
+        <h1 class="mainPrimaryText" id="header" align="center"></h1>
     </div>
     <div align="center">
-    	<span style="color:silver; font-size: 120%;">{% trans "vyber si kategóriu" %}</span>
+    	<span class="mainSecondaryText">{% trans "vyber si kategóriu" %}</span>
     	</div>
-
 <div class="row collapse" align="center" id="choice" style="position:relative;">
 
 	<script>
@@ -36,21 +35,21 @@
 	<a id="back" style="display:none;"><img onclick="javascript:home('home')" src="/static/img/back.png" alt="back" width="60" height="10"></a>
 </div>
 <div class="descTop" align="center" id="labelAbout">
-	<span>
+	<span class="mainSecondaryText">
 		{% trans "Zábavná aplikácia na testovanie vašich schopností na odhady." %}
 	</span><br>
 
-		<div data-colorscheme="dark" class="fb-like" data-href="http://priblizne.cz/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
+		<div class="fb-like" data-href="http://priblizne.cz/" data-layout="standard" data-action="like" data-show-faces="false" data-share="false"></div>
 </div>
 <button class="rotatedText secondary radius edgeButton small" data-reveal-id="feedback" >{% trans "Napíšte nám" %}</button>	
 </div>
-<div class="row collapse" align="center">
+<div class="secondaryStyle">
+<div class="row collapse " align="center">
 <div id="about" class="aboutStyle" class="large-6 collumns" align="left">
 	<h4>
 		{% trans "Precvičte si váš odhad" %}
 	</h4>
-	<span>{% trans "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. Takmer správny 
-		výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi týmito veličinami." %}</span>
+	<span>{% trans "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi týmito veličinami." %}</span>
 	<hr></hr>
 		
 	<h4>
@@ -83,7 +82,7 @@
 </div>
 </div>
 
-
+</div>
 <div id="feedback" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
   <h3 id="modalTitle">{% trans "Máte návrhy na zlepšenie? Napíšte nám." %}</h3>
   <form id="sendFeedback">

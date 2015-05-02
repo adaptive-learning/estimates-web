@@ -6,15 +6,19 @@
 	font: normal 2.5vh courier !important;
 }
 #input{
-    background-color: #6E6D78;
+    background-color: rgba(0, 0, 0, 0);
     color:#E0E0E0;
     border: none;
     outline:none;
 }
 
+#customCounter{
+	background-color: #00838f;	
+}
 
 #testCounter{
-	background-color: #DEDEDE;
+	background-color: rgba(255,255,255,0.1);
+	border-color: rgba(255,255,255,0.3);
 }
 
 
