@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.utils import translation
 from django.utils.translation import ugettext as _
 import os
@@ -15,9 +14,7 @@ import math
 import random
 from learning.forms import *
 from static.python import variables
-# import actualDB
 from django.core import serializers
-# from forms import *
 from django.contrib.auth import get_user
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
@@ -311,9 +308,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     fields = ['answer']            
     def parse_to_model(self):
         js = json.loads(self.post.get('data'))
-
-                
-
         self.request.session['setParam'] += 1
         t = self.post.get('type')
         type = get_object_or_404(Type, type=t)
@@ -330,7 +324,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         self.model.conceptQuestion = get_object_or_404(ConceptQuestion, type=type, concept = c,number=n,
                                                        params = js["par"], 
                                                        hint = self.request.session["hint"])
-        
         ans = self.post.get("answer")
         if ans == "":
             ans = None
@@ -430,8 +423,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
                 self.request.session['medTime']=15
             else:
                 self.request.session['medTime']=median(l) 
-#         if self.request.session["test"] == "time":
-#             ctx["fullTime"] = TIME_TEST;
 
         ctx["numQuestion"] = SET_TEST
         self.ctx = ctx   
@@ -466,11 +457,8 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     @method_decorator(allow_lazy_user)
     def get(self,*args, **kwargs):
         if "test" in self.request.session:
-#             if self.request.session["test"] == "set":
             if self.request.session["setParam"] == SET_TEST:
                 return redirect("%s/finish"%self.request.path)           
-#             elif self.request.session["test"] == "time" and "timeParam" in self.request.session:
-#                 pass
         self.type = kwargs.get("type")
         super(CreateQuestion,self).get(*args,**kwargs)
         return render_to_response(self.template_name,self.ctx,RequestContext(self.request))

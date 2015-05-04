@@ -4,17 +4,28 @@ from datetime import datetime
 from django.db import models
 from django.shortcuts import get_object_or_404
 
-    
+
+#    user answer
 class FloatModel(models.Model):
+    #    right answer
     result = models.FloatField(null = True)
+    #    user answer
     answer = models.FloatField(null = True)
+    #    question
     conceptQuestion = models.ForeignKey('ConceptQuestion')
+    #    category of question
     type = models.ForeignKey('Type')
+    #    time of user Answer
     time = models.IntegerField()
+    #    user Id
     user = models.ForeignKey(User, null = True)
+    #    user succces of answer
     label = models.FloatField(null = True)
+    #    date of user answer
     date = models.DateTimeField(auto_now=True)
+    #    if user made his answer in Time in test on time
     inTime = models.BooleanField()
+    #    if user skipped answer
     skipped = models.BooleanField()
     
     def as_json(self):
@@ -38,34 +49,59 @@ class FloatModel(models.Model):
             inTime = self.inTime,
             )
             
+            
+#    question
 class ConceptQuestion(models.Model):
+    #    question in number if neeeded
     number = models.ForeignKey('Number',null=True);
+    #    concept of question
     concept = models.ForeignKey('Concept', related_name ="concept")
+    #    parameters for specifing things 
     params = models.CharField(max_length = 40, null = True) 
+    #    type of question
     type = models.ForeignKey('Type')
+    #    difficulty of question
     label = models.FloatField(null=True)
+    #    how many times question was answered
     updatedTimes = models.IntegerField(default = 0)
+    #    if question contains hint
     hint = models.BooleanField()
 
+#    question in float 
 class Number(models.Model):
     number = models.FloatField(unique = True)
 
+#    category
 class Type(models.Model):
+    #    category in string
     type = models.CharField(max_length = 8, unique = True)
-    
+
+#    skill of user
 class UserSkill(models.Model):
+    #    user id
     user = models.ForeignKey(User)
+    #    skill of user
     skill = models.FloatField()
+    #    concept for skill
     concept = models.ForeignKey('Concept')
+    #    deleted  but can be used for counting
     number = models.IntegerField()
     
+#    table of currency rating
 class CurrTable(models.Model):
+    #    concept
     concept = models.ForeignKey('Concept')
+    #    is reversed concept
     reversed = models.BooleanField()
+    #    rate from 1 variable to another variable
     rate = models.FloatField()
 
+#    concept
 class Concept(models.Model):
+    #    from
     p1 = models.CharField(max_length = 20, null = True)
+    #    to
     p2 = models.CharField(max_length = 20,null = True)
+    #    type of question
     type= models.ForeignKey("Type")
     

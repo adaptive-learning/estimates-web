@@ -44,6 +44,7 @@ mainDict = {
                           'obj': _("Počet objektov".decode("utf-8")),
                           'sqr': _("Mocniny"),
                           "objsVol": _("Obsah objektov"),
+                          "time": _("na čas".decode("utf-8")),
                           "all":_("Všetko".decode("utf-8")),
                           },
             
