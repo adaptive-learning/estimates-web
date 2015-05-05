@@ -82,7 +82,7 @@ def converter(amount, src, dst):
 
 def get_percentile(listLen,below,same):
     if same==listLen:
-        return 100;
+        return 0;
     else:
         return ((below + same*0.5)/listLen)*100
 
@@ -579,7 +579,6 @@ class Finish(TemplateView):
             conceptDict[con.type.type] = []
         uS = list([(x.concept.type.type, round(x.skill,2)*100) for x in 
                             UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
-        
         for us in uS:
             conceptDict[us[0]].append(us[1])
             print "skill", us[1]
@@ -597,14 +596,10 @@ class Finish(TemplateView):
                 
 
                 best = max(scores,key=lambda item:item[0])
-                print best
                 self.best = [idsInFloat.index(i[2]) for i in scores if i[0] == best[0]]
-                print self.best
                 fastest = min(scores,key=lambda item:item[1])
                 
-                print fastest
                 self.fastest = [idsInFloat.index(i[2]) for i in scores if i[1] == fastest[1]]
-                print self.fastest
             else:
                 self.best = -1
                 self.fastest = -1

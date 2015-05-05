@@ -98,7 +98,7 @@ function answer(diff,result,percentil){
 		setLight(lights,3);
 	} else if (percentil < 75){
 		setLight(lights,2);
-	} else if (oercentil < 87.5){
+	} else if (percentil < 87.5){
 		setLight(lights,1);
 	}
 	var txt_message = "spravna odpoved bola: "+result;
