@@ -16,7 +16,7 @@ class FloatModel(models.Model):
     #    category of question
     type = models.ForeignKey('Type')
     #    time of user Answer
-    time = models.IntegerField()
+    time = models.FloatField()
     #    user Id
     user = models.ForeignKey(User, null = True)
     #    user succces of answer
@@ -24,7 +24,7 @@ class FloatModel(models.Model):
     #    date of user answer
     date = models.DateTimeField(auto_now=True)
     #    if user made his answer in Time in test on time
-    inTime = models.BooleanField()
+    timer = models.FloatField(null = True)
     #    if user skipped answer
     skipped = models.BooleanField()
     
@@ -33,6 +33,12 @@ class FloatModel(models.Model):
         t = get_object_or_404(Type,id = self.type.id)
         pa1 = self.conceptQuestion.concept.p1
         pa2 = self.conceptQuestion.concept.p2
+        if self.timer:
+            if self.timer >= self.time:
+                success = True
+            else: success = False
+        else:
+            success = None;
         if self.conceptQuestion.params == True:
             pa1, pa2 = pa2, pa1
         return dict(
@@ -46,9 +52,8 @@ class FloatModel(models.Model):
             type = t.type, 
             right = self.result,
             skipped = self.skipped,
-            inTime = self.inTime,
+            inTime = success,
             )
-            
             
 #    question
 class ConceptQuestion(models.Model):

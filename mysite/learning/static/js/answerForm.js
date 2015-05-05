@@ -90,15 +90,15 @@ function answer(diff,result,percentil){
 	} else{
 		setStars(stars,0);	
 	}
-	if (percentil < 20){
+	if (percentil < 12.5){
 		setLight(lights,5);
-	} else if(percentil < 40 ){
+	} else if(percentil < 25 ){
 		setLight(lights,4);
-	} else if(percentil < 60){
+	} else if(percentil < 50){
 		setLight(lights,3);
-	} else if (percentil < 80){
+	} else if (percentil < 75){
 		setLight(lights,2);
-	} else {
+	} else if (oercentil < 87.5){
 		setLight(lights,1);
 	}
 	var txt_message = "spravna odpoved bola: "+result;

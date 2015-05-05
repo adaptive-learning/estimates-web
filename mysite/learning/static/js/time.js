@@ -6,8 +6,8 @@ function times(){
 	if(timer_is_on){
 
 
-		time = time+1;
-		t=setTimeout("times()",1000);
+		time = time+0.01;
+		t=setTimeout("times()",10);
 	}
 }
 function afterTestTimer(stay){

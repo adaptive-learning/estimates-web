@@ -67,6 +67,9 @@ def index(request):
     clear_session_params(request)
     return TemplateResponse(request, 'home/index.html')
 
+def round_two(number):
+    return round(number,2);
+
 def get_volume(jsonObject): 
     if jsonObject["t"] == "c":
         return math.pi * pow(jsonObject["r"],2)
@@ -78,7 +81,10 @@ def converter(amount, src, dst):
     return Q_(src).to(dst).magnitude
 
 def get_percentile(listLen,below,same):
-    return ((below + same*0.5)/listLen)*100
+    if same==listLen:
+        return 100;
+    else:
+        return ((below + same*0.5)/listLen)*100
 
 def arrayToType(type):
     if type == None :
@@ -277,18 +283,22 @@ class AjaxableResponseMixin():
             self.update_skill()
             print "diff to send",self.model.label
             clear_session_params(self.request,["p1","question","p2"]);
-            allTimes = sorted ([int(x.time) for x in 
+            allTimes = sorted ([(float)(x.time) for x in 
                                 FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
                                  if x.skipped == False])
+            print allTimes
             if len(allTimes) == 0:
                 percentiles = 0;
             else:
-                below = allTimes.index(int(self.model.time))
+                below = allTimes.index((self.model.time))
                 counter = 0;
                 for tim in allTimes:
                     if tim == self.model.time:
                         counter += 1
                 percentiles = get_percentile(len(allTimes), below, counter)
+                print "below",below
+                print "counter",counter
+                print "percentiles",percentiles
                 
             return HttpResponse("%s//%s//%s"%(str(self.model.label),str(self.model.result),str(percentiles)))
         
@@ -328,14 +338,11 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
         if ans == "":
             ans = None
         self.model.answer = ans
-        self.model.time = self.post.get('time')
+        self.model.time = round_two(float(self.post.get('time')))
         if self.request.session["test"] == "set":
-            inTime = False
+            self.model.timer = None
         elif self.request.session["test"] == "time":
-            print "medtime",self.request.session["medTime"] 
-            if int(self.request.session["medTime"]) > int(self.model.time):
-                inTime = True
-            else: inTime = False
+            self.model.timer =self.request.session["medTime"]
             
         if self.post.get("skip") == "true":
             self.model.skipped = True
@@ -345,7 +352,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             raise Exception("wrong param for skip %s"%self.post.get("skip"))
             
                 
-        self.model.inTime = inTime
         self.model.date = datetime.now(utc)
         
     def get_context_data(self,*args, **kwargs):
