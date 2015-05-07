@@ -9,7 +9,6 @@ class Command(BaseCommand):
     help = 'actualize database concepts to current state'
 
     def handle(self, *args, **options):
-        CurrTable.objects.all().delete()
         typeCurr =  Type.objects.get(type = "curr")
         concepts= Concept.objects.filter(type = typeCurr)
         questions = ConceptQuestion.objects.filter(type = typeCurr, concept__in = concepts)
@@ -19,7 +18,6 @@ class Command(BaseCommand):
             pa1 = x[0].p1 
             pa2 = x[0].p2
             if x[1] == "1":
-                print "reversed"
                 pa1, pa2 = pa2, pa1
             raw.append((json.loads(urllib2.urlopen("https://query.yahooapis.com/v1/public/yql?q=select%20Rate%20from%20yahoo.finance.xchange%20where%20pair%20in%20(%22" 
                                + pa1 
@@ -40,6 +38,12 @@ class Command(BaseCommand):
             raw.append((round(converter(1, pa1, pa2),5),x[0].id,
                        True if x[1] == "1" else False))
         for x in raw:
-            p,created = CurrTable.objects.get_or_create(concept_id=x[1],rate = x[0], reversed = x[2])
+            p,created = CurrTable.objects.get_or_create(concept_id=x[1], reversed = x[2])
+            p.rate = x[0]
+            p.save()
+
+
+
+
         print "success"
         
