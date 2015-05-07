@@ -34,4 +34,8 @@ def uncertain_function(n,a = 1.0,b=.06):
     
 def get_score(approximation, possCorrect = 5, step = 0.04):
     possCorrect = 2*possCorrect
-    return 1-((approximation/step)*(100/possCorrect))/100
+
+    score =  1-((approximation/(step * possCorrect)))
+    if score<0: score = 0
+    return score
+    

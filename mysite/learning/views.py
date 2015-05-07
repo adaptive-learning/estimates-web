@@ -259,7 +259,6 @@ class AjaxableResponseMixin():
     def get_proximation_error(self, model):
         question = model.conceptQuestion;
 
-        if abs(float(model.result)) < 0.000001 : model.result = 0.000001
         ans = model.answer
         res = model.result
         if model.type.type == "temp" :
@@ -271,12 +270,12 @@ class AjaxableResponseMixin():
                 res = converter(model.result, dst,"degC")
                 ans = converter(model.answer, dst,"degC")
         if model.type.type == "equa": model.conceptQuestion.number.number = None
-        diff = float(res) - float(ans)
-        if res == 0.0:
+        dif = float(res) - float(ans)
+        if abs(res) < 0.000001:
             res = 0.000001;
-        diff = abs(diff)/abs(float(res))
-        if diff > 1: diff = 1.0
-        return diff
+        dif = abs(dif)/abs(float(res))
+        if dif > 1: dif = 1.0
+        return dif
 
     def form_valid(self, form):
         if self.request.is_ajax():
