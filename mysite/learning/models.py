@@ -20,7 +20,7 @@ class FloatModel(models.Model):
     #    user Id
     user = models.ForeignKey(User, null = True)
     #    user succces of answer
-    label = models.FloatField(null = True)
+    relative_error = models.FloatField(null = True)
     #    date of user answer
     date = models.DateTimeField(auto_now=True)
     #    if user made his answer in Time in test on time
@@ -43,7 +43,7 @@ class FloatModel(models.Model):
             pa1, pa2 = pa2, pa1
         return dict(
             time=self.time, 
-            label=self.label,
+            label=self.relative_error,
             a = self.answer,
             p1 = pa1,
             p2 = pa2,
@@ -66,7 +66,7 @@ class ConceptQuestion(models.Model):
     #    type of question
     type = models.ForeignKey('Type')
     #    difficulty of question
-    label = models.FloatField(null=True)
+    difficulty = models.FloatField(null=True)
     #    how many times question was answered
     updatedTimes = models.IntegerField(default = 0)
     #    if question contains hint
@@ -89,8 +89,6 @@ class UserSkill(models.Model):
     skill = models.FloatField()
     #    concept for skill
     concept = models.ForeignKey('Concept')
-    #    deleted  but can be used for counting
-    number = models.IntegerField()
     
 #    table of currency rating
 class CurrTable(models.Model):

@@ -190,17 +190,17 @@ class QuestionFunctions():
                 try:
                     userSkill = UserSkill.objects.get(user = user,concept = q)
                 except UserSkill.DoesNotExist:
-                    userSkill = UserSkill(user = user, concept = q, skill = 0, number = 0)
+                    userSkill = UserSkill(user = user, concept = q, skill = 0)
                     userSkill.save()
             else :
                 raise Exception("please log in")
             questions = ConceptQuestion.objects.filter(concept = q)
             for i in questions:
                 floatmodels = FloatModel.objects.filter(conceptQuestion = i,user = user.id)
-                if i.label == None:
-                    i.label = 0.5;
+                if i.difficulty == None:
+                    i.difficulty = 0.5;
                     i.save()
-                Panswer = model.score(userSkill.skill,i.label)
+                Panswer = model.predict_score(userSkill.skill,i.difficulty)
                 if Ptarget >= Panswer:
                     Sprob = Panswer/Ptarget
                 else:
@@ -230,23 +230,26 @@ class AjaxableResponseMixin():
         if self.request.is_ajax():
             if self.request.POST.get("skip") == "true":
                self.form_validate() 
-               self.model.label = 1
+               self.model.relative_error = 1
                self.model.save()
                self.update_skill()
                clear_session_params(self.request,["p1","question","p2"]);
-               return HttpResponse("%s//%s"%(str(self.model.label),str(self.model.result)))
+               return HttpResponse("%s//%s"%(str(self.model.relative_error),str(self.model.result)))
            
             else:
                 return HttpResponseBadRequest(json.dumps(form.errors))
+
     def update_skill(self):
         if self.request.user.is_authenticated():
             user = get_user(self.request)
             question = get_object_or_404(ConceptQuestion, id = self.model.conceptQuestion.id)
             userSkill = get_object_or_404(UserSkill,user = user, concept = question.concept)
-            question.label, userSkill.skill = model.myModel(self.model.label,userSkill.skill,
-                                                            1-question.label,question.updatedTimes,
-                                                            10,0.04,self.model.time)
-            if question.label < 0: question.label = 0
+            questionScore = model.get_score(self.model.relative_error)
+            question.difficulty, userSkill.skill = model.myModel(questionScore,
+                                                                 userSkill.skill,
+                                                                 question.difficulty,
+                                                                 question.updatedTimes,
+                                                                 self.model.time)
             question.updatedTimes += 1;  
             question.save()
             userSkill.save()
@@ -278,10 +281,10 @@ class AjaxableResponseMixin():
     def form_valid(self, form):
         if self.request.is_ajax():
             self.form_validate()
-            self.model.label = self.get_proximation_error(self.model)
+            self.model.relative_error = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
-            print "diff to send",self.model.label
+            print "diff to send",self.model.relative_error
             clear_session_params(self.request,["p1","question","p2"]);
             allTimes = sorted ([(float)(x.time) for x in 
                                 FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
@@ -300,7 +303,7 @@ class AjaxableResponseMixin():
                 print "counter",counter
                 print "percentiles",percentiles
                 
-            return HttpResponse("%s//%s//%s"%(str(self.model.label),str(self.model.result),str(percentiles)))
+            return HttpResponse("%s//%s//%s"%(str(self.model.relative_error),str(self.model.result),str(percentiles)))
         
     def form_validate(self):
         self.model = FloatModel()
@@ -556,14 +559,8 @@ class Finish(TemplateView):
             loggUser = get_user(request).id
         else: 
             raise Exception("please log in")
-        if request.session["test"] == "time":
+        if request.session["test"] in ["time","set"] :
             f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
-        elif request.session["test"] == "set":
-            f = FloatModel.objects.filter(user_id = loggUser,type__in = types).order_by('-date')[:SET_TEST]
-        if len(f) != 0:
-            s = sum([x.label for x in f])/len(f);
-        else:
-            raise Exception("f is 0")
 
         self.test = request.session["test"]
         if toDelete:
@@ -589,11 +586,10 @@ class Finish(TemplateView):
             scores = []
             for x in f:
                 if x.skipped == False:
-                    scores.append((1-x.label,x.time,x.id))
+                    scores.append((model.get_score(x.relative_error),x.time,x.id))
             
             if len(scores) != 0:
                 idsInFloat = [x.id for x in f]
-                
 
                 best = max(scores,key=lambda item:item[0])
                 self.best = [idsInFloat.index(i[2]) for i in scores if i[0] == best[0]]

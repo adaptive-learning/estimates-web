@@ -1,44 +1,28 @@
 import math
 
-def myModel(ans, prev, hard, updateCount, possCorrect,step,time = None):
-    print "ans",ans
-    print "prev",prev
-    print "hard",hard
-    print "updateCount",updateCount
-    print "possCorrect", possCorrect
-    print "step",step
-    print "time",time
-    ans = 1-((ans/step)*(100/possCorrect))/100
-    if ans < 0 :
-        ans = 0
-    elif ans > 1:
-        ans = 1
-    
-    print "next ans",ans
-    sc = score(prev,hard,time)
+def myModel(score, skill, diff, updateCount, time = None):
+    print "score",score
+    sc = predict_score(skill,diff,time)
 
     print "score",sc
 
-    newHard = hard + uncertain_function(updateCount)*(sc - ans)
+    newHard = diff + uncertain_function(updateCount)*(sc - score)
 
     print "new Hard",newHard
 
-    if ans >= sc:
+    if score >= sc:
         K=3.4;
-        uS = prev + K*(ans-sc)
+        uS = skill + K*(score-sc)
     else :
         K = -0.3
-        uS = prev + K*(sc-ans)
-    print "userSkill",uS
-    if uS > 1: uS = 1
-    elif uS < 0: uS = 0  
+        uS = skill + K*(sc-score)
     return (newHard,uS)
 
-def score(prev,hard, time=None):
+def predict_score(skill,diff, time=None):
     if time == None:
         time = 0
     else : time = float(time) 
-    e = -(prev+ln(time)-hard)
+    e = -(skill+ln(time)-diff)
     s = float(1 + math.exp(e))
     return 1/s 
 
@@ -48,4 +32,6 @@ def ln(x):
 def uncertain_function(n,a = 1.0,b=.06):
     return a / (1+b*n)
     
-
+def get_score(approximation, possCorrect = 5, step = 0.04):
+    possCorrect = 2*possCorrect
+    return 1-((approximation/step)*(100/possCorrect))/100
