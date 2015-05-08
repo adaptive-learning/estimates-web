@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-29 22:06+0200\n"
+"POT-Creation-Date: 2015-05-08 10:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,9 @@ msgid "Matematika"
 msgstr "Math"
 
 #: learning/static/python/variables.py:5
-msgid "Odhady matematickych prikladov"
-msgstr "Estimation of math equations"
+#, fuzzy
+msgid "Odhady matematických príkladov"
+msgstr "Estimations of math equations"
 
 #: learning/static/python/variables.py:6
 #: learning/static/python/variables.py:30
@@ -32,7 +33,7 @@ msgstr "Currency"
 
 #: learning/static/python/variables.py:6
 msgid "Odhady meny"
-msgstr "Currency estimation"
+msgstr "Estimations of currency"
 
 #: learning/static/python/variables.py:7
 msgid "Jednotky"
@@ -40,7 +41,7 @@ msgstr "Units"
 
 #: learning/static/python/variables.py:7
 msgid "Odhady jednotiek"
-msgstr "Estimates units"
+msgstr "Estimations of units"
 
 #: learning/static/python/variables.py:8
 msgid "Grafické"
@@ -48,7 +49,7 @@ msgstr "Graphical"
 
 #: learning/static/python/variables.py:8
 msgid "Odhady grafických príkladov"
-msgstr "Estimation of graphical questions"
+msgstr "Estimations of graphic questions"
 
 #: learning/static/python/variables.py:29
 msgid "Dĺžka"
@@ -112,27 +113,33 @@ msgstr "Square"
 msgid "Obsah objektov"
 msgstr "Areas of objects"
 
-#: learning/static/python/variables.py:47
+#: learning/static/python/variables.py:47 templates/navBar/bar.html:36
+#: templates/navBar/bar.html.py:50
+msgid "na čas"
+msgstr "Time Test"
+
+#: learning/static/python/variables.py:48
 msgid "Všetko"
 msgstr "All"
 
-#: learning/static/python/variables.py:58
-msgid "Koľko percent vody je v pohari?"
+#: learning/static/python/variables.py:59
+#, fuzzy
+msgid "Koľko percent vody je v pohári?"
 msgstr "How many percent of water is in glass?"
 
-#: learning/static/python/variables.py:59
+#: learning/static/python/variables.py:60
 msgid "Koľko ° má uhol?"
 msgstr "How many degrees is angle?"
 
-#: learning/static/python/variables.py:60
+#: learning/static/python/variables.py:61
 msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
 msgstr "How many times is bottom line bigger than upper one?"
 
-#: learning/static/python/variables.py:61
+#: learning/static/python/variables.py:62
 msgid "koľko je na obrázku objektov?"
 msgstr "How many objects is on the picture?"
 
-#: learning/static/python/variables.py:62
+#: learning/static/python/variables.py:63
 msgid "Koľko krát sa obsah objektu B zmestí do objektu A?"
 msgstr "How many times does area of object B fit in object A?"
 
@@ -176,11 +183,11 @@ msgstr "Try also:"
 msgid "nápoveda:"
 msgstr "hint:"
 
-#: learning/templates/learning/question.html:58
+#: learning/templates/learning/question.html:59
 msgid "Odpovedať"
 msgstr "Answer"
 
-#: learning/templates/learning/question.html:61
+#: learning/templates/learning/question.html:62
 msgid "Preskočiť"
 msgstr "Skip"
 
@@ -216,13 +223,13 @@ msgstr "Ideas for improvement or bugs send please on"
 msgid ""
 "Dáta o odpovediach sa ukladajú pre výber nasledovných otázok a pre výzkumné "
 "účely."
-msgstr ""
+msgstr "Answers data are stored for choosing next questions and research purposes."
 
 #: templates/about.html:30
 msgid ""
 "Prihlasovacie údaje z facebooku a gmailu sa používajú iba na overenie "
 "identity pri nasledujúcej návšteve. Inak sa s nimi nepracuje."
-msgstr ""
+msgstr "Login information are used for verification of identity. They are not processed in other way."
 
 #: templates/admin/base_site.html:4
 msgid "Django site admin"
@@ -272,105 +279,118 @@ msgstr "Unknown content"
 
 #: templates/home/index.html:26
 msgid "vyber si kategóriu"
-msgstr ""
+msgstr "Choose your category"
 
-#: templates/home/index.html:40
+#: templates/home/index.html:39
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Funny application for testing your skills in estimation"
 
-#: templates/home/index.html:45
+#: templates/home/index.html:44
 msgid "Napíšte nám"
 msgstr "Feedback"
 
 #: templates/home/index.html:50
-msgid "Otázky na mieru:"
-msgstr ""
+msgid "Precvičte si váš odhad"
+msgstr "Practice your estimation skill"
 
 #: templates/home/index.html:52
 msgid ""
+"Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
+"Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
+"týmito veličinami."
+msgstr "Make your answer precise as much as possible and fast at the same time. "
+        "Your answer don't have to be exact. Close is as good as exact answer. Find trade-off between theese variables."
+
+#: templates/home/index.html:56
+msgid "Porovnajte si čas s inými ľuďmi"
+msgstr "Compare your times with others."
+
+#: templates/home/index.html:58
+msgid ""
+"Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
+"percentil v rýchlosti odpovede."
+msgstr "Stars are your accuracy and bolts your percentiles in response rate."
+
+#: templates/home/index.html:62
+msgid "Otázky na mieru:"
+msgstr "Tailored questions:"
+
+#: templates/home/index.html:64
+msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
-"vaších schopností"
-msgstr ""
+"vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky "
+"sú ťažké a ktoré ľahké."
+msgstr "Application is using adaptive system. It is choosing questions by your skills. Your answers will decide what questions are hard or easy."
 
-#: templates/home/index.html:55
+
+#: templates/home/index.html:67
 msgid "Široká škála úloh:"
-msgstr ""
+msgstr "Many types of questions:"
 
-#: templates/home/index.html:57
+#: templates/home/index.html:69
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
-msgstr ""
+msgstr "Practice your estimation skill on many types of questions. For example questions on currency rate, graphic questions or difference between imperial and metric system."
 
-#: templates/home/index.html:60
+#: templates/home/index.html:72
 msgid "Dva typy testov:"
-msgstr ""
+msgstr "Two types of test:"
 
-#: templates/home/index.html:63
+#: templates/home/index.html:75
 msgid ""
-"Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou, alebo si "
-"vyskúšajte zodpovedať 10 otázok na čas"
-msgstr ""
-
-#: templates/home/index.html:66
-msgid "Facebook"
-msgstr ""
-
-#: templates/home/index.html:68
-msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
-msgstr ""
-
-#: templates/home/index.html:79
-msgid "Máte návrhy na zlepšenie? Napíšte nám."
-msgstr ""
-
-#: templates/home/index.html:81
-msgid "Vaša správa:"
-msgstr ""
+"Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, "
+"alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom "
+"limite."
+msgstr "Answer test of 10 questions. Make your answers fast and accurete as possible, or let's try a harder test, in what you have to answer in time limit."
 
 #: templates/home/index.html:83
-msgid "Váš email:"
-msgstr ""
+msgid "Máte návrhy na zlepšenie? Napíšte nám."
+msgstr "Have you any ideas for improvement? Let us know."
 
 #: templates/home/index.html:85
+msgid "Vaša správa:"
+msgstr "Your message:"
+
+#: templates/home/index.html:87
+msgid "Váš email:"
+msgstr "Your email:"
+
+#: templates/home/index.html:89
 msgid "Odoslať"
-msgstr ""
+msgstr "Send"
 
 #: templates/navBar/bar.html:12
 msgid "Priblizne.cz"
-msgstr ""
+msgstr "Priblizne.cz"
 
 #: templates/navBar/bar.html:21
 msgid "Kategórie"
-msgstr ""
+msgstr "Category"
 
 #: templates/navBar/bar.html:33 templates/navBar/bar.html.py:47
 msgid "test"
-msgstr ""
-
-#: templates/navBar/bar.html:36 templates/navBar/bar.html.py:50
-msgid "na čas"
-msgstr ""
+msgstr "test"
 
 #: templates/navBar/bar.html:81
 msgid "Tabuľka prevodov"
-msgstr ""
+msgstr "Conversion Table"
 
 #: templates/navBar/bar.html:85
 msgid "Vlastný set"
-msgstr ""
+msgstr "Custom set"
 
 #: templates/navBar/bar.html:90
 msgid "Prihlásenie"
-msgstr ""
+msgstr "Login"
 
 #: templates/navBar/bar.html:92
 msgid "Prihlásenie cez Google"
-msgstr ""
+msgstr "Login via Google"
 
 #: templates/navBar/bar.html:93
 msgid "Prihlásenie cez Facebook"
-msgstr ""
+msgstr "login via Facebook"
 
 #~ msgid "Počet zodpovedaných otázok:"
 #~ msgstr "Number of answered questions:"

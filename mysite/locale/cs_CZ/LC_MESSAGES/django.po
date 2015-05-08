@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-29 22:06+0200\n"
+"POT-Creation-Date: 2015-05-08 10:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,8 @@ msgid "Matematika"
 msgstr "Matematika"
 
 #: learning/static/python/variables.py:5
-msgid "Odhady matematickych prikladov"
+#, fuzzy
+msgid "Odhady matematických príkladov"
 msgstr "Odhady matematických příkladů"
 
 #: learning/static/python/variables.py:6
@@ -113,27 +114,33 @@ msgstr "Mocniny"
 msgid "Obsah objektov"
 msgstr "Počet objektů"
 
-#: learning/static/python/variables.py:47
+#: learning/static/python/variables.py:47 templates/navBar/bar.html:36
+#: templates/navBar/bar.html.py:50
+msgid "na čas"
+msgstr "na čas"
+
+#: learning/static/python/variables.py:48
 msgid "Všetko"
 msgstr "Vše"
 
-#: learning/static/python/variables.py:58
-msgid "Koľko percent vody je v pohari?"
+#: learning/static/python/variables.py:59
+#, fuzzy
+msgid "Koľko percent vody je v pohári?"
 msgstr "Kolik procent vody je ve sklenici?"
 
-#: learning/static/python/variables.py:59
+#: learning/static/python/variables.py:60
 msgid "Koľko ° má uhol?"
 msgstr "Kolik ° má úhel?"
 
-#: learning/static/python/variables.py:60
+#: learning/static/python/variables.py:61
 msgid "Koľko krát je spodná priamka väčšia ako vrchná?"
 msgstr "Kolikrát je spodní přímka větší než vrchní?"
 
-#: learning/static/python/variables.py:61
+#: learning/static/python/variables.py:62
 msgid "koľko je na obrázku objektov?"
 msgstr "Kolik je na obrázku objektů?"
 
-#: learning/static/python/variables.py:62
+#: learning/static/python/variables.py:63
 msgid "Koľko krát sa obsah objektu B zmestí do objektu A?"
 msgstr ""
 
@@ -177,11 +184,11 @@ msgstr "Vyzkoušejte také:"
 msgid "nápoveda:"
 msgstr ""
 
-#: learning/templates/learning/question.html:58
+#: learning/templates/learning/question.html:59
 msgid "Odpovedať"
 msgstr ""
 
-#: learning/templates/learning/question.html:61
+#: learning/templates/learning/question.html:62
 msgid "Preskočiť"
 msgstr ""
 
@@ -275,31 +282,54 @@ msgstr ""
 msgid "vyber si kategóriu"
 msgstr "vyber kategorii"
 
-#: templates/home/index.html:40
+#: templates/home/index.html:39
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Zábavná aplikace na testování vašich schopností na odhady."
 
-#: templates/home/index.html:45
+#: templates/home/index.html:44
 msgid "Napíšte nám"
 msgstr "Napište nám"
 
 #: templates/home/index.html:50
-msgid "Otázky na mieru:"
-msgstr "Otázky na míru:"
+msgid "Precvičte si váš odhad"
+msgstr ""
 
 #: templates/home/index.html:52
 msgid ""
+"Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
+"Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
+"týmito veličinami."
+msgstr ""
+
+#: templates/home/index.html:56
+msgid "Porovnajte si čas s inými ľuďmi"
+msgstr ""
+
+#: templates/home/index.html:58
+msgid ""
+"Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
+"percentil v rýchlosti odpovede."
+msgstr ""
+
+#: templates/home/index.html:62
+msgid "Otázky na mieru:"
+msgstr "Otázky na míru:"
+
+#: templates/home/index.html:64
+#, fuzzy
+msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
-"vaších schopností"
+"vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky "
+"sú ťažké a ktoré ľahké."
 msgstr ""
 "Aplikace využíva adaptibilní systém, který vybere otázky přesne podle vašich "
 "schopností"
 
-#: templates/home/index.html:55
+#: templates/home/index.html:67
 msgid "Široká škála úloh:"
 msgstr "Široká škála úloh:"
 
-#: templates/home/index.html:57
+#: templates/home/index.html:69
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
@@ -307,37 +337,30 @@ msgstr ""
 "Vyzkoušejte si své odhady na různých typech úloh. Od převodu měn přes "
 "obrázky až po převody mezi imperiálním a metrickým systémem..."
 
-#: templates/home/index.html:60
+#: templates/home/index.html:72
 msgid "Dva typy testov:"
 msgstr "Dva typy testů"
 
-#: templates/home/index.html:63
+#: templates/home/index.html:75
 msgid ""
-"Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou, alebo si "
-"vyskúšajte zodpovedať 10 otázok na čas"
+"Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, "
+"alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom "
+"limite."
 msgstr ""
 
-#: templates/home/index.html:66
-msgid "Facebook"
-msgstr "Facebook"
-
-#: templates/home/index.html:68
-msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
-msgstr "Dejte vědět svým známým o vašich skvělých výsledcích v testu"
-
-#: templates/home/index.html:79
+#: templates/home/index.html:83
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr "Máte návrhy na zlepšení? Napište nám."
 
-#: templates/home/index.html:81
+#: templates/home/index.html:85
 msgid "Vaša správa:"
 msgstr "Vaše zpráva:"
 
-#: templates/home/index.html:83
+#: templates/home/index.html:87
 msgid "Váš email:"
 msgstr "Váš email:"
 
-#: templates/home/index.html:85
+#: templates/home/index.html:89
 msgid "Odoslať"
 msgstr ""
 
@@ -352,10 +375,6 @@ msgstr ""
 #: templates/navBar/bar.html:33 templates/navBar/bar.html.py:47
 msgid "test"
 msgstr "test"
-
-#: templates/navBar/bar.html:36 templates/navBar/bar.html.py:50
-msgid "na čas"
-msgstr "na čas"
 
 #: templates/navBar/bar.html:81
 #, fuzzy
@@ -379,6 +398,12 @@ msgstr "Přihlášení"
 #, fuzzy
 msgid "Prihlásenie cez Facebook"
 msgstr "Přihlášení"
+
+#~ msgid "Facebook"
+#~ msgstr "Facebook"
+
+#~ msgid "Dajte vedieť svojim známym o vašich skvelých výsledkoch v teste"
+#~ msgstr "Dejte vědět svým známým o vašich skvělých výsledcích v testu"
 
 #~ msgid ""
 #~ "Zodpovedajte čo najviac otázok v priebehu 2 a pol minúty, alebo 10 otázok "
