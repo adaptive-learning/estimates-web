@@ -161,4 +161,9 @@ function resizeCanvas(canvas,min,div){
 	 	}
 		element.css("width",newWidth);
 }
-
+function resizePictures(elementDiv,min,div){
+	var element = $("#"+elementDiv);
+element.children().each(function () {
+    alert("e"); // "this" is the current element in the loop
+});
+}

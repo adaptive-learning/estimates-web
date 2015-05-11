@@ -16,6 +16,9 @@ $(document).ready(function(){
 	drawPieTimer(fTime,"{{request.session.medTime|stringformat:'2.f'}}","{{request.session.test}}");
 					resizeCanvas("pie-countdown",40,25);
 				resizeCanvas("myCanvas",150,8);
+				resizeCanvas("myCanvas",150,8);
+				resizePictures("timeAssig",50,8);
+				resizePictures("assigment",50,8);
 				 $(window).resize(function(){
 				 	resizeCanvas("myCanvas",150,8);
 					resizeCanvas("pie-countdown",40,25);

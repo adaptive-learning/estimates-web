@@ -72,8 +72,11 @@ function answer(diff,result,percentil){
 	var timeDiv = document.getElementById("timeAssig");
 	delet(div);
 	delet(document.getElementById("hint"));
-	var stars = createImgPack(5,div,35);
-	var lights = createImgPack(5,timeDiv,20);
+	var stars = createImgPack(5,div,12);
+	var lights = createImgPack(5,timeDiv,10);
+	if ($(window).width()/70 < 12){
+		$("#input").hide();
+	}
 	var d = document.getElementById("next");
 	delet(d);
 	var offset = 0.04;
@@ -127,15 +130,13 @@ function delet(div){
 	}
 }
 
-function resize(img,max){
-	var byWindow = ((5*$(window).height())/100);
-	if (byWindow < max){
-		img.setAttribute("width",byWindow);
-		img.setAttribute("height",byWindow);
-	} else {
-		img.setAttribute("width",max);
-		img.setAttribute("height",max);
-	}
+function resize(img,min){
+ 	var newWidth = $(window).width()/70 ;
+	 	if (newWidth < min){
+ 			newWidth = min;
+	 	}
+		img.setAttribute("width",newWidth);
+		img.setAttribute("height",newWidth);
 }
 
 Number.prototype.round = function(places) {
