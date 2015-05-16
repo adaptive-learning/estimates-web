@@ -30,7 +30,6 @@ function getHint(ele, type, p1,p2,param){
 			fr = p1;
 			to = p2;
 		}
-			
 		if (fr == "degF" && to == "degC"){
 			label.text("°C = (°F - 32) × 5/9");		
 		} else if(fr == "degC" && to == "degF"){
@@ -38,7 +37,7 @@ function getHint(ele, type, p1,p2,param){
 		} else if(fr == "degF" && to == "kelvin"){
 			label.text("Kelvin = (°F + 459.67) x 5/9");	
 		} else if(fr == "kelvin" && to == "degF"){
-			label.text("K = 5/9 (°F - 32) + 273");
+			label.text("°F = 5/9 (Kelvin - 32) + 273");
 		} else if(fr == "degC" && to == "kelvin"){
 			label.text("Kelvin = °C + 273.15");
 		} else if(fr == "kelvin" && to == "degC"){

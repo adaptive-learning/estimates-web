@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-08 10:49+0200\n"
+"POT-Creation-Date: 2015-05-16 12:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -223,13 +223,16 @@ msgstr "Ideas for improvement or bugs send please on"
 msgid ""
 "Dáta o odpovediach sa ukladajú pre výber nasledovných otázok a pre výzkumné "
 "účely."
-msgstr "Answers data are stored for choosing next questions and research purposes."
+msgstr ""
+"Answers data are stored for choosing next questions and research purposes."
 
 #: templates/about.html:30
 msgid ""
 "Prihlasovacie údaje z facebooku a gmailu sa používajú iba na overenie "
 "identity pri nasledujúcej návšteve. Inak sa s nimi nepracuje."
-msgstr "Login information are used for verification of identity. They are not processed in other way."
+msgstr ""
+"Login information are used for verification of identity. They are not "
+"processed in other way."
 
 #: templates/admin/base_site.html:4
 msgid "Django site admin"
@@ -277,86 +280,95 @@ msgstr "None available"
 msgid "Unknown content"
 msgstr "Unknown content"
 
-#: templates/home/index.html:26
+#: templates/home/index.html:36
 msgid "vyber si kategóriu"
 msgstr "Choose your category"
 
-#: templates/home/index.html:39
+#: templates/home/index.html:49
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Funny application for testing your skills in estimation"
 
-#: templates/home/index.html:44
+#: templates/home/index.html:54
 msgid "Napíšte nám"
 msgstr "Feedback"
 
-#: templates/home/index.html:50
+#: templates/home/index.html:60
 msgid "Precvičte si váš odhad"
 msgstr "Practice your estimation skill"
 
-#: templates/home/index.html:52
+#: templates/home/index.html:62
 msgid ""
 "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
 "Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
 "týmito veličinami."
-msgstr "Make your answer precise as much as possible and fast at the same time. "
-        "Your answer don't have to be exact. Close is as good as exact answer. Find trade-off between theese variables."
+msgstr ""
+"Make your answer precise as much as possible and fast at the same time. Your "
+"answer don't have to be exact. Close is as good as exact answer. Find trade-"
+"off between theese variables."
 
-#: templates/home/index.html:56
+#: templates/home/index.html:66
 msgid "Porovnajte si čas s inými ľuďmi"
 msgstr "Compare your times with others."
 
-#: templates/home/index.html:58
+#: templates/home/index.html:68
 msgid ""
 "Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
 "percentil v rýchlosti odpovede."
 msgstr "Stars are your accuracy and bolts your percentiles in response rate."
 
-#: templates/home/index.html:62
+#: templates/home/index.html:72
 msgid "Otázky na mieru:"
 msgstr "Tailored questions:"
 
-#: templates/home/index.html:64
+#: templates/home/index.html:74
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky "
 "sú ťažké a ktoré ľahké."
-msgstr "Application is using adaptive system. It is choosing questions by your skills. Your answers will decide what questions are hard or easy."
+msgstr ""
+"Application is using adaptive system. It is choosing questions by your "
+"skills. Your answers will decide what questions are hard or easy."
 
-
-#: templates/home/index.html:67
+#: templates/home/index.html:77
 msgid "Široká škála úloh:"
 msgstr "Many types of questions:"
 
-#: templates/home/index.html:69
+#: templates/home/index.html:79
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
-msgstr "Practice your estimation skill on many types of questions. For example questions on currency rate, graphic questions or difference between imperial and metric system."
+msgstr ""
+"Practice your estimation skill on many types of questions. For example "
+"questions on currency rate, graphic questions or difference between imperial "
+"and metric system."
 
-#: templates/home/index.html:72
+#: templates/home/index.html:82
 msgid "Dva typy testov:"
 msgstr "Two types of test:"
 
-#: templates/home/index.html:75
+#: templates/home/index.html:85
 msgid ""
 "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, "
 "alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom "
 "limite."
-msgstr "Answer test of 10 questions. Make your answers fast and accurete as possible, or let's try a harder test, in what you have to answer in time limit."
+msgstr ""
+"Answer test of 10 questions. Make your answers fast and accurete as "
+"possible, or let's try a harder test, in what you have to answer in time "
+"limit."
 
-#: templates/home/index.html:83
+#: templates/home/index.html:93
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr "Have you any ideas for improvement? Let us know."
 
-#: templates/home/index.html:85
+#: templates/home/index.html:95
 msgid "Vaša správa:"
 msgstr "Your message:"
 
-#: templates/home/index.html:87
+#: templates/home/index.html:97
 msgid "Váš email:"
 msgstr "Your email:"
 
-#: templates/home/index.html:89
+#: templates/home/index.html:99
 msgid "Odoslať"
 msgstr "Send"
 

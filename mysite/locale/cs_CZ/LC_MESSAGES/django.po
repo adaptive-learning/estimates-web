@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-08 10:49+0200\n"
+"POT-Creation-Date: 2015-05-16 12:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,44 +278,44 @@ msgstr ""
 msgid "Unknown content"
 msgstr ""
 
-#: templates/home/index.html:26
+#: templates/home/index.html:36
 msgid "vyber si kategóriu"
 msgstr "vyber kategorii"
 
-#: templates/home/index.html:39
+#: templates/home/index.html:49
 msgid "Zábavná aplikácia na testovanie vašich schopností na odhady."
 msgstr "Zábavná aplikace na testování vašich schopností na odhady."
 
-#: templates/home/index.html:44
+#: templates/home/index.html:54
 msgid "Napíšte nám"
 msgstr "Napište nám"
 
-#: templates/home/index.html:50
+#: templates/home/index.html:60
 msgid "Precvičte si váš odhad"
 msgstr ""
 
-#: templates/home/index.html:52
+#: templates/home/index.html:62
 msgid ""
 "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
 "Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
 "týmito veličinami."
 msgstr ""
 
-#: templates/home/index.html:56
+#: templates/home/index.html:66
 msgid "Porovnajte si čas s inými ľuďmi"
 msgstr ""
 
-#: templates/home/index.html:58
+#: templates/home/index.html:68
 msgid ""
 "Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
 "percentil v rýchlosti odpovede."
 msgstr ""
 
-#: templates/home/index.html:62
+#: templates/home/index.html:72
 msgid "Otázky na mieru:"
 msgstr "Otázky na míru:"
 
-#: templates/home/index.html:64
+#: templates/home/index.html:74
 #, fuzzy
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
@@ -325,11 +325,11 @@ msgstr ""
 "Aplikace využíva adaptibilní systém, který vybere otázky přesne podle vašich "
 "schopností"
 
-#: templates/home/index.html:67
+#: templates/home/index.html:77
 msgid "Široká škála úloh:"
 msgstr "Široká škála úloh:"
 
-#: templates/home/index.html:69
+#: templates/home/index.html:79
 msgid ""
 "Vyskúšajte si svoje odhady na rôznych typoch úloh. Od prevodov mien cez "
 "obrázky až po prevody medzi imperialnym a metrickým systémom..."
@@ -337,30 +337,30 @@ msgstr ""
 "Vyzkoušejte si své odhady na různých typech úloh. Od převodu měn přes "
 "obrázky až po převody mezi imperiálním a metrickým systémem..."
 
-#: templates/home/index.html:72
+#: templates/home/index.html:82
 msgid "Dva typy testov:"
 msgstr "Dva typy testů"
 
-#: templates/home/index.html:75
+#: templates/home/index.html:85
 msgid ""
 "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, "
 "alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom "
 "limite."
 msgstr ""
 
-#: templates/home/index.html:83
+#: templates/home/index.html:93
 msgid "Máte návrhy na zlepšenie? Napíšte nám."
 msgstr "Máte návrhy na zlepšení? Napište nám."
 
-#: templates/home/index.html:85
+#: templates/home/index.html:95
 msgid "Vaša správa:"
 msgstr "Vaše zpráva:"
 
-#: templates/home/index.html:87
+#: templates/home/index.html:97
 msgid "Váš email:"
 msgstr "Váš email:"
 
-#: templates/home/index.html:89
+#: templates/home/index.html:99
 msgid "Odoslať"
 msgstr ""
 

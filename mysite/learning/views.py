@@ -59,7 +59,7 @@ PROB_MOD = 10
 
 
 TIME_TEST = 150
-SET_TEST = 10
+SET_TEST =  10
 
 
 
@@ -270,10 +270,12 @@ class AjaxableResponseMixin():
                 res = converter(model.result, dst,"degC")
                 ans = converter(model.answer, dst,"degC")
         if model.type.type == "equa": model.conceptQuestion.number.number = None
-        dif = float(res) - float(ans)
-        if abs(res) < 0.000001:
-            res = 0.000001;
-        dif = abs(dif)/abs(float(res))
+        
+        if abs(res) < 0.001:
+            dif = abs(float(answer))/2
+        else :
+            dif = float(res) - float(ans)
+            dif = abs(dif)/abs(float(res))
         if dif > 1: dif = 1.0
         return dif
 
@@ -568,19 +570,30 @@ class Finish(TemplateView):
             clear_session_params(request,["rev","pieTimer","p1","question",
                                            "p2","setParam","test","type","timeParam",
                                            "types"])
-        types = [x.type for x in f]
+        types = list(set([x.type for x in f]))
         concepts = Concept.objects.filter(type__in = types)
         conceptDict = {}
-        for con in concepts:
-            conceptDict[con.type.type] = []
-        uS = list([(x.concept.type.type, round(x.skill,2)*100) for x in 
-                            UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
-        for us in uS:
-            conceptDict[us[0]].append(us[1])
-            print "skill", us[1]
-        for key in conceptDict.keys():
-            conceptDict[key] = sum(conceptDict[key])/len(conceptDict[key])
-        self.uS = [(x,conceptDict[x]) for x in conceptDict]
+        for t in types:
+            concepts = Concept.objects.filter(type = t)
+            counter = 0
+            skill = 0
+            for concept in concepts:
+                skill += UserSkill.objects.get(concept = concept, user_id = loggUser).skill
+                counter +=1
+            conceptDict[t] = model.sigmoid(skill/counter)*100
+#         conceptDict = {}
+#         for con in concepts:
+#             conceptDict[con.type.type] = []
+#         uS = list([(x.concept.type.type, x.skill) for x in 
+#                             UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
+        
+#         for us in uS:
+#             conceptDict[us[0]].append(us[1])
+#         for key in conceptDict.keys():
+#             conceptDict[key] = sum(conceptDict[key])/len(conceptDict[key])
+        self.uS = [(x.type,conceptDict[x]) for x in conceptDict]
+        print self.uS
+        
         if len(f) != 0:
             scores = []
             for x in f:

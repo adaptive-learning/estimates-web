@@ -7,13 +7,12 @@
 {% load staticfiles %}
 {% load learning_filters %}
 {% for type in object_list|get_types_CurrTable %}
+<script src="{% static "js/hint.js" %}"></script>
 <br>
 <div class="row centered">
 <div class="large-12 columns">
 <table>
 	<thead>
-		
-	
 	 	<tr>
 	<th>{{type.type|get_from_dict:"typeReal"}}</th>
 	
@@ -25,15 +24,24 @@
 		{% for p1 in object_list|get_set_p1:type %}
 	 	<tr>
 			<th ><script>document.write(decider("{{p1}}"));</script></th>
+			{% if type.type == "temp" %}
+			{% for p2 in object_list|get_set_p1:type %}
+				{%if p1 != p2%}								
+				<td id="{{p1}}{{p2}}"></td>
+				<script>getHint("{{p1}}{{p2}}","{{type.type}}", "{{p1}}", "{{p2}}","1");</script>	
+				{%endif%}
+				{%endfor%}
+			{% else %}
 			{% for p2 in object_list|filter_by_type:type|get_p2_by_p1:p1 %}
 
 			<td>{{ object_list|firstP:p1|secondP:p2 }}<script>document.write(" "+decider("{{p2}}"));
 				</script></td>
 			{% endfor %}
-		</tr>
+
+			{%endif%}
+					</tr>
 		{% endfor %}
 
-		
 
     
   </thead>

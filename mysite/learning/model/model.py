@@ -19,12 +19,11 @@ def myModel(score, skill, diff, updateCount, time = None):
     return (newHard,uS)
 
 def predict_score(skill,diff, time=None):
-    if time == None:
-        time = 0
-    else : time = float(time) 
-    e = -(skill+ln(time)-diff)
-    s = float(1 + math.exp(e))
-    return 1/s 
+    if time != None:
+        time = math.log(float(time))
+    else: time = 0
+    e = -(skill+time-diff)
+    return sigmoid(e)
 
 def ln(x):
     return math.log1p(x)
@@ -38,4 +37,7 @@ def get_score(approximation, possCorrect = 5, step = 0.04):
     score =  1-((approximation/(step * possCorrect)))
     if score<0: score = 0
     return score
-    
+
+def sigmoid(x):
+    s = float(1 + math.exp(x))
+    return 1/s     

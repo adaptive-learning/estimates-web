@@ -145,7 +145,6 @@ SOCIAL_AUTH_PIPELINE = (
 EMAIL_HOST = 'localhost'
 
 EMAIL_PORT = 25
-EMAIL_USE_TLS = True
 
 SESSION_SERIALIZER= 'django.contrib.sessions.serializers.PickleSerializer'
 GOOGLE_OAUTH2_CLIENT_ID = os.getenv("GOOGLE_OAUTH2_CLIENT_ID", "824945897278-rcivje8rjh86b19ofoe39s7cq6nbnso8.apps.googleusercontent.com")
