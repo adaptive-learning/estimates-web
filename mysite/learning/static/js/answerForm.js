@@ -81,17 +81,27 @@ function answer(diff,result,percentil){
 	delet(d);
 	var offset = 0.04;
 	if (diff < 1*offset){
-		setStars(stars,5);	
+		setStars(stars,5,false);	
 	} else if (diff < 2*offset){
-		setStars(stars,4);	
+		setStars(stars,4,true);	
 	} else if (diff < 3*offset){
-		setStars(stars,3);	
+		setStars(stars,4,false);	
 	} else if (diff < 4*offset){
-		setStars(stars,2);	
+		setStars(stars,3,true);	
 	} else if (diff < 5*offset){
-		setStars(stars,1);	
+		setStars(stars,3, false);	
+	} else if (diff < 6*offset){
+		setStars(stars,2, true);	
+	} else if (diff < 7*offset){
+		setStars(stars,2, false);	
+	} else if (diff < 8*offset){
+		setStars(stars,1, true);	
+	} else if (diff < 9*offset){
+		setStars(stars,1, false);	
+	} else if (diff < 10*offset){
+		setStars(stars,0, true);	
 	} else{
-		setStars(stars,0);	
+		setStars(stars,0, false);	
 	}
 	if (percentil < 12.5){
 		setLight(lights,5);
@@ -112,12 +122,17 @@ function answer(diff,result,percentil){
 		},1500 );
 	return false;
 }
-function setStars(im,x){
+function setStars(im,x,half){
 	for (var p=0;p<im.length;p++){
 		if (p<x){
 			im[p].src="/static/img/star.png";
 		} else {
-			im[p].src="/static/img/star-outline.png";
+			if (half){
+				im[p].src = "/static/img/starHalf.png";
+				half = false;
+			} else {
+				im[p].src="/static/img/star-outline.png";
+			}
 		}
 	}
 }

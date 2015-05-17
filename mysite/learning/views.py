@@ -212,10 +212,8 @@ class QuestionFunctions():
                 except FloatModel.DoesNotExist:
                     Stime = 0
                 score.append((i.id,PROB_MOD*Sprob+COUNT_MOD*Scount+TIME_MOD*Stime))
-        print score
         maximum = max(score,key=lambda item:item[1])
         maximum = random.choice([i for i in score if i[1] == maximum[1]])
-        print maximum
         e = get_object_or_404(ConceptQuestion,id = maximum[0])
         return e
         
@@ -285,12 +283,10 @@ class AjaxableResponseMixin():
             self.model.relative_error = self.get_proximation_error(self.model)
             self.model.save()
             self.update_skill()
-            print "diff to send",self.model.relative_error
             clear_session_params(self.request,["p1","question","p2"]);
             allTimes = sorted ([(float)(x.time) for x in 
                                 FloatModel.objects.filter(conceptQuestion = self.model.conceptQuestion)
                                  if x.skipped == False])
-            print allTimes
             if len(allTimes) == 0:
                 percentiles = 0;
             else:
@@ -300,9 +296,6 @@ class AjaxableResponseMixin():
                     if tim == self.model.time:
                         counter += 1
                 percentiles = get_percentile(len(allTimes), below, counter)
-                print "below",below
-                print "counter",counter
-                print "percentiles",percentiles
                 
             return HttpResponse("%s//%s//%s"%(str(self.model.relative_error),str(self.model.result),str(percentiles)))
         
@@ -373,8 +366,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
             preffered = None
             isSettingsOn = False
         question = self.get_question(types,preffered)
-        print question.params
-        print "number",question.number.number
         self.type = question.type.type
         test = self.kwargs.get("test",None)
         if test is None : raise Exception("no test param in url")
@@ -441,7 +432,6 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def is_new_test(self,dict):
         for p in dict:
             if p not in self.request.session or self.request.session[p] != dict[p]:
-                print "new test passed"
                 
                 clear_session_params(self.request)
                 return True;
@@ -450,14 +440,12 @@ class CreateQuestion(AjaxableResponseMixin, CreateView,QuestionFunctions):
     def is_new_question(self,dict):
         for p in dict:
             if p not in self.request.session:
-                print "new question passed"
                 clear_session_params(self.request,dict.keys())
                 clear_session_params(self.request,["pieTimer"])
                 return True;
         return False;
 
     def set_new_session(self,dict):
-        print"setting new session"
         for p in dict:
             if "setParam" not in self.request.session:
                 self.request.session['setParam'] = 0 
@@ -522,8 +510,6 @@ class AllFromCategory(CreateQuestion):
         types = Type.objects.filter(type__in  = typeNames)
         concepts = Concept.objects.filter(type__in = types)
         self.request.session["pref"] = concepts
-        for x in concepts:
-            print x.type.type
         self.request.session["cat"] = cat
         return super(AllFromCategory,self).get(*args,**kwargs)
 
@@ -581,18 +567,7 @@ class Finish(TemplateView):
                 skill += UserSkill.objects.get(concept = concept, user_id = loggUser).skill
                 counter +=1
             conceptDict[t] = model.sigmoid(skill/counter)*100
-#         conceptDict = {}
-#         for con in concepts:
-#             conceptDict[con.type.type] = []
-#         uS = list([(x.concept.type.type, x.skill) for x in 
-#                             UserSkill.objects.filter(user_id = loggUser, concept__in = concepts) ])
-        
-#         for us in uS:
-#             conceptDict[us[0]].append(us[1])
-#         for key in conceptDict.keys():
-#             conceptDict[key] = sum(conceptDict[key])/len(conceptDict[key])
         self.uS = [(x.type,conceptDict[x]) for x in conceptDict]
-        print self.uS
         
         if len(f) != 0:
             scores = []
@@ -628,15 +603,10 @@ def clearSession(request):
 def clear_session_params(request,params = ["rev","pieTimer","p1","question",
                                            "p2","timeParam","test","type","setParam",
                                            "types","pref"]):
-    if params[0] == "timeParam":
-        print "CLEARING timeParam"
     for param in params:
         if param in request.session:
             del request.session[param]
-        else :
-            print "no %s param in session" % param
     if "medTime" in request.session:
-        print "clearing"
         del request.session["medTime"]
 
         

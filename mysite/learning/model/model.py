@@ -1,15 +1,8 @@
 import math
 
 def myModel(score, skill, diff, updateCount, time = None):
-    print "score",score
     sc = predict_score(skill,diff,time)
-
-    print "score",sc
-
     newHard = diff + uncertain_function(updateCount)*(sc - score)
-
-    print "new Hard",newHard
-
     if score >= sc:
         K=3.4;
         uS = skill + K*(score-sc)
@@ -25,15 +18,10 @@ def predict_score(skill,diff, time=None):
     e = -(skill+time-diff)
     return sigmoid(e)
 
-def ln(x):
-    return math.log1p(x)
-
 def uncertain_function(n,a = 1.0,b=.06):
     return a / (1+b*n)
     
-def get_score(approximation, possCorrect = 5, step = 0.04):
-    possCorrect = 2*possCorrect
-
+def get_score(approximation, possCorrect = 10, step = 0.04):
     score =  1-((approximation/(step * possCorrect)))
     if score<0: score = 0
     return score
