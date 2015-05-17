@@ -142,35 +142,35 @@ msgstr "Kolik je na obrázku objektů?"
 
 #: learning/static/python/variables.py:63
 msgid "Koľko krát sa obsah objektu B zmestí do objektu A?"
-msgstr ""
+msgstr "Kolikrát se obsah objektu B vejde do objektu A?"
 
 #: learning/templates/learning/finish.html:29
 msgid "Vaše skóre"
-msgstr ""
+msgstr "Vaše skóre"
 
 #: learning/templates/learning/finish.html:41
 msgid " Najrýchlejšia odpoveď"
-msgstr ""
+msgstr " Nejrychlejší odpověď"
 
 #: learning/templates/learning/finish.html:42
 msgid " Najsprávnejšia odpoveď"
-msgstr ""
+msgstr " Nejsprávnější odpověď"
 
 #: learning/templates/learning/finish.html:44
 msgid " Nestihnutá odpoveď"
-msgstr ""
+msgstr " Nestihnutá odpověď"
 
 #: learning/templates/learning/finish.html:45
 msgid " Stihnutá odpoveď"
-msgstr ""
+msgstr " Stihnutá odpověď"
 
 #: learning/templates/learning/finish.html:47
 msgid " Preskočená odpoveď"
-msgstr ""
+msgstr " Přeskočená odpověď"
 
 #: learning/templates/learning/finish.html:52
 msgid "Znova"
-msgstr ""
+msgstr "Znovu"
 
 #: learning/templates/learning/footer.html:7
 msgid "O projekte"
@@ -182,15 +182,15 @@ msgstr "Vyzkoušejte také:"
 
 #: learning/templates/learning/question.html:18
 msgid "nápoveda:"
-msgstr ""
+msgstr "nápověda:"
 
 #: learning/templates/learning/question.html:59
 msgid "Odpovedať"
-msgstr ""
+msgstr "Odpovědět"
 
 #: learning/templates/learning/question.html:62
 msgid "Preskočiť"
-msgstr ""
+msgstr "Přeskočit"
 
 #: learning/templates/learning/selectOwn.html:34
 msgid "Vyber si vlastný typ"
@@ -206,31 +206,31 @@ msgstr "Označ vše"
 
 #: learning/templates/learning/selectOwn.html:92
 msgid "vytvoriť test"
-msgstr ""
+msgstr "vytvořit test"
 
 #: learning/templates/learning/selectOwn.html:93
 msgid "vytvoriť na čas"
-msgstr ""
+msgstr "vytvořit na čas"
 
 #: templates/about.html:15
 msgid "Projekt je vyvíjaný v rámci bakalárskej práce Romana Orlíčka."
-msgstr ""
+msgstr "Projekt je vyvíjen v rámci bakalářské práce Romana Orlíčka."
 
 #: templates/about.html:20
 msgid "Námety na zlepšenie, prípadne nájdenie chýb zasielajte prosím na"
-msgstr ""
+msgstr "Náměty na zlepšení, případně nalezení chyb zasílejte prosím na"
 
 #: templates/about.html:27
 msgid ""
 "Dáta o odpovediach sa ukladajú pre výber nasledovných otázok a pre výzkumné "
 "účely."
-msgstr ""
+msgstr "Data o odpovědích se ukládají pro výběr následujících otázek a pro výzkumné účely"
 
 #: templates/about.html:30
 msgid ""
 "Prihlasovacie údaje z facebooku a gmailu sa používajú iba na overenie "
 "identity pri nasledujúcej návšteve. Inak sa s nimi nepracuje."
-msgstr ""
+msgstr "Přihlašovací údaje z facebooku a gmailu se používají jen na ověření identity při následující návštěvě. Jinak se s nimi nemanipuluje."
 
 #: templates/admin/base_site.html:4
 msgid "Django site admin"
@@ -292,24 +292,26 @@ msgstr "Napište nám"
 
 #: templates/home/index.html:60
 msgid "Precvičte si váš odhad"
-msgstr ""
+msgstr "Procvičte si váš odhad"
 
 #: templates/home/index.html:62
 msgid ""
 "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
 "Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
 "týmito veličinami."
-msgstr ""
+msgstr "Pokuste se odpovědět co nejpřesněji, a nejrychleji na otázky. "
+"Téměř správný výsledek má stejnou váhu jako přesný. Najděte kompromis mezi "
+"těmito veličinami."
 
 #: templates/home/index.html:66
 msgid "Porovnajte si čas s inými ľuďmi"
-msgstr ""
+msgstr "Porovnejte si čas s jinými lidmi"
 
 #: templates/home/index.html:68
 msgid ""
 "Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
 "percentil v rýchlosti odpovede."
-msgstr ""
+msgstr "Zatímco hvězdičky označují vaši přesnost odpovědi, blesky určují váš percentil v rychlosti odpovědi."
 
 #: templates/home/index.html:72
 msgid "Otázky na mieru:"
@@ -322,7 +324,7 @@ msgid ""
 "vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky "
 "sú ťažké a ktoré ľahké."
 msgstr ""
-"Aplikace využíva adaptibilní systém, který vybere otázky přesne podle vašich "
+"Aplikace využívá adaptibilní systém, který vybere otázky přesně podle vašich "
 "schopností"
 
 #: templates/home/index.html:77
@@ -362,7 +364,7 @@ msgstr "Váš email:"
 
 #: templates/home/index.html:99
 msgid "Odoslať"
-msgstr ""
+msgstr "Odoslat"
 
 #: templates/navBar/bar.html:12
 msgid "Priblizne.cz"
@@ -370,7 +372,7 @@ msgstr "Priblizne.cz"
 
 #: templates/navBar/bar.html:21
 msgid "Kategórie"
-msgstr ""
+msgstr "Kategorie"
 
 #: templates/navBar/bar.html:33 templates/navBar/bar.html.py:47
 msgid "test"
@@ -392,12 +394,12 @@ msgstr "Přihlášení"
 #: templates/navBar/bar.html:92
 #, fuzzy
 msgid "Prihlásenie cez Google"
-msgstr "Přihlášení"
+msgstr "Přihlášení přes Google"
 
 #: templates/navBar/bar.html:93
 #, fuzzy
 msgid "Prihlásenie cez Facebook"
-msgstr "Přihlášení"
+msgstr "Přihlášení přes Facebook"
 
 #~ msgid "Facebook"
 #~ msgstr "Facebook"
