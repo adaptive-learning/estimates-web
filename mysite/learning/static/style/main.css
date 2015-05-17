@@ -1,6 +1,12 @@
 .mainStyle{
 	position:relative;
 	background-color: #607d8b;
+	/*height: 60vh;*/
+}
+
+.mainStyleFull{
+	position:relative;
+	background-color: #607d8b;
 	height: 60vh;
 }
 

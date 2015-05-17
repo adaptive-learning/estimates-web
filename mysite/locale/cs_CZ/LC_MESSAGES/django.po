@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-16 12:26+0200\n"
+"POT-Creation-Date: 2015-05-17 20:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,7 +198,7 @@ msgstr "Vyber si vlastní typ"
 
 #: learning/templates/learning/selectOwn.html:36
 msgid "Označte aspoň jeden typ"
-msgstr ""
+msgstr "Označte alespoň jeden typ"
 
 #: learning/templates/learning/selectOwn.html:62
 msgid "Označ všetko"
@@ -224,13 +224,17 @@ msgstr "Náměty na zlepšení, případně nalezení chyb zasílejte prosím na
 msgid ""
 "Dáta o odpovediach sa ukladajú pre výber nasledovných otázok a pre výzkumné "
 "účely."
-msgstr "Data o odpovědích se ukládají pro výběr následujících otázek a pro výzkumné účely"
+msgstr ""
+"Data o odpovědích se ukládají pro výběr následujících otázek a pro výzkumné "
+"účely"
 
 #: templates/about.html:30
 msgid ""
 "Prihlasovacie údaje z facebooku a gmailu sa používajú iba na overenie "
 "identity pri nasledujúcej návšteve. Inak sa s nimi nepracuje."
-msgstr "Přihlašovací údaje z facebooku a gmailu se používají jen na ověření identity při následující návštěvě. Jinak se s nimi nemanipuluje."
+msgstr ""
+"Přihlašovací údaje z facebooku a gmailu se používají jen na ověření identity "
+"při následující návštěvě. Jinak se s nimi nemanipuluje."
 
 #: templates/admin/base_site.html:4
 msgid "Django site admin"
@@ -299,9 +303,10 @@ msgid ""
 "Pokúste sa odpovedať čo najpresnejšie, a najrýchlejšie odpovedať na otázky. "
 "Takmer správny výsledok má rovnakú váhu ako presný. Nájdite kompromis medzi "
 "týmito veličinami."
-msgstr "Pokuste se odpovědět co nejpřesněji, a nejrychleji na otázky. "
-"Téměř správný výsledek má stejnou váhu jako přesný. Najděte kompromis mezi "
-"těmito veličinami."
+msgstr ""
+"Pokuste se odpovědět co nejpřesněji, a nejrychleji na otázky. Téměř správný "
+"výsledek má stejnou váhu jako přesný. Najděte kompromis mezi těmito "
+"veličinami."
 
 #: templates/home/index.html:66
 msgid "Porovnajte si čas s inými ľuďmi"
@@ -311,7 +316,9 @@ msgstr "Porovnejte si čas s jinými lidmi"
 msgid ""
 "Zatiaľ čo hviezdičky označujú vašu presnosť odpovede, blesky určujú váš "
 "percentil v rýchlosti odpovede."
-msgstr "Zatímco hvězdičky označují vaši přesnost odpovědi, blesky určují váš percentil v rychlosti odpovědi."
+msgstr ""
+"Zatímco hvězdičky označují vaši přesnost odpovědi, blesky určují váš "
+"percentil v rychlosti odpovědi."
 
 #: templates/home/index.html:72
 msgid "Otázky na mieru:"
@@ -325,7 +332,7 @@ msgid ""
 "sú ťažké a ktoré ľahké."
 msgstr ""
 "Aplikace využívá adaptibilní systém, který vybere otázky přesně podle vašich "
-"schopností"
+"schopností. VY uživatelé systému rozhodujete, které otázky jsou ťěžké a které jednoduché."
 
 #: templates/home/index.html:77
 msgid "Široká škála úloh:"
@@ -348,7 +355,7 @@ msgid ""
 "Zodpovedajte test o počte 10 otázok s čo najvyššiou presnosťou a rýchlosťou, "
 "alebo si vyskúšajte test, kde každú otázku musíte odpovedať v istom časovom "
 "limite."
-msgstr ""
+msgstr "Zodpovězte test o počtu 10 otázek s co největší přesností a rychlostí, a nebo vyzkoušejte test, ve kterém musíte na každou otázku odpovědět v co nejkratším časovém limitu."
 
 #: templates/home/index.html:93
 msgid "Máte návrhy na zlepšenie? Napíšte nám."

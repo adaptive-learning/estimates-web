@@ -72,11 +72,11 @@ function answer(diff,result,percentil){
 	var timeDiv = document.getElementById("timeAssig");
 	delet(div);
 	delet(document.getElementById("hint"));
-	var stars = createImgPack(5,div,12);
-	var lights = createImgPack(5,timeDiv,10);
-	if ($(window).width()/70 < 12){
-		$("#input").hide();
-	}
+	var stars = createImgPack(5,div,14);
+	var lights = createImgPack(5,timeDiv,12);
+	// if ($(window).width()/70 < 16){
+		// $("#input").hide();
+	// }
 	var d = document.getElementById("next");
 	delet(d);
 	var offset = 0.04;
@@ -146,7 +146,7 @@ function delet(div){
 }
 
 function resize(img,min){
- 	var newWidth = $(window).width()/70 ;
+ 	var newWidth = $(window).width()/50 ;
 	 	if (newWidth < min){
  			newWidth = min;
 	 	}
