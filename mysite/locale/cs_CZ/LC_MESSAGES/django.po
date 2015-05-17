@@ -22,7 +22,6 @@ msgid "Matematika"
 msgstr "Matematika"
 
 #: learning/static/python/variables.py:5
-#, fuzzy
 msgid "Odhady matematických príkladov"
 msgstr "Odhady matematických příkladů"
 
@@ -110,7 +109,6 @@ msgid "Mocniny"
 msgstr "Mocniny"
 
 #: learning/static/python/variables.py:46
-#, fuzzy
 msgid "Obsah objektov"
 msgstr "Počet objektů"
 
@@ -124,7 +122,6 @@ msgid "Všetko"
 msgstr "Vše"
 
 #: learning/static/python/variables.py:59
-#, fuzzy
 msgid "Koľko percent vody je v pohári?"
 msgstr "Kolik procent vody je ve sklenici?"
 
@@ -325,7 +322,6 @@ msgid "Otázky na mieru:"
 msgstr "Otázky na míru:"
 
 #: templates/home/index.html:74
-#, fuzzy
 msgid ""
 "Aplikácia využíva adaptibilný systém, ktorý vyberie otázky presne podľa "
 "vaších schopností. Navyše VY používatelia systému rozhodujete ktoré otázky "
@@ -386,7 +382,6 @@ msgid "test"
 msgstr "test"
 
 #: templates/navBar/bar.html:81
-#, fuzzy
 msgid "Tabuľka prevodov"
 msgstr "Tabulka převodů"
 
@@ -399,12 +394,10 @@ msgid "Prihlásenie"
 msgstr "Přihlášení"
 
 #: templates/navBar/bar.html:92
-#, fuzzy
 msgid "Prihlásenie cez Google"
 msgstr "Přihlášení přes Google"
 
 #: templates/navBar/bar.html:93
-#, fuzzy
 msgid "Prihlásenie cez Facebook"
 msgstr "Přihlášení přes Facebook"
 
